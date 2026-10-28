@@ -2,6 +2,13 @@
 
 Notable project changes are recorded here, newest first. Planning decisions are not evidence of implemented features.
 
+## Unreleased — Phase 3 implementation
+
+- Added apples, berries, and uncommon golden apples on ten starter-area gathering nodes.
+- Added server-owned typed inventory, capacity and collection checks, per-player cooldowns, local respawn countdowns, and pickup feedback.
+- Connected food selection and consumption to monster growth; removed Phase 2's free starter fruit.
+- Recorded multiplayer pacing and touch review as outstanding phase exit checks.
+
 ## Unreleased — Phase 2 complete
 
 - Added a server-owned Sprout with a readable part-based face, belly, feet, and leaf; it follows its owner and reacts to feeding.
@@ -28,3 +35,11 @@ Notable project changes are recorded here, newest first. Planning decisions are 
 - Verified the mapped `GameServer.main` and `GameClient` nodes in Explorer; confirmed the Studio server script source matches `src/server/main.server.luau`.
 - Inspected Play mode after sync: the floating island appeared, the player spawned at the expected height, and the template floor/spawn were disabled. No bootstrap or Rojo errors appeared; Studio reported asset-type mismatch warnings for the template asset `rbxassetid://203785492`.
 - No place publish or Git push was performed.
+
+## Unreleased — Phase 4 farming slice
+
+- Added personal islands, four plots, selected seeds, seed shop, timestamped crop growth and atomic harvest rewards.
+- Added farm-only save/load with lease checks and labelled Studio preview when API access is unavailable. Save/rejoin remains unverified.
+- Recorded user-reported Phase 3 solo checks and explicitly deferred multiplayer testing.
+
+- Fixed Phase 4 bridge/grass surface overlap: bridge now spans only the gap between island edges, removing coplanar flicker. Applied geometry correction to the active Play session as well.

@@ -4,9 +4,10 @@ local RunService = game:GetService("RunService")
 local Config = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("MonsterConfig"))
 
 local MonsterService = {}
+local FoodService = require(script.Parent:WaitForChild("FoodService"))
 local FEED_COOLDOWN = 0.8
 local FOLLOW_OFFSET = Vector3.new(3.5, -1.3, 0)
-local states: { [number]: { SpeciesId: string, GrowthXP: number, StageId: string, FoodCount: number } } = {}
+local states: { [number]: { SpeciesId: string, GrowthXP: number, StageId: string } } = {}
 local lastFeedAt: { [number]: number } = {}
 local reactionUntil: { [number]: number } = {}
 local initialized: { [number]: boolean } = {}
@@ -122,7 +123,6 @@ local function updateState(player: Player)
 	player:SetAttribute("MonsterName", state.SpeciesId)
 	player:SetAttribute("MonsterXP", state.GrowthXP)
 	player:SetAttribute("MonsterStage", state.StageId)
-	player:SetAttribute("FoodCount", state.FoodCount)
 
 	local model = workspace:FindFirstChild("Companion_" .. player.UserId)
 	if not model then return end
@@ -141,32 +141,34 @@ local function createCompanion(player: Player)
 		SpeciesId = "Sprout",
 		GrowthXP = 0,
 		StageId = Config.GrowthStages[1].Id,
-		FoodCount = Config.StarterFood,
 	}
 	makeCompanion(player)
 	updateState(player)
 end
 
-local function onFeed(player: Player)
+local function onFeed(player: Player, foodId)
 	local state = states[player.UserId]
 	if not state then return end
+	local humanoid = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
+	if not humanoid or humanoid.Health <= 0 then return end
 	local now = os.clock()
 	if now - (lastFeedAt[player.UserId] or 0) < FEED_COOLDOWN then return end
 	lastFeedAt[player.UserId] = now
-	if state.FoodCount < 1 then
-		feedFeedback:FireClient(player, false, 0)
-		return
-	end
 	if state.GrowthXP >= Config.MaxXP then
 		feedFeedback:FireClient(player, false, 0)
 		return
 	end
 
-	state.FoodCount -= 1
-	state.GrowthXP = math.min(Config.MaxXP, state.GrowthXP + Config.FoodXP)
+	local foodXP = FoodService.TryConsume(player, foodId)
+	if not foodXP then
+		feedFeedback:FireClient(player, false, 0)
+		return
+	end
+	local grantedXP = math.min(Config.MaxXP - state.GrowthXP, foodXP)
+	state.GrowthXP += grantedXP
 	reactionUntil[player.UserId] = now + 0.55
 	updateState(player)
-	feedFeedback:FireClient(player, true, Config.FoodXP)
+	feedFeedback:FireClient(player, true, grantedXP)
 end
 
 function MonsterService.GetSnapshot(player: Player)
@@ -177,7 +179,6 @@ function MonsterService.GetSnapshot(player: Player)
 		SpeciesId = state.SpeciesId,
 		GrowthXP = state.GrowthXP,
 		StageId = state.StageId,
-		FoodCount = state.FoodCount,
 	}
 end
 

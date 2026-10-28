@@ -24,6 +24,8 @@ Make the companion the emotional center of a small playable slice: players can s
 
 ## Deliberate limits
 
+Phase 3 supersedes the free starter fruit described in this phase's historical verification. Current sessions start with an empty typed food basket; FoodService owns inventory and MonsterService owns growth.
+
 - Starter fruit, growth, and stage are session-only; saved progression belongs to the planned data phase.
 - The part-based Sprout is prototype art. Production visuals and animation are planned for Phase 7.
 - Wild food gathering begins in Phase 3; farming in Phase 4; evolution in Phase 5.

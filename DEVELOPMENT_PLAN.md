@@ -1,6 +1,6 @@
 # Grow a Monster — Development Plan
 
-**Status:** Phases 1 and 2 are complete; Phase 3 is ready to begin.
+**Status:** Phases 1 and 2 complete. Phase 3 solo/device checks passed per user; multiplayer deferred. Phase 4 farming implemented; persistence, multiplayer, and device validation pending.
 The order favors a small playable loop early, then reliable progression, content, polish, and release readiness.
 
 ## Release shape
@@ -62,3 +62,8 @@ Detailed phase briefs live in `docs/phases/`. A phase is complete only when its 
 - [x] Confirmed the folder is a Rojo/Git project and preserved existing files.
 - [x] Confirmed the intended Roblox Studio place before editing/syncing.
 - [x] Completed Phase 1's smallest vertical slice and updated `CHANGELOG.md`.
+
+## Deferred verification
+
+- [ ] Phase 3: two-player independent node availability, inventory isolation, and pacing. Deferred at user request on 2026-10-29; does not block Phase 4 implementation.
+- [ ] Phase 4: two-player farm ownership, save/rejoin with API access enabled, and phone interaction/layout.

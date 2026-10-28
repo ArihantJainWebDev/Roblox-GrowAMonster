@@ -40,6 +40,10 @@ The exact layout and tooling will be reconciled with the provided folder before 
 
 ## 3. Runtime responsibilities
 
+### Current Phase 3 implementation
+
+The source currently uses flat service/controller modules under the mapped folders. FoodService owns per-player inventory and node readiness in server tables, mirrors display attributes, and returns cloned data-only inventory snapshots. MonsterService owns growth and asks FoodService to consume the selected food; the spend and XP grant do not yield. Clients only select food, display counts, and hide/regrow their own fruit visuals. The toolchain uses Rokit via rokit.toml. The proposed source tree is a target layout; some of its modules belong to later phases.
+
 ### Server services
 
 - **PlayerDataService:** load, validate, version, save, and release player profiles; handle retry and session locking using a mature, documented persistence approach.
@@ -121,3 +125,7 @@ Replicate compact snapshots or changed fields; don't send the full profile for e
 | Too many systems before the fun is proven | Build and review one vertical slice before adding secondary systems. |
 | Unclear tradeoff between offline growth and active play | Keep absence non-punitive; test passive progress as a small capped bonus only if needed. |
 | Platform/API changes | Check official Roblox documentation when implementation reaches the affected API. |
+
+## Phase 4 farming slice
+
+FarmService owns per-player islands, four plot states, seed/coin balances and farm-only persistence. FarmConfig supplies prototype crop rules. FarmController presents seed choices, shop requests and derived crop visuals. FoodService.TryGrant atomically admits a whole harvest or leaves it unclaimed. Farm saves use GrowAMonster_Farms_v1 with an expiring session token; complete shared profile persistence remains future work. Studio without API access is explicitly preview-only.

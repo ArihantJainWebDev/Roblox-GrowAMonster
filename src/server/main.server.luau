@@ -49,4 +49,6 @@ if not workspace:FindFirstChild(WORLD_NAME) then
 	world.Parent = workspace
 end
 
+require(script.Parent:WaitForChild("FoodService")).Start()
 require(script.Parent:WaitForChild("MonsterService")).Start()
+require(script.Parent:WaitForChild("FarmService")).Start()

@@ -96,6 +96,8 @@ Monster reactions, idle behavior, feeding feedback, and simple emotes provide em
 
 Exact experience and spawn rates are balancing data, not promises. Food should be visually distinguishable, easy to collect, and conveyed with a short pickup effect and readable inventory feedback.
 
+The Phase 3 prototype uses per-player node cooldowns, an empty starting basket, and apples/berries/golden apples. Counts, growth rewards, and timers are configured in FoodConfig; these are implementation defaults for review, not final economy balance.
+
 ### Personal farm
 
 1. Obtain seeds through early onboarding, play rewards, or a soft-currency shop.
@@ -136,3 +138,7 @@ The first complete, publishable slice should include one starter monster with a 
 ## 11. Success checks
 
 Use observation and playtests rather than assuming engagement numbers. A new player should understand what to do next, see a complete gather/plant/feed cycle, understand the elemental choice, and retain progress across a session restart. Track only useful aggregate gameplay signals, such as where onboarding stops, how often planting/feeding succeeds, and save failures; respect Roblox privacy and analytics requirements.
+
+## Phase 4 prototype defaults
+
+The first farm slice uses apple saplings (30s/3 apples) and berry bushes (60s/4 berries), sharing existing basket foods. Two seeds each and 12 coins start the loop; seeds cost 2/3 coins, and harvest returns a seed plus 3 coins. These are tunable defaults; proposed carrot/strawberry crops remain later expansion.

@@ -1,116 +1,162 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local player = Players.LocalPlayer
-local Config = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("MonsterConfig"))
-local feedRequest = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("FeedMonster")
-local feedFeedback = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("FeedFeedback")
-local TweenService = game:GetService("TweenService")
-
+local shared = ReplicatedStorage:WaitForChild("Shared")
+local Config = require(shared:WaitForChild("MonsterConfig"))
+local FoodConfig = require(shared:WaitForChild("FoodConfig"))
+local remotes = ReplicatedStorage:WaitForChild("Remotes")
+local feedRequest = remotes:WaitForChild("FeedMonster")
+local selected = FoodConfig.Order[1]
 local gui = Instance.new("ScreenGui")
 gui.Name = "MonsterHUD"
 gui.ResetOnSpawn = false
 gui.Parent = player:WaitForChild("PlayerGui")
-
 local panel = Instance.new("Frame")
 panel.Name = "CompanionPanel"
-panel.Size = UDim2.fromOffset(270, 160)
-panel.Position = UDim2.new(0, 20, 1, -180)
+panel.Size = UDim2.fromOffset(300, 330)
+panel.AnchorPoint = Vector2.new(0, 1)
+panel.Position = UDim2.new(0, 12, 1, -12)
 panel.BackgroundColor3 = Color3.fromRGB(38, 49, 58)
-panel.BackgroundTransparency = 0.08
+panel.BackgroundTransparency = 0.05
 panel.Parent = gui
 Instance.new("UICorner", panel).CornerRadius = UDim.new(0, 14)
-
-local title = Instance.new("TextLabel")
-title.Name = "Title"
-title.Size = UDim2.new(1, -20, 0, 32)
-title.Position = UDim2.fromOffset(10, 8)
-title.BackgroundTransparency = 1
-title.Font = Enum.Font.GothamBold
-title.TextColor3 = Color3.new(1, 1, 1)
-title.TextSize = 18
-title.TextXAlignment = Enum.TextXAlignment.Left
-title.Parent = panel
-
-local progress = Instance.new("TextLabel")
-progress.Name = "Progress"
-progress.Size = UDim2.new(1, -20, 0, 26)
-progress.Position = UDim2.fromOffset(10, 42)
-progress.BackgroundTransparency = 1
-progress.Font = Enum.Font.Gotham
-progress.TextColor3 = Color3.fromRGB(205, 225, 210)
-progress.TextSize = 15
-progress.TextXAlignment = Enum.TextXAlignment.Left
-progress.Parent = panel
-
-local button = Instance.new("TextButton")
-button.Name = "FeedButton"
-button.Size = UDim2.new(1, -20, 0, 48)
-button.Position = UDim2.fromOffset(10, 98)
-button.BackgroundColor3 = Color3.fromRGB(100, 194, 112)
-button.TextColor3 = Color3.fromRGB(25, 45, 30)
-button.Font = Enum.Font.GothamBold
-button.TextSize = 17
-button.Parent = panel
-Instance.new("UICorner", button).CornerRadius = UDim.new(0, 10)
-
-local feedback = Instance.new("TextLabel")
-feedback.Name = "Feedback"
-feedback.Size = UDim2.new(1, -20, 0, 22)
-feedback.Position = UDim2.fromOffset(10, 72)
-feedback.BackgroundTransparency = 1
-feedback.Font = Enum.Font.GothamBold
-feedback.TextColor3 = Color3.fromRGB(174, 255, 174)
-feedback.TextSize = 14
-feedback.TextXAlignment = Enum.TextXAlignment.Left
-feedback.Text = ""
-feedback.Parent = panel
-
-local function refresh()
-	local xp = player:GetAttribute("MonsterXP") or 0
-	local food = player:GetAttribute("FoodCount") or 0
-	local stageId = player:GetAttribute("MonsterStage") or "Baby"
-	local stage = Config.GrowthStages[stageId == "Young" and 2 or 1]
-	title.Text = player:GetAttribute("MonsterName") or "Your Monster"
-	progress.Text = string.format("%s • Growth %d/%d", stage.Name, xp, Config.MaxXP)
-	if xp >= Config.MaxXP then
-		button.Text = "Growth milestone reached"
-	elseif food > 0 then
-		button.Text = string.format("Feed  •  %d fruit", food)
-	else
-		button.Text = "No fruit left"
-	end
-	button.Active = food > 0 and xp < Config.MaxXP
-	button.AutoButtonColor = button.Active
+local scale = Instance.new("UIScale", panel)
+local function text(name, y, height, size)
+	local label = Instance.new("TextLabel")
+	label.Name = name
+	label.Position = UDim2.fromOffset(12, y)
+	label.Size = UDim2.new(1, -24, 0, height)
+	label.BackgroundTransparency = 1
+	label.Font = Enum.Font.Gotham
+	label.TextSize = size
+	label.TextColor3 = Color3.fromRGB(224, 239, 228)
+	label.TextXAlignment = Enum.TextXAlignment.Left
+	label.TextWrapped = true
+	label.Parent = panel
+	return label
 end
-
-for _, attribute in { "MonsterName", "MonsterXP", "MonsterStage", "FoodCount" } do
+local title = text("Title", 8, 25, 19)
+title.Font = Enum.Font.GothamBold
+local progress = text("Progress", 36, 24, 14)
+local basket = text("Basket", 62, 23, 13)
+local feedback = text("Feedback", 280, 42, 13)
+feedback.Text = "Find a fruit bush. Hold E or tap Collect."
+local buttons = {}
+local refresh
+for index, id in FoodConfig.Order do
+	local button = Instance.new("TextButton")
+	button.Name = id
+	button.Position = UDim2.fromOffset(12, 88 + (index - 1) * 44)
+	button.Size = UDim2.new(1, -24, 0, 40)
+	button.Font = Enum.Font.GothamBold
+	button.TextSize = 14
+	button.TextColor3 = Color3.new(1, 1, 1)
+	button.Parent = panel
+	Instance.new("UICorner", button).CornerRadius = UDim.new(0, 8)
+	button.Activated:Connect(function() selected = id; refresh() end)
+	buttons[id] = button
+end
+local feedButton = Instance.new("TextButton")
+feedButton.Name = "FeedButton"
+feedButton.Size = UDim2.new(1, -24, 0, 46)
+feedButton.Position = UDim2.fromOffset(12, 228)
+feedButton.Font = Enum.Font.GothamBold
+feedButton.TextSize = 16
+feedButton.TextColor3 = Color3.fromRGB(25, 45, 30)
+feedButton.Parent = panel
+Instance.new("UICorner", feedButton).CornerRadius = UDim.new(0, 10)
+refresh = function()
+	local xp = player:GetAttribute("MonsterXP") or 0
+	local stageName = "Baby Sprout"
+	for _, stage in Config.GrowthStages do
+		if stage.Id == player:GetAttribute("MonsterStage") then stageName = stage.Name end
+	end
+	title.Text = stageName
+	progress.Text = xp >= Config.MaxXP and "Young milestone reached" or string.format("Next: Young Sprout • %d/%d growth", xp, Config.MaxXP)
+	basket.Text = string.format("FOOD BASKET  %d/%d • Select food", player:GetAttribute("FoodCount") or 0, FoodConfig.Capacity)
+	for id, button in buttons do
+		local food = FoodConfig.Foods[id]
+		button.Text = string.format("%s%s  ×%d  •  +%d XP", selected == id and "✓ " or "", food.Name, player:GetAttribute("Food_" .. id) or 0, food.XP)
+		button.BackgroundColor3 = selected == id and Color3.fromRGB(61, 118, 87) or Color3.fromRGB(59, 70, 80)
+	end
+	local count = player:GetAttribute("Food_" .. selected) or 0
+	local canFeed = count > 0 and xp < Config.MaxXP
+	feedButton.Active, feedButton.AutoButtonColor = canFeed, canFeed
+	feedButton.BackgroundColor3 = canFeed and Color3.fromRGB(112, 206, 125) or Color3.fromRGB(144, 159, 148)
+	if xp >= Config.MaxXP then feedButton.Text = "Growth milestone reached"
+	elseif count == 0 then feedButton.Text = "Collect " .. FoodConfig.Foods[selected].Name
+	else feedButton.Text = "Feed " .. FoodConfig.Foods[selected].Name end
+end
+for _, attribute in { "MonsterXP", "MonsterStage", "FoodCount" } do
 	player:GetAttributeChangedSignal(attribute):Connect(refresh)
 end
-button.Activated:Connect(function() feedRequest:FireServer() end)
-feedFeedback.OnClientEvent:Connect(function(accepted: boolean, amount: number)
-	if accepted then
-		feedback.TextColor3 = Color3.fromRGB(174, 255, 174)
-		feedback.Text = string.format("Sprout is happy! +%d growth", amount)
-		local model = workspace:FindFirstChild("Companion_" .. player.UserId)
-		local body = model and model:FindFirstChild("Body")
-		if body and body:IsA("BasePart") then
-			local original = body.Size
-			local pop = TweenService:Create(body, TweenInfo.new(0.14, Enum.EasingStyle.Back, Enum.EasingDirection.Out), { Size = original * 1.08 })
-			pop:Play()
-			pop.Completed:Once(function()
-				if body.Parent then TweenService:Create(body, TweenInfo.new(0.18), { Size = original }):Play() end
-			end)
-		end
-	else
-		feedback.TextColor3 = Color3.fromRGB(255, 211, 139)
-		if (player:GetAttribute("MonsterXP") or 0) >= Config.MaxXP then
-			feedback.Text = "Sprout reached this growth milestone!"
-		else
-			feedback.Text = "No fruit left—find something to feed Sprout."
-		end
+for _, id in FoodConfig.Order do player:GetAttributeChangedSignal("Food_" .. id):Connect(refresh) end
+feedButton.Activated:Connect(function()
+	if (player:GetAttribute("Food_" .. selected) or 0) > 0 and (player:GetAttribute("MonsterXP") or 0) < Config.MaxXP then
+		feedRequest:FireServer(selected)
 	end
-	task.delay(2.2, function()
-		if feedback.Parent then feedback.Text = "" end
+end)
+local feedbackVersion = 0
+local function showFeedback(message)
+	feedbackVersion += 1
+	local version = feedbackVersion
+	feedback.Text = message
+	task.delay(4, function()
+		if feedbackVersion == version and feedback.Parent then
+			feedback.Text = "Fruit regrows for you. Others get their own harvest."
+		end
 	end)
+end
+remotes:WaitForChild("FeedFeedback").OnClientEvent:Connect(function(accepted, amount)
+	if accepted then showFeedback(string.format("Sprout is happy! +%d growth", amount))
+	elseif (player:GetAttribute("MonsterXP") or 0) >= Config.MaxXP then showFeedback("Young milestone reached. Evolution comes later.")
+	else showFeedback("You don't have that food. Try collecting some.") end
+end)
+remotes:WaitForChild("CollectFeedback").OnClientEvent:Connect(function(accepted, message)
+	if accepted and FoodConfig.Foods[message] then
+		if (player:GetAttribute("Food_" .. selected) or 0) == 0 then selected = message end
+		showFeedback("+1 " .. FoodConfig.Foods[message].Name .. " added to your basket!")
+		refresh()
+	else showFeedback(message) end
 end)
 refresh()
+local function resize()
+	local camera = workspace.CurrentCamera
+	if not camera then return end
+	local size = camera.ViewportSize
+	local touch = game:GetService("UserInputService").TouchEnabled
+	local compact = size.X > size.Y and size.Y < 500
+	panel.AnchorPoint = Vector2.new(0, (touch or compact) and 0 or 1)
+	panel.Position = (touch or compact) and UDim2.fromOffset(12, 12) or UDim2.new(0, 12, 1, -12)
+	if compact then
+		local width = math.min(570, gui.AbsoluteSize.X - 24)
+		panel.Size = UDim2.fromOffset(width, 210)
+		scale.Scale = 1
+		for index, id in FoodConfig.Order do
+			buttons[id].Position = UDim2.fromOffset(12 + (index - 1) * (width - 24) / 3, 88)
+			buttons[id].Size = UDim2.fromOffset((width - 24) / 3 - 4, 44)
+			buttons[id].TextWrapped = true
+			buttons[id].TextSize = 12
+		end
+		feedButton.Position = UDim2.fromOffset(12, 134)
+		feedback.Position = UDim2.fromOffset(12, 184)
+		feedback.Size = UDim2.new(1, -24, 0, 22)
+		feedback.TextSize = 12
+	else
+		panel.Size = UDim2.fromOffset(300, 330)
+		scale.Scale = math.min(1, (gui.AbsoluteSize.X - 24) / 300)
+		for index, id in FoodConfig.Order do
+			buttons[id].Position = UDim2.fromOffset(12, 88 + (index - 1) * 46)
+			buttons[id].Size = UDim2.new(1, -24, 0, 44)
+			buttons[id].TextWrapped = false
+			buttons[id].TextSize = 14
+		end
+		feedButton.Position = UDim2.fromOffset(12, 228)
+		feedback.Position = UDim2.fromOffset(12, 280)
+		feedback.Size = UDim2.new(1, -24, 0, 42)
+		feedback.TextSize = 13
+	end
+end
+if workspace.CurrentCamera then workspace.CurrentCamera:GetPropertyChangedSignal("ViewportSize"):Connect(resize) end
+gui:GetPropertyChangedSignal("AbsoluteSize"):Connect(resize)
+resize()

@@ -1,7 +1,5 @@
 -- Shared display and balance values. The server remains authoritative.
 return {
-	StarterFood = 10,
-	FoodXP = 10,
 	MaxXP = 100,
 	GrowthStages = {
 		{ Id = "Baby", Name = "Baby Sprout", AtXP = 0, Scale = 1 },

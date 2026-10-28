@@ -20,6 +20,13 @@ Use this log for choices that materially affect gameplay, player expectations, s
 - **Rationale:** This lets the Phase 2 slice demonstrate continuous growth and one clear milestone before gathering, farming, and persistence are implemented.
 - **Follow-up:** Replace test starter food with the real inventory and saved progression in their planned phases; tune the values after playtesting.
 
+## 2026-10-29 — Phase 3 prototype defaults
+
+- Use per-player node cooldowns to avoid emptying the starter route for other players.
+- Start sessions with an empty basket; collection replaces Phase 2's free test fruit.
+- Prototype values: apple 5 XP/12s, berry 10 XP/20s, golden apple 30 XP/45s; a 50-item total basket cap. These are tunable, not final balance.
+- Keep the existing 100-XP Young milestone cap until evolution work. Feeding at the cap must preserve inventory.
+
 ## Open design questions
 
 The roadmap records current recommendations for these, but playtests can revise them: exact growth and economy values; passive growth behavior; island expansion; how island visits work; first-release quest length; and whether later systems such as trading or co-op are worth their complexity.
