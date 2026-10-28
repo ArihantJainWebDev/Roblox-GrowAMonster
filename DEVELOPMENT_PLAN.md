@@ -1,6 +1,6 @@
 # Grow a Monster — Development Plan
 
-**Status:** Roadmap for review; no gameplay implementation has started.  
+**Status:** Phase 1 is complete; Phase 2 is ready to begin.
 The order favors a small playable loop early, then reliable progression, content, polish, and release readiness.
 
 ## Release shape
@@ -58,7 +58,7 @@ Detailed phase briefs live in `docs/phases/`. A phase is complete only when its 
 
 ## Ready-to-build checklist
 
-- [ ] User has reviewed this design baseline and requested implementation.
-- [ ] Confirm whether the folder is already a Rojo/Git project or needs setup; preserve existing files.
-- [ ] Confirm intended Roblox Studio place before editing/syncing.
-- [ ] Start Phase 1 with the smallest vertical slice and update `CHANGELOG.md`.
+- [x] User has reviewed this design baseline and requested implementation.
+- [x] Confirmed the folder is a Rojo/Git project and preserved existing files.
+- [x] Confirmed the intended Roblox Studio place before editing/syncing.
+- [x] Completed Phase 1's smallest vertical slice and updated `CHANGELOG.md`.

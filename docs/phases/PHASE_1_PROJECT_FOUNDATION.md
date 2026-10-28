@@ -1,6 +1,6 @@
 # Phase 1 — Project Foundation and Playable Skeleton
 
-**Status:** Local scaffold and Git repository prepared; Studio sync and play inspection are pending confirmation of the target place and Rojo setup.
+**Status:** COMPLETE — the project builds and syncs to the intended Studio place, and the synced spawn skeleton works in Play mode.
 
 ## Goal
 
@@ -9,21 +9,22 @@ Establish a safe, repeatable Studio-to-source workflow and a clean playable skel
 ## Planned work
 
 - Inspect the supplied folder, Git state, existing Rojo mapping, and Studio place; preserve existing work. **Done:** folder was empty except for planning docs; Git has been initialized locally.
-- Adopt or complete a minimal Rojo mapping and Luau startup structure only after inspection. **Prepared locally:** `default.project.json` and a server bootstrap.
-- Define shared configuration/types and service startup conventions at the smallest useful scale.
-- Create a simple readable test spawn and establish how Studio content and source content are mapped. **Source prepared:** a temporary floating-island spawn area is created by the server bootstrap.
+- Adopt or complete a minimal Rojo mapping and Luau startup structure only after inspection. **Done:** `default.project.json` maps the server and client source into Studio.
+- Define shared configuration/types and service startup conventions at the smallest useful scale. **Deferred:** no shared gameplay modules are needed for this foundation-only phase.
+- Create a simple readable test spawn and establish how Studio content and source content are mapped. **Done:** the server bootstrap hides the default baseplate/spawn during play and creates a floating-island spawn area.
 - Record tool versions and setup steps in the project README.
 
 ## Verification and exit checks
 
-- Rojo project mapping can be validated and synced to the intended place.
-- The player can enter the test area; startup has no unresolved errors.
+- **Rojo sync done:** accepted the project sync into `GrowAMonster` (place ID `126867787734164`). Studio Explorer shows `ServerScriptService.GameServer.main` and `StarterPlayer.StarterPlayerScripts.GameClient`; the synced script source matches `src/server/main.server.luau`.
+- **Build validation done:** Rojo 7.7.1 built the project to a temporary place file.
+- **Play inspection done after sync:** the island appeared, the player spawned at Y≈70, the template baseplate was hidden and the default spawn disabled. No bootstrap or Rojo errors were reported. Studio still reports asset-type mismatch warnings for the default template asset `rbxassetid://203785492`.
 - The folder structure is documented and Git ignores generated/local-only files.
 - The target Studio place has been confirmed before any mutation.
 
-## Current blocker
+## Notes
 
-Rokit and Rojo are not installed; Rojo 7.7.1 is pinned in `rokit.toml`. The connected Studio instance is named `Place1`. Before the Studio place is changed, confirm that `Place1` is the intended project place. After that, set up Rokit, sync the project, and inspect the spawn area in Play mode.
+The plugin reported an HTTP timeout once after the sync preview was accepted; the synced tree and exact server source were subsequently verified, and the synced place ran successfully. No place publish or Git push was performed.
 
 ## Out of scope
 
