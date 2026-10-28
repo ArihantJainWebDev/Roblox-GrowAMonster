@@ -52,3 +52,4 @@ end
 require(script.Parent:WaitForChild("FoodService")).Start()
 require(script.Parent:WaitForChild("MonsterService")).Start()
 require(script.Parent:WaitForChild("FarmService")).Start()
+require(script.Parent:WaitForChild("ExplorationService")).Start()

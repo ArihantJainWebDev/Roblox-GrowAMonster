@@ -142,3 +142,7 @@ Use observation and playtests rather than assuming engagement numbers. A new pla
 ## Phase 4 prototype defaults
 
 The first farm slice uses apple saplings (30s/3 apples) and berry bushes (60s/4 berries), sharing existing basket foods. Two seeds each and 12 coins start the loop; seeds cost 2/3 coins, and harvest returns a seed plus 3 coins. These are tunable defaults; proposed carrot/strawberry crops remain later expansion.
+
+## Phase 5 prototype defaults
+
+First evolution unlocks at 100 growth. Fire, Crystal, and Nature share equal XP and a 300 cap. Element Grove grants all evolved branches 2 berries per 60 seconds per player. Choice saves with monster data when storage is available; Studio preview resets.

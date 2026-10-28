@@ -129,3 +129,7 @@ Replicate compact snapshots or changed fields; don't send the full profile for e
 ## Phase 4 farming slice
 
 FarmService owns per-player islands, four plot states, seed/coin balances and farm-only persistence. FarmConfig supplies prototype crop rules. FarmController presents seed choices, shop requests and derived crop visuals. FoodService.TryGrant atomically admits a whole harvest or leaves it unclaimed. Farm saves use GrowAMonster_Farms_v1 with an expiring session token; complete shared profile persistence remains future work. Studio without API access is explicitly preview-only.
+
+## Phase 5 progression
+
+EvolutionConfig defines branches and thresholds. MonsterService owns TryEvolve and validates RestoreSnapshot; client attributes only mirror private state. FarmService serializes MonsterService snapshots alongside farm data under the same lease. EvolutionController offers preview/confirmation; ExplorationService checks server snapshots before granting an Element Grove reward. Food inventory remains session-only.

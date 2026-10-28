@@ -40,3 +40,5 @@ docs/
 See `docs/phases/PHASE_1_PROJECT_FOUNDATION.md` for the current scope and exit checks. Keep the project design and changelog current as implementation decisions are made.
 
 Phase 4 farming is available: select a seed in your home panel and use a plot to plant/harvest. Apple saplings take 30 seconds; berries take 60. Studio currently has API access disabled, so farms show a session-only preview. Phase 4 save/rejoin, multiplayer and phone review remain pending.
+
+Phase 5 prototype: reach 100 growth, preview and confirm Fire/Crystal/Nature, then feed to 300. Element Grove lies beyond the shared gathering island and offers evolved players 2 berries every 60 seconds. Final art stays in Phase 7. Save/rejoin and multiplayer verification are deferred.

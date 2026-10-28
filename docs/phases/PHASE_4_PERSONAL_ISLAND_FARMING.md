@@ -37,3 +37,5 @@ Make the personal floating island a persistent home and dependable food source.
 - Desktop screenshot inspected: four plot home, seed selection/shop, and explicit save status visible.
 - Studio returned StudioAccessToApisNotAllowed. Save/rejoin and failure-recovery verification remains pending; no persistence pass is claimed.
 - Pending: normal-duration hands-on farming/feeding loop, full-basket harvest retention, shop behavior, multiplayer ownership/bridges, and phone layout/input review. Phase 4 is not complete.
+
+User confirmed farming checks working. Save/rejoin testing explicitly deferred at user request; proceed to Phase 5 without claiming persistence verified.

@@ -3,6 +3,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local player = Players.LocalPlayer
 local shared = ReplicatedStorage:WaitForChild("Shared")
 local Config = require(shared:WaitForChild("MonsterConfig"))
+local Evolution = require(shared:WaitForChild("EvolutionConfig"))
 local FoodConfig = require(shared:WaitForChild("FoodConfig"))
 local remotes = ReplicatedStorage:WaitForChild("Remotes")
 local feedRequest = remotes:WaitForChild("FeedMonster")
@@ -67,12 +68,14 @@ feedButton.Parent = panel
 Instance.new("UICorner", feedButton).CornerRadius = UDim.new(0, 10)
 refresh = function()
 	local xp = player:GetAttribute("MonsterXP") or 0
+	local cap = player:GetAttribute("MonsterGrowthCap") or Evolution.AtXP
+	local path = Evolution.Paths[player:GetAttribute("MonsterPath")]
 	local stageName = "Baby Sprout"
 	for _, stage in Config.GrowthStages do
 		if stage.Id == player:GetAttribute("MonsterStage") then stageName = stage.Name end
 	end
-	title.Text = stageName
-	progress.Text = xp >= Config.MaxXP and "Young milestone reached" or string.format("Next: Young Sprout • %d/%d growth", xp, Config.MaxXP)
+	title.Text = path and path.Name or stageName
+	progress.Text = xp >= cap and (path and "Growth cap reached • Explore Element Grove" or "100 growth! Choose your element") or string.format("%s • %d/%d", path and "Grove unlocked" or "Next: Young Sprout", xp, cap)
 	basket.Text = string.format("FOOD BASKET  %d/%d • Select food", player:GetAttribute("FoodCount") or 0, FoodConfig.Capacity)
 	for id, button in buttons do
 		local food = FoodConfig.Foods[id]
@@ -80,19 +83,19 @@ refresh = function()
 		button.BackgroundColor3 = selected == id and Color3.fromRGB(61, 118, 87) or Color3.fromRGB(59, 70, 80)
 	end
 	local count = player:GetAttribute("Food_" .. selected) or 0
-	local canFeed = count > 0 and xp < Config.MaxXP
+	local canFeed = count > 0 and xp < cap
 	feedButton.Active, feedButton.AutoButtonColor = canFeed, canFeed
 	feedButton.BackgroundColor3 = canFeed and Color3.fromRGB(112, 206, 125) or Color3.fromRGB(144, 159, 148)
-	if xp >= Config.MaxXP then feedButton.Text = "Growth milestone reached"
+	if xp >= cap then feedButton.Text = path and "Prototype growth cap reached" or "Choose evolution to keep growing"
 	elseif count == 0 then feedButton.Text = "Collect " .. FoodConfig.Foods[selected].Name
 	else feedButton.Text = "Feed " .. FoodConfig.Foods[selected].Name end
 end
-for _, attribute in { "MonsterXP", "MonsterStage", "FoodCount" } do
+for _, attribute in { "MonsterXP", "MonsterStage", "MonsterPath", "MonsterGrowthCap", "FoodCount" } do
 	player:GetAttributeChangedSignal(attribute):Connect(refresh)
 end
 for _, id in FoodConfig.Order do player:GetAttributeChangedSignal("Food_" .. id):Connect(refresh) end
 feedButton.Activated:Connect(function()
-	if (player:GetAttribute("Food_" .. selected) or 0) > 0 and (player:GetAttribute("MonsterXP") or 0) < Config.MaxXP then
+	if (player:GetAttribute("Food_" .. selected) or 0) > 0 and (player:GetAttribute("MonsterXP") or 0) < (player:GetAttribute("MonsterGrowthCap") or Evolution.AtXP) then
 		feedRequest:FireServer(selected)
 	end
 end)
@@ -109,7 +112,7 @@ local function showFeedback(message)
 end
 remotes:WaitForChild("FeedFeedback").OnClientEvent:Connect(function(accepted, amount)
 	if accepted then showFeedback(string.format("Sprout is happy! +%d growth", amount))
-	elseif (player:GetAttribute("MonsterXP") or 0) >= Config.MaxXP then showFeedback("Young milestone reached. Evolution comes later.")
+	elseif (player:GetAttribute("MonsterXP") or 0) >= (player:GetAttribute("MonsterGrowthCap") or Evolution.AtXP) then showFeedback("Choose your evolution at 100 growth, or explore if already evolved.")
 	else showFeedback("You don't have that food. Try collecting some.") end
 end)
 remotes:WaitForChild("CollectFeedback").OnClientEvent:Connect(function(accepted, message)

@@ -2,12 +2,13 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 local Config = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("MonsterConfig"))
+local Evolution = require(ReplicatedStorage.Shared:WaitForChild("EvolutionConfig"))
 
 local MonsterService = {}
 local FoodService = require(script.Parent:WaitForChild("FoodService"))
 local FEED_COOLDOWN = 0.8
 local FOLLOW_OFFSET = Vector3.new(3.5, -1.3, 0)
-local states: { [number]: { SpeciesId: string, GrowthXP: number, StageId: string } } = {}
+local states = {}
 local lastFeedAt: { [number]: number } = {}
 local reactionUntil: { [number]: number } = {}
 local initialized: { [number]: boolean } = {}
@@ -32,6 +33,8 @@ end
 
 local feedRequest = getOrCreateRemote("FeedMonster")
 local feedFeedback = getOrCreateRemote("FeedFeedback")
+local evolveRequest = getOrCreateRemote("EvolveMonster")
+local evolveFeedback = getOrCreateRemote("EvolutionFeedback")
 
 local function getStage(xp: number)
 	for index = #Config.GrowthStages, 1, -1 do
@@ -123,13 +126,24 @@ local function updateState(player: Player)
 	player:SetAttribute("MonsterName", state.SpeciesId)
 	player:SetAttribute("MonsterXP", state.GrowthXP)
 	player:SetAttribute("MonsterStage", state.StageId)
+	player:SetAttribute("MonsterPath", state.Path or "")
+	player:SetAttribute("MonsterGrowthCap", state.Path and Evolution.MaxXP or Evolution.AtXP)
+	player:SetAttribute("ExplorationUnlocked", state.Path ~= nil)
 
 	local model = workspace:FindFirstChild("Companion_" .. player.UserId)
 	if not model then return end
 	model:SetAttribute("Stage", state.StageId)
 	model:SetAttribute("GrowthXP", state.GrowthXP)
 	local label = model:FindFirstChild("Nameplate") and model.Nameplate:FindFirstChildWhichIsA("TextLabel")
-	if label then label.Text = stage.Name end
+	local path = state.Path and Evolution.Paths[state.Path]
+	if label then label.Text = path and path.Name or stage.Name end
+	if path then
+		model.Body.Color = path.Color
+		model.Leaf.Color = path.Accent
+		model.Leaf.Shape = state.Path == "Crystal" and Enum.PartType.Block or Enum.PartType.Ball
+		model.Leaf.Material = state.Path == "Crystal" and Enum.Material.Neon or Enum.Material.SmoothPlastic
+		model.Belly.Color = path.Accent
+	end
 	local ratio = stage.Scale + (state.GrowthXP / Config.MaxXP) * 0.15
 	model:ScaleTo(ratio)
 end
@@ -149,12 +163,14 @@ end
 local function onFeed(player: Player, foodId)
 	local state = states[player.UserId]
 	if not state then return end
+	if not require(script.Parent.FarmService).CanChange(player) then return end
 	local humanoid = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
 	if not humanoid or humanoid.Health <= 0 then return end
 	local now = os.clock()
 	if now - (lastFeedAt[player.UserId] or 0) < FEED_COOLDOWN then return end
 	lastFeedAt[player.UserId] = now
-	if state.GrowthXP >= Config.MaxXP then
+	local cap = state.Path and Evolution.MaxXP or Evolution.AtXP
+	if state.GrowthXP >= cap then
 		feedFeedback:FireClient(player, false, 0)
 		return
 	end
@@ -164,7 +180,7 @@ local function onFeed(player: Player, foodId)
 		feedFeedback:FireClient(player, false, 0)
 		return
 	end
-	local grantedXP = math.min(Config.MaxXP - state.GrowthXP, foodXP)
+	local grantedXP = math.min(cap - state.GrowthXP, foodXP)
 	state.GrowthXP += grantedXP
 	reactionUntil[player.UserId] = now + 0.55
 	updateState(player)
@@ -179,10 +195,39 @@ function MonsterService.GetSnapshot(player: Player)
 		SpeciesId = state.SpeciesId,
 		GrowthXP = state.GrowthXP,
 		StageId = state.StageId,
+		Path = state.Path,
 	}
 end
 
+function MonsterService.RestoreSnapshot(player, snapshot)
+	local state = states[player.UserId]
+	if not state or type(snapshot) ~= "table" then return end
+	state.Path = typeof(snapshot.Path) == "string" and Evolution.Paths[snapshot.Path] and snapshot.Path or nil
+	local xp = tonumber(snapshot.GrowthXP) or 0
+	if xp ~= xp or math.abs(xp) == math.huge then xp = 0 end
+	state.GrowthXP = math.clamp(math.floor(xp), state.Path and Evolution.AtXP or 0, state.Path and Evolution.MaxXP or Evolution.AtXP)
+	updateState(player)
+end
+
+function MonsterService.TryEvolve(player, pathId)
+	local state = states[player.UserId]
+	if not state or typeof(pathId) ~= "string" or not Evolution.Paths[pathId] then return false, "Choose a valid path" end
+	if not require(script.Parent.FarmService).CanChange(player) then return false, "Progress is unavailable while your data loads or reconnects" end
+	local humanoid = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
+	if not humanoid or humanoid.Health <= 0 then return false, "Respawn first" end
+	if state.Path then return false, "Your path is already chosen" end
+	if state.GrowthXP < Evolution.AtXP then return false, "Reach 100 growth first" end
+	state.Path = pathId
+	updateState(player)
+	reactionUntil[player.UserId] = os.clock() + 0.55
+	return true, "Evolved into " .. Evolution.Paths[pathId].Name .. "! Element Grove unlocked."
+end
+
 function MonsterService.Start()
+	evolveRequest.OnServerEvent:Connect(function(player, pathId)
+		local ok, message = MonsterService.TryEvolve(player, pathId)
+		evolveFeedback:FireClient(player, ok, message)
+	end)
 	feedRequest.OnServerEvent:Connect(onFeed)
 	Players.PlayerAdded:Connect(createCompanion)
 	Players.PlayerRemoving:Connect(function(player)

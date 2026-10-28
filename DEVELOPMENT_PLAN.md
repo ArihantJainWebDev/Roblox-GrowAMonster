@@ -67,3 +67,10 @@ Detailed phase briefs live in `docs/phases/`. A phase is complete only when its 
 
 - [ ] Phase 3: two-player independent node availability, inventory isolation, and pacing. Deferred at user request on 2026-10-29; does not block Phase 4 implementation.
 - [ ] Phase 4: two-player farm ownership, save/rejoin with API access enabled, and phone interaction/layout.
+
+## 2026-10-29 progression update
+
+- User confirmed Phase 4 farming checks work. Save/rejoin and multiplayer testing explicitly deferred at user request; phone farming review remains pending.
+- Phase 5 implementation underway: first elemental choice at 100 growth, equal growth cap of 300, Element Grove reward interaction. Save/rejoin remains deferred, not passed.
+
+Phase 5 evolution prototype implemented; live selection guards and post-evolution feeding passed. Pending: Grove playthrough, phone input/layout, multiplayer isolation, and deferred save/rejoin. Final art stays in Phase 7.

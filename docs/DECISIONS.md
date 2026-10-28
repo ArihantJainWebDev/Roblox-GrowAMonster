@@ -30,3 +30,10 @@ Use this log for choices that materially affect gameplay, player expectations, s
 ## Open design questions
 
 The roadmap records current recommendations for these, but playtests can revise them: exact growth and economy values; passive growth behavior; island expansion; how island visits work; first-release quest length; and whether later systems such as trading or co-op are worth their complexity.
+
+## 2026-10-29 - Phase 5 prototype
+
+- First path at 100 growth; Fire/Crystal/Nature share the 300 cap and Grove rewards. No branch blocks basic gathering/farming.
+- Confirmation makes the path permanent for that monster; save/rejoin verification stays deferred at user request.
+- Extend the current leased farm record with monster XP/path rather than creating a second competing save. Consolidate persistence before release.
+- Production models/textures/animation remain Phase 7.

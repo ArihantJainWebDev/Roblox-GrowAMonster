@@ -9,6 +9,10 @@ local profiles, islands, slots = {}, {}, {}
 local store = DSS:GetDataStore("GrowAMonster_Farms_v1")
 local token = game.JobId .. Http:GenerateGUID(false)
 local closing = false
+function Service.CanChange(player)
+	local profile = profiles[player]
+	return profile ~= nil and not profile.Blocked and (not profile.Persistent or os.time() < profile.Lease)
+end
 local function part(parent, name, size, pos, color)
 	local p = Instance.new("Part")
 	p.Name, p.Size, p.Position = name, size, pos
@@ -21,6 +25,7 @@ local function save(player, release)
 	if not profile or not profile.Persistent or profile.Saving then return end
 	profile.Saving = true
 	local snapshot = { Coins = profile.Coins, Seeds = table.clone(profile.Seeds), Plots = {} }
+	snapshot.Monster = require(script.Parent.MonsterService).GetSnapshot(player)
 	for i, plot in profile.Plots do snapshot.Plots[i] = table.clone(plot) end
 	local ok, result = pcall(function()
 		return store:UpdateAsync(tostring(player.UserId), function(old)
@@ -96,6 +101,7 @@ local function init(player)
 	-- On an unavailable store, allow an explicitly labelled Studio preview only.
 	if not ok and not game:GetService("RunService"):IsStudio() then player:Kick("Farm data could not load. Please try again."); return end
 	profiles[player] = profile
+	if ok then require(script.Parent.MonsterService).RestoreSnapshot(player, saved.Monster) end
 	player:SetAttribute("FarmSaveStatus", ok and "Loaded" or "Studio preview — not saved")
 	local slot = 1
 	while slots[slot] do slot += 1 end
