@@ -1,0 +1,15 @@
+# Editor and local tool state
+.vscode/
+.idea/
+*.log
+*.tmp
+
+# Generated dependencies and build output
+node_modules/
+dist/
+build/
+
+# Operating system metadata
+.DS_Store
+Thumbs.db
+Desktop.ini
