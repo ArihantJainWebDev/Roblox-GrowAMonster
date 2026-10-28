@@ -1,6 +1,6 @@
 # Grow a Monster — Development Plan
 
-**Status:** Phase 1 is complete; Phase 2 is ready to begin.
+**Status:** Phases 1 and 2 are complete; Phase 3 is ready to begin.
 The order favors a small playable loop early, then reliable progression, content, polish, and release readiness.
 
 ## Release shape
@@ -15,7 +15,7 @@ The order favors a small playable loop early, then reliable progression, content
 |---|---|---|
 | 0 | Project handoff and planning baseline | Existing files and tools reviewed; design and scope recorded; user agrees the baseline is ready for implementation. |
 | 1 | Rojo/Git foundation and playable skeleton | Project syncs to the intended Studio place; player can spawn in a readable test area with clean startup/output. |
-| 2 | Companion, feeding, and growth | Starter companion state is visible; valid feeding changes authoritative growth and milestone UI; invalid requests grant nothing. |
+| 2 | Companion, feeding, and growth | Readable companion feedback and milestone UI; valid feeding changes server-owned growth; invalid requests grant nothing; growth data is persistence-ready. |
 | 3 | Food inventory and wild gathering | A small set of server-validated food nodes can be collected and respawn; inventory feedback is clear. |
 | 4 | Personal island and four-plot farming | Each player can plant, wait, harvest and feed; ownership is enforced; crop state survives rejoin. |
 | 5 | Evolution and first exploration unlock | Fire, Crystal, and Nature choices work and persist; choice feedback is clear; paths are comparable. |

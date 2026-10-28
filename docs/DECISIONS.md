@@ -14,6 +14,12 @@ Use this log for choices that materially affect gameplay, player expectations, s
 - **Project documents:** maintain `GAME_DESIGN.md`, `ARCHITECTURE.md`, `DEVELOPMENT_PLAN.md`, `CHANGELOG.md`, and phase briefs.
 - **Implementation boundary:** plan first; do not change gameplay files until the user requests building.
 
+## 2026-10-29 — Phase 2 starter growth loop
+
+- **Choice:** Give each new session 10 starter fruit, grant 10 growth XP per accepted feed, and use 100 XP for the first visible Baby-to-Young stage change.
+- **Rationale:** This lets the Phase 2 slice demonstrate continuous growth and one clear milestone before gathering, farming, and persistence are implemented.
+- **Follow-up:** Replace test starter food with the real inventory and saved progression in their planned phases; tune the values after playtesting.
+
 ## Open design questions
 
 The roadmap records current recommendations for these, but playtests can revise them: exact growth and economy values; passive growth behavior; island expansion; how island visits work; first-release quest length; and whether later systems such as trading or co-op are worth their complexity.

@@ -1,6 +1,6 @@
 # Grow a Monster — Architecture
 
-**Status:** Proposed technical plan; implementation begins only after the planning baseline is reviewed.  
+**Status:** Technical baseline accepted; implementation is underway, with phases recorded in `DEVELOPMENT_PLAN.md`.
 **Stack:** Roblox Studio, Luau, Rojo, Git.
 
 ## 1. Guiding rules

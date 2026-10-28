@@ -5,9 +5,9 @@ The source project for a cozy Roblox creature-raising and exploration game. The 
 ## Project status
 
 - Planning baseline is recorded in `GAME_DESIGN.md` and `ARCHITECTURE.md`.
-- Phase 1 is complete: the project builds with the pinned Rojo 7.7.1 CLI, syncs into the intended Studio place, and the floating spawn was inspected in Play mode.
+- Phases 1 and 2 are complete: the server-validated feeding and growth loop, recognizable following Sprout, and persistence-ready growth snapshot are in place. Production art and saved progression remain future work.
 - The folder uses Rojo and Git. Studio's mapped server script was verified against the local source. A one-time Rojo timeout appeared after sync, but the synced project ran successfully.
-- No production gameplay loop is implemented yet.
+- Food gathering, farming, evolution, persistence, and production-ready creature art are not implemented yet.
 
 ## Prerequisites
 

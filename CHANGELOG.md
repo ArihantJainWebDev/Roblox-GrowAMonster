@@ -2,6 +2,13 @@
 
 Notable project changes are recorded here, newest first. Planning decisions are not evidence of implemented features.
 
+## Unreleased — Phase 2 complete
+
+- Added a server-owned Sprout with a readable part-based face, belly, feet, and leaf; it follows its owner and reacts to feeding.
+- Added a data-only growth snapshot for later persistence, plus the client HUD and server-validated feeding. Starter food, XP, and stage remain session-only.
+- Verified ten feeds consume food and advance Baby-to-Young at 100 XP; an empty-inventory feed request grants no XP. Rojo build and Studio sync succeeded.
+- Production art, saved progression, gathering, farming, and evolution remain future work in their planned phases.
+
 ## Unreleased — Planning baseline (initial state)
 
 - Recorded the agreed game direction: personal floating islands and shared exploration, continuous visible companion growth, Fire/Crystal/Nature evolution paths, wild food plus four-plot farming, colorful stylized 3D, and optional cosmetic monetization.
