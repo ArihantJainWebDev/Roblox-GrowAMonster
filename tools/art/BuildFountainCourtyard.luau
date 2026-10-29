@@ -175,6 +175,7 @@ function Courtyard.Build(Art,options)
 			part("BenchBack",Vector3.new(.25,1.1,5.4),Vector3.new(x+math.sign(x)*.8,2.5,z),wood,Enum.Material.WoodPlanks)
 		end
 	end
+	require(script.Parent.CourtyardDetails).Build(Art,root,options)
 	local landing=part("ReviewLanding",Vector3.new(8,.3,6),Vector3.new(0,.15,-30),cream,Enum.Material.Limestone)
 	root:SetAttribute("LocalLanding",Vector3.new(0,4,-30))
 	root:PivotTo(root:GetPivot()+(options.Origin or Vector3.new(3600,120,0)))

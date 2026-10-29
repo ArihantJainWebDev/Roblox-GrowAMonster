@@ -11,6 +11,9 @@
         },
         "Courtyard": {
           "$path": "tools/art/BuildFountainCourtyard.luau"
+        },
+        "CourtyardDetails": {
+          "$path": "tools/art/BuildCourtyardDetails.luau"
         }
       },
       "Shared": {

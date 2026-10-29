@@ -149,3 +149,7 @@ Gateway travel stays within the same server. Server-owned player-to-island mappi
 ## W2 implemented boundaries — 29 October 2026
 
 WorldConfig defines shared terrain zones, graded routes, bridge endpoints, food anchors and home placement. WorldService writes bounded terrain regions and owns shared supports/fall recovery. FarmService creates personal terrain and keeps its existing invisible Grass compatibility anchor for quest/UI distances. GatewayService resolves owned homes on the server, validates prompt access/cooldown and requests destination streaming before travel. Client CourtyardEffects/WorldVisuals reconstruct original non-colliding meshes and effects; gameplay interactions remain server-owned. Mesh/Image APIs are required. See docs/world/W2_FOUNDATION.md. The previous architecture entry saying travel implementation is pending is superseded; visiting policy remains pending.
+
+## Courtyard detail module
+
+ReplicatedStorage.ArtReview.CourtyardDetails maps tools/art/BuildCourtyardDetails.luau. Courtyard.Build invokes it before applying the world-origin translation. It batches project-authored visual masonry and furniture by material/color, constructs layered botanical meshes, and raycasts only Terrain to align short trail connections. The local visuals do not own player progress or grant rewards.

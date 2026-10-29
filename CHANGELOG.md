@@ -2,6 +2,31 @@
 
 Notable project changes are recorded here, newest first. Planning decisions are not evidence of implemented features.
 
+## Unreleased — Consistent editor preview
+
+- Added tools/PreviewWorldInStudio.luau to refresh the generated shared world/courtyard in Edit mode from current sources.
+- Prevented WorldService from starting its player recovery loop during an Edit preview build.
+- Resolved the stale sky-foundation-03 Edit scene while retaining sky-foundation-09 sources; no project files were lost and nothing was published.
+
+## Unreleased — Natural stone trails and bridge landings
+
+- Replaced outdoor pale tile markers with continuous Rock terrain trails; retained the courtyard's formal paving.
+- Rebuilt bridge spans using measured ground elevations, extended landings, bounded terrain clearance and six stone approach ramps.
+- Widened the Grove bloom grass clearing. Three no-jump bridge/landing traversals passed in desktop Play; exact remaining review items are recorded in docs/world/W2_FOUNDATION.md.
+
+## Unreleased — W3 courtyard construction
+
+- Added batched plaza paving, fountain apron/border, garden coping and terrain-aligned trail connections.
+- Added pavilion ashlar, recessed windows, arch voussoirs, pilasters and botanical roof ornament; layered tree-bed foliage and flowers, lantern frames and bench armrests.
+- Preserved original fountain water/audio and current gameplay anchors. Expanded grass clearings along courtyard connections.
+- Desktop Play construction/navigation/effects checks passed; user visual acceptance and remaining collision/device requirements are recorded in docs/world/W3_COURTYARD.md.
+
+## Unreleased — Grass clipping correction, 29 October 2026
+
+- Replace Grass terrain material with Ground beneath the courtyard, farm beds/aisles, spawn/egg, gateways, tree bases, Grove bloom and walking trails. Terrain height and occupancy stay intact; wild landscape keeps its grass.
+- Apply shared clearings on startup even when terrain already matches the current version; apply home clearings after each personal island is generated.
+- Synced WorldService into Studio and applied the shared clearings in Edit. Fresh Play voxel checks found zero Grass voxels in sampled courtyard/farm/tree-base areas and retained Grass in the sampled wild landscape. Rojo build passed.
+
 ## Unreleased — W2 world foundation, 29 October 2026
 
 - Added irregular floating Terrain, rock strata, orchard terraces, three bridges, spring/channel, layered procedural clouds and fall recovery.

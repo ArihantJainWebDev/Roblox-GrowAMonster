@@ -102,3 +102,10 @@ Courtyard runtime blocker resolved: user enabled Mesh / Image APIs; per-piece me
 ## W2 implementation — 29 October 2026
 
 W2 foundation is in progress: real floating terrain, orchard/Grove routes, integrated fountain hub, layered clouds and separate gateway homes are implemented. Functional gateway/recovery and route support checks passed; W2 visual acceptance, full-loop walkthrough, multiplayer, persistence and device/performance checks remain open. See docs/world/W2_FOUNDATION.md for exact evidence and defects. Historical prototype completion does not mean this production stage is complete.
+
+## W3 courtyard construction — 29 October 2026
+
+W3-garden-01 adds expanded paving, pavilion masonry/ornament and layered planting to the actual shared fountain hub. Construction pass awaits user visual review and device checks; it is not an accepted completed stage. See docs/world/W3_COURTYARD.md. W2 and R1 open requirements remain tracked.
+
+
+User route review — 29 October 2026: screenshots exposed bridge/terrain joins and trail-marker defects. Corrected under W2 build sky-foundation-09 with rock trails and measured landings; three no-jump crossings passed. Close visual review remains open, then W3 courtyard approval precedes W4 rollout. See docs/world/W2_FOUNDATION.md.

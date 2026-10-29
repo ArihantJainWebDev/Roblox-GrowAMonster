@@ -162,3 +162,6 @@ Keep a compact shared fountain hub and walkable orchard/Grove loop. A Home gatew
 ## W2 layout integration — 29 October 2026
 
 Shared fountain hub, terraced orchard and Element Grove now use floating Terrain connected by three walking bridges. Owned homes occupy a separate same-server residential area reached through gateways. Existing four-plot farming, gathering, growth and evolution rules remain authoritative. This is a functional foundation implementation, not accepted finished environment/creature/UI art. See docs/world/W2_FOUNDATION.md.
+
+
+Outdoor route material decision — 29 October 2026: use natural stone/rock trails across exploration areas rather than scattered pale rectangular tiles. Formal jointed paving remains local to the fountain courtyard.

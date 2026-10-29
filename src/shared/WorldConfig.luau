@@ -1,6 +1,6 @@
 -- Authored layout; food and growth balance remain in their own configs.
 local Map={
-	Version="sky-foundation-03",Hub=Vector3.new(0,422,0),HubArrival=Vector3.new(-28,426,-26),
+	Version="sky-foundation-09",Hub=Vector3.new(0,422,0),HubArrival=Vector3.new(-28,426,-26),
 	HomeGateway=Vector3.new(-48,422,-25),GroveBloom=Vector3.new(310,483,175),RecoveryY=250,
 	Zones={
 		{Id="Hub",X=0,Z=0,RX=118,RZ=110,Y=420,Depth=125},

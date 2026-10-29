@@ -44,15 +44,83 @@ local function buildZone(zone)
 		task.wait()
 	end
 end
+-- Replace material only: preserve terrain occupancy, heights and collision.
+-- Roblox grows decorative blades on Grass even when a prop covers that surface.
+local function clearGrass(center,width,depth)
+ local region=Region3.new(center-Vector3.new(width/2,14,depth/2),center+Vector3.new(width/2,14,depth/2)):ExpandToGrid(4)
+ Terrain:ReplaceMaterial(region,4,Enum.Material.Grass,Enum.Material.Ground)
+end
+function Service.ApplyHomeGroundCover(center)
+ clearGrass(center+Vector3.new(0,2,-3),30,32) -- four beds and their aisles
+ clearGrass(center+Vector3.new(3,2,18),22,16) -- spawn and egg
+ clearGrass(center+Vector3.new(-16,2,-15),16,16) -- return gateway
+end
+function Service.ApplyGroundCover()
+ clearGrass(Map.Hub,68,70) -- courtyard, fountain, furniture and portico
+ clearGrass(Map.HomeGateway,16,16)
+ for _,ends in {{Vector3.new(-32,0,-24),Vector3.new(-48,0,-25)},{Vector3.new(32,0,-24),Vector3.new(45,0,-30)},{Vector3.new(32,0,28),Vector3.new(45,0,35)}} do
+  local steps=math.ceil((ends[2]-ends[1]).Magnitude/4)
+  for i=0,steps do clearGrass(Map.Hub+ends[1]:Lerp(ends[2],i/steps),10,10) end
+ end
+ for _,route in Map.Routes do for i=1,#route.Points-1 do
+  local a,b=route.Points[i],route.Points[i+1]
+  local steps=math.max(1,math.ceil((b-a).Magnitude/4))
+  for j=0,steps do clearGrass(a:Lerp(b,j/steps),12,12) end
+ end;task.wait() end
+ local world=workspace:FindFirstChild("WorldFoundation")
+ local anchors=world and world:FindFirstChild("LandmarkAnchors")
+ if anchors then for _,anchor in anchors:GetChildren() do clearGrass(anchor.Position,12,12) end end
+ clearGrass(Map.GroveBloom,32,32)
+end
 function Service.BuildHome(slot)
 	local center=Map.HomeCenter(slot)
 	buildZone({Id="Home",X=center.X,Z=center.Z,RX=57,RZ=62,Y=420,Depth=75})
-	return Vector3.new(center.X,assert(Service.SurfaceAt(center.X,center.Z))-2,center.Z)
+	local origin=Vector3.new(center.X,assert(Service.SurfaceAt(center.X,center.Z))-2,center.Z)
+	Service.ApplyHomeGroundCover(origin)
+	return origin
 end
 function Service.SurfaceAt(x,z)
 	local p=RaycastParams.new();p.FilterType=Enum.RaycastFilterType.Include;p.FilterDescendantsInstances={Terrain}
 	local hit=workspace:Raycast(Vector3.new(x,650,z),Vector3.new(0,-500,0),p)
 	return hit and hit.Position.Y or nil
+end
+-- Cut only the deck corridor: preserve the island underside and neighbouring slopes.
+local function gradeBridge(a,b)
+ local ab=Vector2.new(b.X-a.X,b.Z-a.Z)
+ local lo=Vector3.new(math.min(a.X,b.X)-16,math.min(a.Y,b.Y)-12,math.min(a.Z,b.Z)-16)
+ local hi=Vector3.new(math.max(a.X,b.X)+16,650,math.max(a.Z,b.Z)+16)
+ local region=Region3.new(lo,hi):ExpandToGrid(4)
+ local m,o=Terrain:ReadVoxels(region,4)
+ local corner=region.CFrame.Position-region.Size/2
+ for x=1,m.Size.X do
+  for z=1,m.Size.Z do
+   local px,pz=corner.X+(x-.5)*4,corner.Z+(z-.5)*4
+   local raw=Vector2.new(px-a.X,pz-a.Z):Dot(ab)/ab:Dot(ab)
+   local t=math.clamp(raw,0,1);local p=a:Lerp(b,t)
+   if raw>=-8/ab.Magnitude and raw<=1+8/ab.Magnitude and Vector2.new(px-p.X,pz-p.Z).Magnitude<12 then
+    for y=1,m.Size.Y do
+     local py=corner.Y+(y-.5)*4
+     o[x][y][z]=math.min(o[x][y][z],math.clamp((p.Y-4.2-py)/4+.5,0,1))
+     if o[x][y][z]==0 then m[x][y][z]=Enum.Material.Air
+     elseif m[x][y][z]==Enum.Material.Grass then m[x][y][z]=Enum.Material.Ground end
+    end
+   end
+  end
+  if x%8==0 then task.wait() end
+ end
+ Terrain:WriteVoxels(region,4,m,o)
+end
+local function buildStoneTrails()
+ for _,route in Map.Routes do for i=1,#route.Points-1 do
+  local a,b=route.Points[i],route.Points[i+1]
+  local steps=math.ceil((b-a).Magnitude/3)
+  for j=0,steps do
+   local p=a:Lerp(b,j/steps)
+   local region=Region3.new(p-Vector3.new(4,10,4),p+Vector3.new(4,14,4)):ExpandToGrid(4)
+   Terrain:ReplaceMaterial(region,4,Enum.Material.Ground,Enum.Material.Rock)
+  end
+  task.wait()
+ end end
 end
 local function bridge(parent,a,b)
 	local direction=b-a;local count=math.ceil(direction.Magnitude/3)
@@ -71,6 +139,21 @@ local function bridge(parent,a,b)
 		local rail=part(parent,"BridgeRail",Vector3.new(.4,.4,direction.Magnitude),p,Color3.fromRGB(104,76,49),Enum.Material.Wood)
 		rail.CFrame=CFrame.lookAt(p,p+direction)
 	end
+	-- Short stone approach ramps bridge the voxel-smoothed edge of each landing.
+	local along=Vector3.new(direction.X,0,direction.Z).Unit
+	for _,endInfo in {{a,-along},{b,along}} do
+		local endpoint,outward=endInfo[1],endInfo[2]
+		local outside=endpoint+outward*8
+		local ground=Service.SurfaceAt(outside.X,outside.Z)
+		if ground then
+			outside=Vector3.new(outside.X,ground+.08,outside.Z)
+			local inner=endpoint-Vector3.new(0,.08,0)
+			gradeBridge(outside,inner)
+			local frame=CFrame.lookAt((inner+outside)/2,outside)
+			local ramp=part(parent,"StoneLandingRamp",Vector3.new(12,3,(outside-inner).Magnitude+.15),frame.Position-frame.UpVector*1.5,Color3.fromRGB(131,132,119),Enum.Material.Rock)
+			ramp.CFrame=frame-frame.UpVector*1.5
+		end
+	end
 end
 local function atmosphere()
 	local light=game:GetService("Lighting");light.ClockTime,light.Brightness=14.5,2.6
@@ -86,6 +169,10 @@ local function atmosphere()
 	Terrain:SetMaterialColor(Enum.Material.Slate,Color3.fromRGB(102,109,113))
 end
 function Service.Start()
+	if game:GetService("RunService"):IsRunning() then
+		local preview=workspace:FindFirstChild("EditorCourtyardPreview")
+		if preview then preview.Parent=game.ServerStorage end
+	end
 	local existing=workspace:FindFirstChild("WorldFoundation")
 	if not existing or existing:GetAttribute("Version")~=Map.Version then
 		if existing then existing:Destroy() end
@@ -113,23 +200,34 @@ function Service.Start()
 			local anchor=part(anchors,"Tree"..i,Vector3.one,Vector3.new(point.X,y,point.Y),Color3.new(1,1,1));anchor.Transparency,anchor.CanCollide,anchor.CanQuery=1,false,false
 		end
 		local connections=Instance.new("Folder");connections.Name="Bridges";connections.Parent=world
-		for _,route in Map.Bridges do bridge(connections,route.A+Vector3.new(0,2,0),route.B+Vector3.new(0,2,0)) end
-		for _,route in Map.Routes do for i=1,#route.Points-1 do
-			local a,b=route.Points[i],route.Points[i+1];local count=math.max(1,math.floor((b-a).Magnitude/14))
-			for j=0,count do
-				local p=a:Lerp(b,j/count);local y=Service.SurfaceAt(p.X,p.Z)
-				if y and math.abs(y-p.Y)<5 then
-					local stone=part(world,"TrailStone",Vector3.new(5,.25,4),Vector3.new(p.X,y+.1,p.Z),Color3.fromRGB(192,184,157),Enum.Material.Limestone)
-					stone.CanCollide=false
-				end
-			end
-		end end
+		for index,route in Map.Bridges do
+   -- Land twelve studs inside each island; use measured ground instead of a guessed +2 offset.
+   local along=Vector3.new(route.B.X-route.A.X,0,route.B.Z-route.A.Z).Unit
+   local start,finish=route.A-along*12,route.B+along*12
+   local a=Vector3.new(start.X,assert(Service.SurfaceAt(start.X,start.Z))+.05,start.Z)
+   local b=Vector3.new(finish.X,assert(Service.SurfaceAt(finish.X,finish.Z))+.05,finish.Z)
+   gradeBridge(a,b)
+   local span=Instance.new("Model");span.Name="Bridge"..index;span:SetAttribute("Start",a);span:SetAttribute("Finish",b);span.Parent=connections
+   bridge(span,a,b)
+  end
 		local spawn=Instance.new("SpawnLocation");spawn.Name="HubSpawn";spawn.Anchored=true
 		spawn.Size,spawn.Position,spawn.Transparency=Vector3.new(8,1,8),Map.HubArrival-Vector3.new(0,3,0),1
 		spawn.Neutral,spawn.Duration,spawn.Parent=true,0,world
 		world:SetAttribute("Version",Map.Version);world:SetAttribute("Ready",true)
 	end
+	Service.ApplyGroundCover()
+	buildStoneTrails()
+	-- Client-authored masonry has simple server-owned boundaries at the same placement.
+	local world=workspace.WorldFoundation
+	if not world:FindFirstChild("CourtyardBoundaries") then
+		local bounds=Instance.new("Folder");bounds.Name="CourtyardBoundaries";bounds.Parent=world
+		for _,side in {-1,1} do
+			local wall=part(bounds,"PavilionSideWall",Vector3.new(6.7,7.6,1.2),Map.Hub+Vector3.new(side*9.9,3.8,32),Color3.new(1,1,1))
+			wall.Transparency=1
+		end
+	end
 	atmosphere()
+	if not game:GetService("RunService"):IsRunning() then return end
 	task.spawn(function()
 		while true do task.wait(.3)
 			for _,player in Players:GetPlayers() do

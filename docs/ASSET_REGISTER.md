@@ -33,3 +33,7 @@ Fountain audio candidate 9120557315 (ProSoundEffects), free Creator Store result
 ## W2 original atmosphere and landmark assets
 
 WorldVisuals authors its cloud image and mesh cards locally, plus a faceted Grove bloom; no external source or upload. Broadleaf clones use the original Geometry library. Courtyard fountain audio retains the existing registered candidate. Native Terrain/materials form the land; all new local visual meshes are non-colliding. Runtime Mesh/Image APIs are enabled. User visual approval and device/performance checks remain open.
+
+## W3 garden details
+
+BuildCourtyardDetails.luau contains project-authored masonry/paving meshes, botanical ornament, understory leaves and flower geometry. No external geometry/textures or paid assets were added. Materials use Roblox engine appearances; existing fountain audio retains its earlier provenance. Side-panel collision uses matching server-owned bounds; visual acceptance, device/performance and multiplayer review remain open.

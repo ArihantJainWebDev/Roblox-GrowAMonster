@@ -38,3 +38,32 @@ Status: In progress, 29 October 2026. Functional foundation implemented; visual 
 ## Source ownership
 
 WorldService builds server terrain, bridges and recovery; GatewayService owns travel. WorldConfig owns placement and grading. WorldVisuals creates non-colliding local clouds/vegetation/bloom/waterfall. CourtyardEffects rebuilds original meshes on each client because transient Edit mesh content does not survive Edit-to-Play cloning reliably. Mesh/Image APIs are required. No assets were uploaded or published.
+
+
+## Grass clipping correction — 29 October 2026
+
+User reports the full gameplay flow works, with terrain grass clipping through placed scenery. WorldService now changes only Grass material to Ground in bounded occupied areas: courtyard, farm/aisles, spawn/egg, gateways, trails, tree roots and Grove bloom. No terrain is excavated; global grass decoration remains enabled. Shared clearings reapply on startup regardless of world version, and home clearings follow home terrain creation. Existing shared Edit terrain was updated as well. Fresh Play samples: courtyard Grass=0, farm Grass=0, tree base Grass=0; wild-landscape Grass=20 occupied voxels. Build passed. User walkthrough feedback does not close deferred multiplayer/persistence/device checks.
+
+
+## Route defects reported by user — 29 October 2026
+
+User screenshots identify disconnected/raised bridge ends, terrain piercing decks, pale tile markers overlapping timber, and crowded Grove grass. These are defects, not accepted visual details. Natural rock trails are now the approved outdoor direction; the fountain plaza keeps formal masonry.
+
+World build sky-foundation-09 removes the TrailStone markers and replaces the cleared trail's Ground material with a continuous Rock surface. Bridges extend twelve studs into their islands; endpoints derive from actual Terrain raycasts. A bounded voxel pass caps terrain inside each deck corridor without clearing the island underside. Six stone landing ramps connect the timber ends to the measured ground eight studs beyond. Grove bloom clearing expands to 32 × 32 studs.
+
+Desktop Play: all three bridge crossings and far landing exits passed client navigation with JumpPower and JumpHeight set to zero; checked health 100. Each bridge has two landing ramps. Terrain probes at 41 longitudinal positions × three lateral offsets per span found maximum terrain height relative to the design deck line: Bridge1 -0.355, Bridge2 -0.306, Bridge3 +0.096 studs (small residual at a landing/smoothing boundary, still requiring close visual review). No TrailStone tiles remain. Build/whitespace checks passed. User screenshots revealed defects missed by the earlier route-support-only checks; those earlier checks must not be treated as visual/landing acceptance.
+
+Open: user review of stone texture, bridge abutments/rail endings, remaining small terrain seam and grass density away from cleared approaches. W2 is not accepted complete. Outdoor trail preference does not approve W3 courtyard or W4 scenery.
+
+Final landing pass: close visual review exposed terrain poking through one stone approach. The same bounded clearance is now applied under each approach and abutments have three-stud structural depth. Final build 09 supersedes the initial crossing evidence; user visual review remains required.
+
+The final grading corridor includes a voxel-smoothing margin beyond each landing and beside each deck. Earlier numeric probes describe the intermediate build, not final visual acceptance.
+`nFinal build 09 landing probes (three lateral offsets, five positions per ramp) found maximum terrain-to-landing differences of -1.464 / -1.099 / -1.390 studs on bridges 1 / 2 / 3: no terrain intrusion in those samples. Final orchard/Grove crossing and far exit passed with jumping disabled; normal jump controls restored afterward. Rojo build passed.
+
+
+## Edit/Play preview mismatch — 29 October 2026
+
+User reported recent work missing after reconnecting Rojo. Audit found current source sky-foundation-09 and the W3 detail module present in Studio, while the Edit workspace still held generated sky-foundation-03. Runtime terrain/courtyard changes reverted on stopping Play; the local source files were intact.
+
+Added tools/PreviewWorldInStudio.luau to rebuild the shared terrain and courtyard in Edit from freshly cloned modules (avoids stale require caches). WorldService exits before starting its recovery loop when used in Edit. Ran the preview: Edit terrain now sky-foundation-09, courtyard W3-garden-01. Checked all 25 mapped source files against local content, allowing newline normalization; the only initial discrepancy was an extra trailing blank line in WorldService and was normalized. A fresh Play restart reports current terrain/courtyard again. No publish performed. Client cloud sheets, private home/player services and other gameplay visuals still initialize during Play.
+Editor preview has its own EditorCourtyardPreview name and is removed from Workspace at runtime, preventing a race with client courtyard reconstruction. Final fresh Play: terrain sky-foundation-09, courtyard W3-garden-01, Ready, clouds true. Returned to Edit after verification; no publish performed.
