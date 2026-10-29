@@ -150,3 +150,7 @@ First evolution unlocks at 100 growth. Fire, Crystal, and Nature share equal XP 
 ## Phase 6 prototype onboarding
 
 Hatch, gather, plant, harvest, feed, return home, evolve, then claim the Grove bloom. Eight objectives award 23 coins total and remember valid actions completed out of order. Guidance can be collapsed. Element Grove is expanded with landmarks/signs and three food patches. Final art remains Phase 7.
+
+## Production world direction — 29 October 2026
+
+Build a substantial, crafted fantasy archipelago above clouds with sculpted terrain, believable cliff undersides, water/fountain, layered vegetation, coherent architecture and purposeful exploration routes. Flat square platforms, a visible template ground plane and primitive creature studies are not accepted final visuals. docs/WORLD_PRODUCTION_PLAN.md specifies required spaces, asset methods and review gates; it supersedes the old small-island visual target without changing the core gameplay pillars.

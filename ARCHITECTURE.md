@@ -137,3 +137,7 @@ EvolutionConfig defines branches and thresholds. MonsterService owns TryEvolve a
 ## Phase 6 onboarding
 
 QuestService owns objective facts and ordered one-time rewards. Validated actions call Record from server services; clients cannot claim progress. Coin reward and step advancement do not yield. QuestController derives guidance from replicated step state. FarmService saves quest snapshots; MonsterService persists Hatched and migrates legacy grown/evolved monsters. Rejoin/storage-failure checks remain pending.
+
+## World/art production boundary — 29 October 2026
+
+Follow docs/WORLD_PRODUCTION_PLAN.md. Separate authored environment/asset data from gameplay services; migrate gameplay anchors and transforms without losing validation or state IDs. Verify Rojo/Studio ownership for meshes, terrain and imported models before replacing runtime-generated scenery. Preserve source assets and import metadata. VisualSample is an unaccepted preview, not production world architecture. A visible template plane and above-cloud rendering must be audited in the actual place.

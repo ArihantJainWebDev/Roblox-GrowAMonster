@@ -1,20 +1,9 @@
-# Phase 7 — Content, Social Play, and Polish
+# Phase 7 — Fantasy World and Art Production
 
-**Status:** Planned; depends on stable first-release systems.
+Status: Replanned, 29 October 2026. No visual stage accepted.
 
-## Goal
+The previous generic polish brief is superseded by [WORLD_PRODUCTION_PLAN.md](../WORLD_PRODUCTION_PLAN.md). Follow its ordered stages W1 blueprint/feasibility, W2 sky/clouds/terrain, W3 finished fountain courtyard, W4 complete world, C1 creatures/eggs, C2 animation/effects, U1 unified interface, and R1 integrated acceptance.
 
-Make the initial experience feel cohesive, accessible, safe, and comfortable across target devices.
+Use [QUALITY_GATES.md](../QUALITY_GATES.md) for completion and [ASSET_REGISTER.md](../ASSET_REGISTER.md) for sourcing. The existing VisualSample is an unaccepted study. No additional social feature is a dependency of this art program; multiplayer ownership and safety checks remain required.
 
-## Planned work
-
-- Replace temporary visuals with cohesive stylized 3D assets and animation.
-- Tune UI hierarchy, touch targets, readability, audio, and interaction feedback.
-- Decide and implement bounded island visiting or other low-risk social features only if they add clear value.
-- Review instance counts, loading, data errors, and player-facing recovery.
-
-## Verification and exit checks
-
-- Core loop is legible on a small screen and with mouse/keyboard.
-- Social access cannot alter another player's progression or property.
-- The experience has no known blocking data, output, navigation, or usability defects in the agreed playthroughs.
+Next deliverable: world blueprint with elevations/routes and verified modeling/import or free-asset pipeline. Do not extend primitive scenery as finished world art.

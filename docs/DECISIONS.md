@@ -44,3 +44,7 @@ The roadmap records current recommendations for these, but playtests can revise 
 - Eight objectives grant 23 one-time coins; valid out-of-order actions are remembered.
 - Expand Element Grove as the first region. No path blocks ordinary food/farming.
 - Deferred persistence/multiplayer checks remain open; production art stays Phase 7.
+
+## 29 October 2026 — Production quality requirement
+
+User requires a proper fantasy world: sculpted terrain, fountain, clouds/sky, architecture, foliage and then custom characters. No flat empty platform world or primitive-sphere substitutes as final art. Inspect free assets when appropriate; verify rights, scripts, scale and style before use. No unverified quality claims or blanket promises to refine later. Use docs/WORLD_PRODUCTION_PLAN.md and docs/QUALITY_GATES.md; user review of real Studio results determines acceptance.

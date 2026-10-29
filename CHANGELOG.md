@@ -59,3 +59,10 @@ Notable project changes are recorded here, newest first. Planning decisions are 
 - Tutorial completion now removes the guide and target marker automatically, including when loading an already completed journey.
 
 - Added a Sunlit Sky Gardens visual study: hatchery canopy, egg nest, raised crop bed, flowering tree, paving and static baby creature maquette. This is a review sample, not final production art.
+
+## 29 October 2026 — World/art production replan
+
+- Established ordered fantasy-world production stages, concrete required world spaces and evidence-based quality gates.
+- Added asset register and custom/free-asset fallback policy; no external assets selected yet.
+- Recorded visible-ground/cloud/terrain and primitive-art defects as unresolved. Current VisualSample is unaccepted.
+- Replaced stale top-level status and generic Phase 7 brief. Gameplay prototype acceptance does not close deferred release checks.

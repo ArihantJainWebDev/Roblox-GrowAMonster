@@ -1,6 +1,6 @@
 # Grow a Monster — Development Plan
 
-**Status:** Phases 1 and 2 complete. Phase 3 solo/device checks passed per user; multiplayer deferred. Phase 4 farming implemented; persistence, multiplayer, and device validation pending.
+**Status:** Gameplay prototype baseline accepted for continued development; release checks remain open. Active work is the fantasy world/art production plan in `docs/WORLD_PRODUCTION_PLAN.md`, starting at W1. No production-art stage is accepted.
 The order favors a small playable loop early, then reliable progression, content, polish, and release readiness.
 
 ## Release shape
@@ -20,7 +20,7 @@ The order favors a small playable loop early, then reliable progression, content
 | 4 | Personal island and four-plot farming | Each player can plant, wait, harvest and feed; ownership is enforced; crop state survives rejoin. |
 | 5 | Evolution and first exploration unlock | Fire, Crystal, and Nature choices work and persist; choice feedback is clear; paths are comparable. |
 | 6 | Onboarding, quests, and first region | A new player can finish the tutorial loop and find a next goal without assistance; first region feels worth exploring. |
-| 7 | Content, social play, and polish | Target devices have legible controls; presentation is cohesive; social boundaries and island behavior are settled. |
+| 7 | Fantasy world and art production | Follow W1–W4, C1–C2, U1 and R1 in docs/WORLD_PRODUCTION_PLAN.md; all quality gates require evidence and user review. |
 | 8 | Release readiness and optional cosmetics | Save/rejoin, error recovery, moderation/platform review, performance and purchase handling are checked; core progression is free. |
 | 9 | Post-release expansion | Add new regions/crops/forms from player feedback, with backward-compatible data migrations and scoped releases. |
 
@@ -80,3 +80,7 @@ Phase 5 evolution prototype implemented; live selection guards and post-evolutio
 User confirmed Phase 5 gameplay works. Phase 6 onboarding/region prototype is implemented; live chain checks passed. Pending: first-time user playthrough, phone layout/input, saved-profile recovery and multiplayer. Previously deferred checks remain open; production art stays Phase 7.
 
 Phase 7 visual study started with the recommended Sunlit Sky Gardens direction. Review the actual Studio sample before extending the style. Detailed custom meshes, creature rigging/animation and final materials remain outstanding.
+
+## Active plan precedence — 29 October 2026
+
+The detailed world/art production plan and quality gates supersede the generic polish approach and the small visual study. Historical prototype implementation entries are not visual approval or release acceptance. Deferred checks remain open; the current primitive sample is unaccepted. See docs/ASSET_REGISTER.md for required asset sourcing.

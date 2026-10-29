@@ -1,14 +1,12 @@
 # Grow a Monster
 
-The source project for a cozy Roblox creature-raising and exploration game. The current build target is a small floating starter island; gameplay systems will be added in the phases documented in [DEVELOPMENT_PLAN.md](DEVELOPMENT_PLAN.md).
+The source project for a cozy Roblox creature-raising and exploration game. The active target is a crafted fantasy archipelago above clouds; the gameplay prototype is the foundation for the production plan.
 
 ## Project status
 
-- Planning baseline is recorded in `GAME_DESIGN.md` and `ARCHITECTURE.md`.
-- Phases 1 and 2 are complete: the server-validated feeding and growth loop, recognizable following Sprout, and persistence-ready growth snapshot are in place. Production art and saved progression remain future work.
-- The folder uses Rojo and Git. Studio's mapped server script was verified against the local source. A one-time Rojo timeout appeared after sync, but the synced project ran successfully.
-- Phase 3 adds food bushes, individual respawn timers, a food basket, and selected-food feeding. Multiplayer pacing and touch review remain.
-- Farming, evolution, persistence, and production-ready art are not implemented yet. Current sessions begin with an empty basket; collect fruit before feeding.
+Gameplay prototype systems include hatching, gathering, four-plot farming, feeding, growth, three evolution paths and an eight-step quest chain. User playthrough checks are recorded in phase briefs; save/rejoin, multiplayer and outstanding device checks are not yet passed.
+
+Active work: a substantial fantasy archipelago above clouds, following [World Production Plan](docs/WORLD_PRODUCTION_PLAN.md) and [Quality Gates](docs/QUALITY_GATES.md). Current world/creature art and VisualSample are unaccepted prototype studies. Custom models and inspected free assets are valid production routes; no external production assets have been selected yet.
 
 ## Prerequisites
 
