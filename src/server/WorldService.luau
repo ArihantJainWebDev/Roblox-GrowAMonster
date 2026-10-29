@@ -54,6 +54,7 @@ function Service.ApplyHomeGroundCover(center)
  clearGrass(center+Vector3.new(0,2,-3),30,32) -- four beds and their aisles
  clearGrass(center+Vector3.new(3,2,18),22,16) -- spawn and egg
  clearGrass(center+Vector3.new(-16,2,-15),16,16) -- return gateway
+ clearGrass(center+Vector3.new(-15,2,17),14,12) -- propagation bench
 end
 function Service.ApplyGroundCover()
  clearGrass(Map.Hub,68,70) -- courtyard, fountain, furniture and portico
@@ -71,6 +72,27 @@ function Service.ApplyGroundCover()
  local anchors=world and world:FindFirstChild("LandmarkAnchors")
  if anchors then for _,anchor in anchors:GetChildren() do clearGrass(anchor.Position,12,12) end end
  clearGrass(Map.GroveBloom,32,32)
+ clearGrass(Vector3.new(310,Service.SurfaceAt(310,197),197),34,14)
+ clearGrass(Vector3.new(356,Service.SurfaceAt(356,-224),-224),18,14)
+ for _,point in {Vector2.new(282,194),Vector2.new(337,207),Vector2.new(334,150)} do
+  clearGrass(Vector3.new(point.X,Service.SurfaceAt(point.X,point.Y),point.Y),14,14)
+ end
+ for _,group in Map.TreeGroups do for _,entry in group do
+  local y=Service.SurfaceAt(entry[1],entry[2]);if y then clearGrass(Vector3.new(entry[1],y,entry[2]),16,16) end
+ end end
+end
+local function meadowCover(zone)
+ local region=Region3.new(Vector3.new(zone.X-zone.RX,zone.Y-32,zone.Z-zone.RZ),Vector3.new(zone.X+zone.RX,zone.Y+64,zone.Z+zone.RZ)):ExpandToGrid(4)
+ local materials,occupancy=Terrain:ReadVoxels(region,4)
+ local corner=region.CFrame.Position-region.Size/2
+ for x=1,materials.Size.X do for z=1,materials.Size.Z do
+  local px,pz=corner.X+(x-.5)*4,corner.Z+(z-.5)*4
+  local radius=((px-zone.X)/zone.RX)^2+((pz-zone.Z)/zone.RZ)^2
+  if radius<.75 and math.noise(px*.035,pz*.035,7)>-.18 then
+   for y=1,materials.Size.Y do if materials[x][y][z]==Enum.Material.Grass then materials[x][y][z]=Enum.Material.LeafyGrass end end
+  end
+ end;if x%8==0 then task.wait() end end
+ Terrain:WriteVoxels(region,4,materials,occupancy)
 end
 function Service.BuildHome(slot)
 	local center=Map.HomeCenter(slot)
@@ -165,13 +187,16 @@ local function atmosphere()
 	local clouds=Terrain:FindFirstChildOfClass("Clouds") or Instance.new("Clouds")
 	clouds.Cover,clouds.Density,clouds.Color=.55,.55,Color3.fromRGB(241,243,242);clouds.Parent=Terrain
 	Terrain:SetMaterialColor(Enum.Material.Grass,Color3.fromRGB(102,143,77))
+	Terrain:SetMaterialColor(Enum.Material.LeafyGrass,Color3.fromRGB(92,126,78))
 	Terrain:SetMaterialColor(Enum.Material.Rock,Color3.fromRGB(123,123,111))
 	Terrain:SetMaterialColor(Enum.Material.Slate,Color3.fromRGB(102,109,113))
 end
 function Service.Start()
 	if game:GetService("RunService"):IsRunning() then
-		local preview=workspace:FindFirstChild("EditorCourtyardPreview")
-		if preview then preview.Parent=game.ServerStorage end
+		for _,name in {"EditorCourtyardPreview","EditorWorldScenery"} do
+			local preview=workspace:FindFirstChild(name)
+			if preview then preview.Parent=game.ServerStorage end
+		end
 	end
 	local existing=workspace:FindFirstChild("WorldFoundation")
 	if not existing or existing:GetAttribute("Version")~=Map.Version then
@@ -215,10 +240,39 @@ function Service.Start()
 		spawn.Neutral,spawn.Duration,spawn.Parent=true,0,world
 		world:SetAttribute("Version",Map.Version);world:SetAttribute("Ready",true)
 	end
-	Service.ApplyGroundCover()
-	buildStoneTrails()
+ if workspace.WorldFoundation:GetAttribute("GroundCoverVersion")~="W4-cover-03" then
+  Service.ApplyGroundCover()
+  buildStoneTrails()
+  meadowCover(Map.Zones[2]);meadowCover(Map.Zones[3])
+  workspace.WorldFoundation:SetAttribute("GroundCoverVersion","W4-cover-03")
+ end
 	-- Client-authored masonry has simple server-owned boundaries at the same placement.
 	local world=workspace.WorldFoundation
+	if not world:FindFirstChild("GroveRuinBoundaries") then
+		local bounds=Instance.new("Folder");bounds.Name="GroveRuinBoundaries";bounds.Parent=world
+		local y=Service.SurfaceAt(310,197)
+		for _,side in {-1,1} do
+			local foot=Service.SurfaceAt(310+side*11.7,197);local height=math.max(1,y+5-foot)
+			local pier=part(bounds,"GroveRuinPier",Vector3.new(2.7,height,2.7),Vector3.new(310+side*11.7,foot+height/2,197),Color3.new(1,1,1))
+			pier.Transparency,pier.CanQuery=1,false
+		end
+	end
+	if not world:FindFirstChild("W4TreeBoundaries") then
+		local trunks=Instance.new("Folder");trunks.Name="W4TreeBoundaries";trunks.Parent=world
+		for _,group in Map.TreeGroups do for _,entry in group do
+			local y=Service.SurfaceAt(entry[1],entry[2]);if y then
+				local height=10*entry[3]
+				local trunk=part(trunks,"TreeTrunkCollision",Vector3.new(1.6,height,1.6),Vector3.new(entry[1],y+height/2,entry[2]),Color3.new(1,1,1))
+				trunk.Transparency,trunk.CanQuery=1,false
+			end
+		end end
+		local y=Service.SurfaceAt(356,-224)
+		for _,x in {-3.8,3.8} do for _,z in {-2.5,2.5} do
+			local foot=Service.SurfaceAt(356+x,-224+z);local height=math.max(1,y+6.8-foot)
+			local post=part(trunks,"SpringPergolaCollision",Vector3.new(.5,height,.5),Vector3.new(356+x,foot+height/2,-224+z),Color3.new(1,1,1))
+			post.Transparency,post.CanQuery=1,false
+		end end
+	end
 	if not world:FindFirstChild("CourtyardBoundaries") then
 		local bounds=Instance.new("Folder");bounds.Name="CourtyardBoundaries";bounds.Parent=world
 		for _,side in {-1,1} do

@@ -78,7 +78,7 @@ function Service.Act(player, index, cropId)
 		return true, "Harvested! Seed returned and +3 coins"
 	end
 	if typeof(cropId) ~= "string" or not Config.Crops[cropId] then return false, "Choose a seed" end
-	if p.Seeds[cropId] < 1 then return false, "Buy a seed at your island sign" end
+	if p.Seeds[cropId] < 1 then return false, "Buy a seed at your seed bench" end
 	p.Seeds[cropId] -= 1
 	p.Plots[index] = { Crop = cropId, ReadyAt = os.time() + Config.Crops[cropId].Seconds }
 	publish(player)
@@ -136,6 +136,7 @@ local function init(player)
 	for i = 1, 4 do
 		local x, z = ((i-1)%2)*12-6, math.floor((i-1)/2)*12-9
 		local plot = part(island, "Plot" .. i, Vector3.new(9,0.6,9), center + Vector3.new(x,2.3,z), Color3.fromRGB(104,69,43))
+		plot.Material=Enum.Material.Ground
 		local prompt = Instance.new("ProximityPrompt")
 		prompt.ActionText, prompt.ObjectText, prompt.MaxActivationDistance, prompt.HoldDuration = "Plant / Harvest", "Farm plot " .. i, 10, 0.3
 		prompt.RequiresLineOfSight, prompt.Parent = false, plot
@@ -145,6 +146,9 @@ local function init(player)
 			RS.Remotes.FarmFeedback:FireClient(player, success, message)
 		end)
 	end
+ local counter=part(island,"SeedCounter",Vector3.new(7,2.4,3),center+Vector3.new(-15,3.2,17),Color3.fromRGB(109,80,52))
+ counter.Transparency,counter.CanCollide=1,true
+ local shop=Instance.new("ProximityPrompt");shop.Name="ShopPrompt";shop.ObjectText="Seeds & saplings";shop.ActionText="Browse seeds";shop.MaxActivationDistance=10;shop.RequiresLineOfSight=false;shop.Parent=counter
 	island.Parent = workspace
 	islands[player] = island
 	require(script.Parent.GatewayService).RegisterHome(player,island,center)

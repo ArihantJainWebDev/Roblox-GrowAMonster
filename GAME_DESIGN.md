@@ -165,3 +165,7 @@ Shared fountain hub, terraced orchard and Element Grove now use floating Terrain
 
 
 Outdoor route material decision — 29 October 2026: use natural stone/rock trails across exploration areas rather than scattered pale rectangular tiles. Formal jointed paving remains local to the fountain courtyard.
+
+## W4 environment interaction update
+
+Orchard and Grove use distinct planted/mineral compositions; four farm beds show apple/berry growth and ripe fruit. Browse seeds at the home propagation bench, then plant using the existing plot prompts. Ownership is shown on a physical garden sign; food uses nearby native prompts instead of distant name billboards. Crop timings, costs, yields, food values and evolution requirements are unchanged.

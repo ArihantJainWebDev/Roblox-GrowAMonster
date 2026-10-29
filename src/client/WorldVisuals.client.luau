@@ -46,14 +46,7 @@ if not ok then warn("Cloud layer could not render: "..tostring(err)) end
 local courtyard=workspace:WaitForChild("FountainHubVisuals",90)
 if not courtyard then return end
 while courtyard.Parent and not courtyard:GetAttribute("AssemblyReady") do task.wait(.2) end
-local template=courtyard:FindFirstChild("Original_Broadleaf")
-if template then
-	for _,anchor in world:WaitForChild("LandmarkAnchors"):GetChildren() do
-		local tree=template:Clone();tree.Name="LandscapeBroadleaf"
-		local _,size=tree:GetBoundingBox();local cf=tree:GetBoundingBox()
-		tree:PivotTo(tree:GetPivot()+(anchor.Position+Vector3.new(0,size.Y/2-.7,0)-cf.Position));tree.Parent=root
-	end
-end
+-- Regional trees and planting are authored by SceneryController.
 local water=courtyard:FindFirstChild("WaterEffectAnchor")
 if water then
 	local top=Instance.new("Part");top.Name="WaterfallAnchor";top.Size=Vector3.one;top.Anchored,top.CanCollide,top.Transparency=true,false,1

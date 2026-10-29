@@ -110,3 +110,7 @@ Use docs/world/WORLD_BLUEPRINT_V2.png and W1_BLUEPRINT.md. The fountain hub stay
 ## Current implementation status — 29 October 2026
 
 User requested construction after the courtyard study. W2 functional foundation is implemented and in progress; see world/W2_FOUNDATION.md. Layout 02 is respected. W1 capacity/device targets remain open, and W2/W3 visual acceptance is not inferred from this implementation. Next required work is the W2 continuous route/edge/watercourse and cloud-horizon review, followed by the stated courtyard/world gates. This supersedes the earlier current-next-action paragraph without marking its unresolved targets passed.
+
+## W4 current status — 29 October 2026
+
+User reports pre-W4 multiplayer working with three people and requests W4 implementation. Environment rollout pass W4-landscape-02 / W4-home-01 is implemented in Studio and local sources. See world/W4_WORLD_BUILD.md. User visual review, new presentation/bench-flow multiplayer regression and device/performance/persistence evidence remain open; no full W4 acceptance is claimed.

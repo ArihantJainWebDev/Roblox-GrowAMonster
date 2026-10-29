@@ -15,6 +15,8 @@ while folder.Parent do
 			local seconds = math.max(0, math.ceil((player:GetAttribute("NodeReady_" .. node.Name) or 0) - now))
 			prompt.Enabled = seconds == 0
 			fruit.LocalTransparencyModifier = seconds > 0 and 1 or 0
+			local visual=node:FindFirstChild("LocalFoodVisuals")
+			if visual then for _,piece in visual:GetDescendants() do if piece:IsA("BasePart") then piece.LocalTransparencyModifier=fruit.LocalTransparencyModifier end end end
 			local stem = node:FindFirstChild("Stem")
 			if stem then stem.LocalTransparencyModifier = fruit.LocalTransparencyModifier end
 			label.Text.Text = seconds > 0 and string.format("%s\nRegrows in %ds", food.Name, seconds) or food.Name .. "\n" .. food.Rarity

@@ -65,8 +65,9 @@ Detailed phase briefs live in `docs/phases/`. A phase is complete only when its 
 
 ## Deferred verification
 
-- [ ] Phase 3: two-player independent node availability, inventory isolation, and pacing. Deferred at user request on 2026-10-29; does not block Phase 4 implementation.
-- [ ] Phase 4: two-player farm ownership, save/rejoin with API access enabled, and phone interaction/layout.
+- [x] Phase 3 multiplayer functionality: user reports three-player testing works on 2026-10-29. Detailed pacing/performance measurements remain open.
+- [x] Phase 4 multiplayer functionality: user reports the three-player game works, including the pre-W4 farm flow.
+- [ ] Phase 4 remaining: save/rejoin evidence and phone interaction/layout.
 
 ## 2026-10-29 progression update
 
@@ -109,3 +110,8 @@ W3-garden-01 adds expanded paving, pavilion masonry/ornament and layered plantin
 
 
 User route review — 29 October 2026: screenshots exposed bridge/terrain joins and trail-marker defects. Corrected under W2 build sky-foundation-09 with rock trails and measured landings; three no-jump crossings passed. Close visual review remains open, then W3 courtyard approval precedes W4 rollout. See docs/world/W2_FOUNDATION.md.
+
+
+## W4 environment rollout — 29 October 2026
+
+User reports three-player multiplayer working and authorizes W4. Environment pass implemented across orchard, Grove, gateways, wild food and all four personal farm beds. Seed shop now opens at a bench; crop spheres are replaced by three-stage plant models. See docs/world/W4_WORLD_BUILD.md for exact checks and remaining visual/device/W4 multiplayer regression gates. This is not accepted stage completion.

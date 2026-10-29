@@ -19,6 +19,13 @@ local ok,result=pcall(function()
  local root=require(courtyard).Build(require(geometry),{Integrated=true,Origin=map.Hub})
  root.Name="EditorCourtyardPreview"
  root:SetAttribute("EditorPreview",true)
+ local oldLandscape=workspace:FindFirstChild("EditorWorldScenery");if oldLandscape then oldLandscape:Destroy() end
+ local scenery=RS.ArtReview:FindFirstChild("WorldScenery")
+ if scenery then
+  local library=fresh(scenery,"WorldScenery")
+  local container=Instance.new("Model");container.Name="EditorWorldScenery";container.Parent=workspace
+  require(library).Build(require(geometry),container,root.Original_Broadleaf,root,map)
+ end
  workspace.WorldFoundation:SetAttribute("EditorPreviewVersion",map.Version)
  return {TerrainVersion=map.Version,CourtyardBuild=root:GetAttribute("CourtyardBuild")}
 end)

@@ -14,6 +14,9 @@
         },
         "CourtyardDetails": {
           "$path": "tools/art/BuildCourtyardDetails.luau"
+        },
+        "WorldScenery": {
+          "$path": "tools/art/BuildWorldScenery.luau"
         }
       },
       "Shared": {

@@ -37,3 +37,9 @@ WorldVisuals authors its cloud image and mesh cards locally, plus a faceted Grov
 ## W3 garden details
 
 BuildCourtyardDetails.luau contains project-authored masonry/paving meshes, botanical ornament, understory leaves and flower geometry. No external geometry/textures or paid assets were added. Materials use Roblox engine appearances; existing fountain audio retains its earlier provenance. Side-panel collision uses matching server-owned bounds; visual acceptance, device/performance and multiplayer review remain open.
+
+## W4 original world kit
+
+BuildWorldScenery.luau authors rock profiles, lobed apples/berry clusters, plant sprays, gateway arch/veil/crest, terracotta pots, stage-based saplings/bushes, Grove mineral silhouettes, spring canopy and watercourse. Regional trees clone the existing original broadleaf family; native engine materials and existing author-generated fountain texture provide surfaces/flow highlights. No external imports, purchases or uploads added. Review/license route is project-authored; visual approval and device profiling remain open. See world/W4_WORLD_BUILD.md.
+
+W4 final pass also includes a jointed Grove arch and botanical crest, individually grounded piers/posts, native LeafyGrass meadow patches and the authored translucent spring strip. No externally sourced asset added.

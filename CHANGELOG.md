@@ -2,6 +2,13 @@
 
 Notable project changes are recorded here, newest first. Planning decisions are not evidence of implemented features.
 
+## Unreleased — W4 environment rollout
+
+- Added orchard/Grove planting, original fruit and rocks, spring canopy/bench/watercourse, trail signs and authored portal frames.
+- Dressed all four farm beds and replaced crop spheres with staged apple/berry plants and ripe fruit. Seed buying opens from a physical propagation bench; ownership uses a small sign.
+- Kept server-owned gameplay rules and per-player fruit cooldowns; added trunk/post collision and cached shared grass clearings.
+- Recorded the user's successful pre-W4 three-player test and W4 desktop planting/harvest/bench/travel/pickup checks. W4 visual approval and presentation regression/device checks remain open; see docs/world/W4_WORLD_BUILD.md.
+
 ## Unreleased — Consistent editor preview
 
 - Added tools/PreviewWorldInStudio.luau to refresh the generated shared world/courtyard in Edit mode from current sources.

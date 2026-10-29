@@ -24,3 +24,6 @@ For every review record: stage, build/date, reference, real Studio screenshots o
 6. Storage/rejoin, multiplayer and outstanding device verification remain open: track under R1, not as passed prototype phases.
 
 Gateway acceptance: owned Home routing, Return to Hub, safe arrival, retrigger guard, companion relocation, quest marker updates, denied visits and unavailable-home recovery must pass multiplayer/device checks. Residential distance/streaming never substitutes for ownership validation.
+
+
+29 October 2026: user reports the pre-W4 three-player multiplayer test works. W4 rollout is now implemented for review; see world/W4_WORLD_BUILD.md. This closes the reported baseline functional multiplayer deferral, not R1 or new W4 presentation/device regression requirements.

@@ -18,7 +18,13 @@ local function label(y, height)
 	return t
 end
 local status, message = label(4,38), label(140,46)
+status.Size=UDim2.new(1,-80,0,38)
+panel.Visible=false
 message.Text = "Choose a seed, then use one of your four plots."
+local shopOpen=false
+local close=Instance.new("TextButton");close.Text="Close";close.Size=UDim2.fromOffset(56,24);close.Position=UDim2.new(1,-62,0,4);close.Parent=panel
+close.Activated:Connect(function() shopOpen=false end)
+local connectedCounter
 local buttons = {}
 for i,id in Config.Order do
 	local button = Instance.new("TextButton")
@@ -40,7 +46,13 @@ local function refresh()
 	local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
 	local island = workspace:FindFirstChild("Island_"..player.UserId)
 	local grass = island and island:FindFirstChild("Grass")
-	panel.Visible = grass ~= nil and root ~= nil and (root.Position-grass.Position).Magnitude < 40
+	local counter=island and island:FindFirstChild("SeedCounter")
+ if counter and counter~=connectedCounter then
+  connectedCounter=counter
+  counter:WaitForChild("ShopPrompt").Triggered:Connect(function(who) if who==player then shopOpen=true end end)
+ end
+ if not counter or not root or (root.Position-counter.Position).Magnitude>16 then shopOpen=false end
+ panel.Visible=shopOpen
 	if island then
 		for i=1,4 do
 			local plot = island:FindFirstChild("Plot"..i)
@@ -49,25 +61,9 @@ local function refresh()
 			local crop = Config.Crops[cropId]
 			local seconds = math.max(0,(plot:GetAttribute("ReadyAt") or 0)-os.time())
 			local prompt = plot:FindFirstChildOfClass("ProximityPrompt")
-			local visual = plot:FindFirstChild("LocalCrop")
-			if crop and not visual then
-				visual = Instance.new("Part")
-				visual.Name, visual.Shape = "LocalCrop", Enum.PartType.Ball
-				visual.Anchored, visual.CanCollide, visual.CanTouch = true, false, false
-				visual.TopSurface, visual.BottomSurface = Enum.SurfaceType.Smooth, Enum.SurfaceType.Smooth
-				visual.Parent = plot
-			end
-			if visual then
-				if crop then
-					local growth = math.clamp(1-seconds/crop.Seconds,0,1)
-					visual.Size = Vector3.one * (0.7+growth*2)
-					visual.Position = plot.Position+Vector3.new(0,0.3+visual.Size.Y/2,0)
-					visual.Color = seconds>0 and Color3.fromRGB(74,166,73) or Foods.Foods[cropId].Color
-				else visual:Destroy() end
-			end
 			prompt.ObjectText = crop and (crop.Name .. (seconds>0 and " • "..seconds.."s" or " • Ready!")) or "Empty plot"
 			prompt.ActionText = crop and "Harvest" or "Plant selected seed"
-			plot.Color = crop and (seconds>0 and Color3.fromRGB(101,135,65) or Color3.fromRGB(213,180,64)) or Color3.fromRGB(104,69,43)
+			plot.Color = Color3.fromRGB(104,69,43)
 		end
 	end
 end

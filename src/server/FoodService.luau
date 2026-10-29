@@ -109,7 +109,10 @@ local function createNodes()
 		local base = Vector3.new(x, surfaceY + 0.65, z)
 		part(model, "Bush", Vector3.new(3.4, 1.3, 3.4), base, Color3.fromRGB(64, 136, 79), Enum.PartType.Ball)
 		local fruit = part(model, "Fruit", Vector3.new(1.3, 1.3, 1.3), base + Vector3.new(0, 1.25, 0), food.Color, Enum.PartType.Ball)
+		fruit.Transparency=1
+		model.Bush.Transparency=1
 		part(model, "Stem", Vector3.new(0.15, 0.4, 0.15), fruit.Position + Vector3.new(0, 0.7, 0), Color3.fromRGB(104, 77, 46))
+		model.Stem.Transparency=1
 		local prompt = Instance.new("ProximityPrompt")
 		prompt.Name = "Collect"
 		prompt.ActionText = "Collect"
@@ -120,6 +123,7 @@ local function createNodes()
 		prompt.Parent = fruit
 		local billboard = Instance.new("BillboardGui")
 		billboard.Name = "Label"
+		billboard.Enabled=false -- native collection prompt provides readable nearby food information
 		billboard.Size = UDim2.fromOffset(180, 50)
 		billboard.StudsOffset = Vector3.new(0, 2, 0)
 		billboard.MaxDistance = 65
