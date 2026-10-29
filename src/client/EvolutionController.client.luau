@@ -1,7 +1,8 @@
 local RS = game:GetService("ReplicatedStorage")
 local player = game.Players.LocalPlayer
+local remotes=RS:WaitForChild("Remotes")
 local Config = require(RS.Shared:WaitForChild("EvolutionConfig"))
-local remote = RS.Remotes:WaitForChild("EvolveMonster")
+local remote = remotes:WaitForChild("EvolveMonster")
 local gui = Instance.new("ScreenGui")
 gui.Name, gui.ResetOnSpawn, gui.DisplayOrder = "EvolutionHUD", false, 10
 gui.Parent = player:WaitForChild("PlayerGui")
@@ -38,7 +39,7 @@ for i,id in Config.Order do
 end
 confirm.Activated:Connect(function() if selected then remote:FireServer(selected) end end)
 local status=label(316,28,"Your next adventure: Element Grove")
-RS.Remotes:WaitForChild("EvolutionFeedback").OnClientEvent:Connect(function(_,message) status.Text=message end)
+remotes:WaitForChild("EvolutionFeedback").OnClientEvent:Connect(function(_,message) status.Text=message end)
 local function refresh()
 	panel.Visible=(player:GetAttribute("MonsterXP") or 0)>=Config.AtXP and (player:GetAttribute("MonsterPath") or "")==""
 	scale.Scale=math.min(1,(gui.AbsoluteSize.X-24)/340,(gui.AbsoluteSize.Y-24)/350)

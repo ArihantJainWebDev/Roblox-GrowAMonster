@@ -145,3 +145,7 @@ Follow docs/WORLD_PRODUCTION_PLAN.md. Separate authored environment/asset data f
 ## Approved home travel architecture — 29 October 2026
 
 Gateway travel stays within the same server. Server-owned player-to-island mapping resolves destinations; do not trust client coordinates or ownership claims. Validate access, live character, destination readiness, request rate and safe landing. Coordinate companion/spawn/quest anchors after travel. Home slots may change across sessions without changing account-owned data. Streaming or distance offers no security boundary. Implementation remains pending.
+
+## W2 implemented boundaries — 29 October 2026
+
+WorldConfig defines shared terrain zones, graded routes, bridge endpoints, food anchors and home placement. WorldService writes bounded terrain regions and owns shared supports/fall recovery. FarmService creates personal terrain and keeps its existing invisible Grass compatibility anchor for quest/UI distances. GatewayService resolves owned homes on the server, validates prompt access/cooldown and requests destination streaming before travel. Client CourtyardEffects/WorldVisuals reconstruct original non-colliding meshes and effects; gameplay interactions remain server-owned. Mesh/Image APIs are required. See docs/world/W2_FOUNDATION.md. The previous architecture entry saying travel implementation is pending is superseded; visiting policy remains pending.

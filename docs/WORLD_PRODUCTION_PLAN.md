@@ -105,3 +105,8 @@ Current next action: finish W1 asset/import feasibility and device/capacity targ
 ## Approved layout amendment — 29 October 2026
 
 Use docs/world/WORLD_BLUEPRINT_V2.png and W1_BLUEPRINT.md. The fountain hub stays compact. A Home gateway serves owned homes in a separate residential area of the same server; each home returns to the hub by gateway. Visits use a permission-aware destination menu. Visit policy remains a separate decision. Fixed physical home docks and the earlier six-slot proposal are superseded. Shared hub/orchard/Grove routes remain walkable. Layout approval does not approve final assets, precise dimensions/elevations or untested performance.
+
+
+## Current implementation status — 29 October 2026
+
+User requested construction after the courtyard study. W2 functional foundation is implemented and in progress; see world/W2_FOUNDATION.md. Layout 02 is respected. W1 capacity/device targets remain open, and W2/W3 visual acceptance is not inferred from this implementation. Next required work is the W2 continuous route/edge/watercourse and cloud-horizon review, followed by the stated courtyard/world gates. This supersedes the earlier current-next-action paragraph without marking its unresolved targets passed.

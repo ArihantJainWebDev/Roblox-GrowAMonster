@@ -98,3 +98,7 @@ W1 feasibility: original mesh generation works in Studio. Authored fountain/clif
 Courtyard review build assembled; see docs/world/FOUNTAIN_COURTYARD_REVIEW.md. Runtime visual acceptance is blocked by disabled Editable Mesh / Image APIs, confirmed by an ordinary LocalScript probe. Audio playback passed. User notified of the required setting; no asset upload performed.
 
 Courtyard runtime blocker resolved: user enabled Mesh / Image APIs; per-piece mesh freezing fixed memory limits. Desktop Play sample renders correctly with moving effects/audio. Await user visual acceptance; full world, device/performance and multiplayer/persistence checks remain open.
+
+## W2 implementation — 29 October 2026
+
+W2 foundation is in progress: real floating terrain, orchard/Grove routes, integrated fountain hub, layered clouds and separate gateway homes are implemented. Functional gateway/recovery and route support checks passed; W2 visual acceptance, full-loop walkthrough, multiplayer, persistence and device/performance checks remain open. See docs/world/W2_FOUNDATION.md for exact evidence and defects. Historical prototype completion does not mean this production stage is complete.

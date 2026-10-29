@@ -2,6 +2,15 @@
 
 Notable project changes are recorded here, newest first. Planning decisions are not evidence of implemented features.
 
+## Unreleased — W2 world foundation, 29 October 2026
+
+- Added irregular floating Terrain, rock strata, orchard terraces, three bridges, spring/channel, layered procedural clouds and fall recovery.
+- Integrated the original fountain courtyard into the shared hub and added broadleaf/bloom landmarks.
+- Moved personal homes to separate terrain and implemented validated same-server gateways, companion relocation and gateway-aware quest guidance.
+- Relocated food/Grove anchors; fixed farm/evolution UI startup waiting for remotes.
+- Archived obsolete template scenery and removed the isolated courtyard Rojo marker. Nothing uploaded, published or pushed.
+- Functional checks and open visual/multiplayer/device/persistence requirements are recorded in docs/world/W2_FOUNDATION.md. W2 is not accepted complete.
+
 ## Unreleased — Phase 3 implementation
 
 - Added apples, berries, and uncommon golden apples on ten starter-area gathering nodes.

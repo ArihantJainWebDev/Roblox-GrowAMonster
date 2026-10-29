@@ -1,6 +1,7 @@
 local Players = game:GetService("Players")
 local RS = game:GetService("ReplicatedStorage")
 local player = Players.LocalPlayer
+local remotes=RS:WaitForChild("Remotes")
 local Config = require(RS.Shared:WaitForChild("FarmConfig"))
 local Foods = require(RS.Shared:WaitForChild("FoodConfig"))
 local gui = Instance.new("ScreenGui")
@@ -23,14 +24,14 @@ for i,id in Config.Order do
 	local button = Instance.new("TextButton")
 	button.Size, button.Position = UDim2.fromOffset(164,44), UDim2.fromOffset(8,42+(i-1)*48)
 	button.TextSize, button.Parent = 13,panel
-	button.Activated:Connect(function() RS.Remotes.ChooseSeed:FireServer(id,false) end)
+	button.Activated:Connect(function() remotes.ChooseSeed:FireServer(id,false) end)
 	buttons[id] = button
 	local buy = Instance.new("TextButton")
 	buy.Size, buy.Position = UDim2.fromOffset(62,44), UDim2.fromOffset(180,42+(i-1)*48)
 	buy.Text, buy.TextSize, buy.Parent = "Buy " .. Config.Crops[id].Cost .. "c",12,panel
-	buy.Activated:Connect(function() RS.Remotes.ChooseSeed:FireServer(id,true) end)
+	buy.Activated:Connect(function() remotes.ChooseSeed:FireServer(id,true) end)
 end
-RS.Remotes:WaitForChild("FarmFeedback").OnClientEvent:Connect(function(_,text) message.Text=text end)
+remotes:WaitForChild("FarmFeedback").OnClientEvent:Connect(function(_,text) message.Text=text end)
 local function refresh()
 	status.Text = string.format("FARM • %d coins\n%s", player:GetAttribute("FarmCoins") or 0,player:GetAttribute("FarmSaveStatus") or "Loading farm…")
 	for id,button in buttons do

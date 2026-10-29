@@ -158,3 +158,7 @@ Build a substantial, crafted fantasy archipelago above clouds with sculpted terr
 ## Approved multiplayer world layout — 29 October 2026
 
 Keep a compact shared fountain hub and walkable orchard/Grove loop. A Home gateway leads to the player-owned floating island in a separate residential zone within the same server; each home has Return to Hub. Home slots do not require individual hub docks. Player capacity follows performance testing, not a six-dock limit. Visiting uses a permission-aware menu; the precise visit policy still needs a decision.
+
+## W2 layout integration — 29 October 2026
+
+Shared fountain hub, terraced orchard and Element Grove now use floating Terrain connected by three walking bridges. Owned homes occupy a separate same-server residential area reached through gateways. Existing four-plot farming, gathering, growth and evolution rules remain authoritative. This is a functional foundation implementation, not accepted finished environment/creature/UI art. See docs/world/W2_FOUNDATION.md.

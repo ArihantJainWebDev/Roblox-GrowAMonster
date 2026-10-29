@@ -97,24 +97,15 @@ end
 local function createNodes()
 	local folder = Instance.new("Folder")
 	folder.Name = "FoodNodes"
-	local layout = {
-		{ "Apple01", "Apple", -12, -8 }, { "Apple02", "Apple", 12, -8 },
-		{ "Apple03", "Apple", -22, 8 }, { "Apple04", "Apple", 22, 8 },
-		{ "Apple05", "Apple", -10, 22 }, { "Apple06", "Apple", 10, 22 },
-		{ "Berry01", "Berry", -24, -22 }, { "Berry02", "Berry", 24, -22 },
-		{ "Berry03", "Berry", 0, -22 }, { "Golden01", "GoldenApple", 0, 30 },
-		{ "GroveApple01", "Apple", -18, -86 }, { "GroveBerry01", "Berry", 18, -86 },
-		{ "GroveGolden01", "GoldenApple", -18, -114 },
-	}
-	local top = workspace:WaitForChild("GrowAMonsterWorld"):WaitForChild("IslandTop")
-	local surfaceY = top.Position.Y + top.Size.Y / 2
+	local layout = require(ReplicatedStorage.Shared.WorldConfig).FoodNodes
 	for _, entry in layout do
 		local id, foodId, x, z = table.unpack(entry)
 		local food = Config.Foods[foodId]
 		local model = Instance.new("Model")
 		model.Name = id
 		model:SetAttribute("FoodId", foodId)
-		model:SetAttribute("RequiresEvolution", z < -60)
+		model:SetAttribute("RequiresEvolution", entry[5] == true)
+		local surfaceY=assert(require(script.Parent.WorldService).SurfaceAt(x,z), "Food node outside terrain: "..id)
 		local base = Vector3.new(x, surfaceY + 0.65, z)
 		part(model, "Bush", Vector3.new(3.4, 1.3, 3.4), base, Color3.fromRGB(64, 136, 79), Enum.PartType.Ball)
 		local fruit = part(model, "Fruit", Vector3.new(1.3, 1.3, 1.3), base + Vector3.new(0, 1.25, 0), food.Color, Enum.PartType.Ball)

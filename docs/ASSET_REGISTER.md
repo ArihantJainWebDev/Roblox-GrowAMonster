@@ -29,3 +29,7 @@ Nine additional models inspected. No production approval. Detailed judgments: wo
 A working EditableMesh authoring path now produces original fountain, cliff and broadleaf mesh studies. Source and OBJ/MTL export live in tools/art and assets/review. See world/ORIGINAL_ASSET_STUDY.md. Provenance is project-authored; visual acceptance, production materials/collision, animation/audio, static persistence and performance remain unpassed. No production asset approval is implied.
 
 Fountain audio candidate 9120557315 (ProSoundEffects), free Creator Store result checked 29 October 2026, preloaded/played in this place. Original courtyard uses author-owned procedural mesh/image data; the runtime API setting and static persistence/replication route remain explicit dependencies. See world/FOUNTAIN_COURTYARD_REVIEW.md.
+
+## W2 original atmosphere and landmark assets
+
+WorldVisuals authors its cloud image and mesh cards locally, plus a faceted Grove bloom; no external source or upload. Broadleaf clones use the original Geometry library. Courtyard fountain audio retains the existing registered candidate. Native Terrain/materials form the land; all new local visual meshes are non-colliding. Runtime Mesh/Image APIs are enabled. User visual approval and device/performance checks remain open.

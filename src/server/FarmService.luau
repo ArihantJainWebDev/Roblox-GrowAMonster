@@ -115,12 +115,13 @@ local function init(player)
 	local slot = 1
 	while slots[slot] do slot += 1 end
 	slots[slot] = player
-	local center = Vector3.new(slot * 110, 64, 0)
+	local center = require(script.Parent.WorldService).BuildHome(slot)
+	if not player.Parent then return end
 	local island = Instance.new("Model")
 	island.Name = "Island_" .. player.UserId
 	island:SetAttribute("OwnerUserId", player.UserId)
-	part(island, "Grass", Vector3.new(64, 4, 64), center, Color3.fromRGB(113,190,105))
-	part(island, "Rock", Vector3.new(48,12,48), center - Vector3.new(0,8,0), Color3.fromRGB(105,98,90))
+	local anchor=part(island, "Grass", Vector3.new(100, 4, 110), center, Color3.fromRGB(113,190,105))
+	anchor.Transparency,anchor.CanCollide,anchor.CanQuery=1,false,false
 	local spawn = Instance.new("SpawnLocation")
 	spawn.Name, spawn.Size, spawn.Position = "HomeSpawn", Vector3.new(6,1,6), center + Vector3.new(0,2.5,18)
 	spawn.Anchored, spawn.Transparency, spawn.Neutral, spawn.Parent = true, 1, true, island
@@ -128,9 +129,10 @@ local function init(player)
 	homeLabel.Name,homeLabel.Size,homeLabel.StudsOffset,homeLabel.MaxDistance="HomeLabel",UDim2.fromOffset(220,50),Vector3.new(0,7,0),100
 	homeLabel.Adornee,homeLabel.Parent=spawn,spawn
 	local homeText=Instance.new("TextLabel")
-	homeText.Size,homeText.BackgroundTransparency,homeText.Text=UDim2.fromScale(1,1),1,player.DisplayName.."'s home\nBridge → Wild food"
+	homeText.Size,homeText.BackgroundTransparency,homeText.Text=UDim2.fromScale(1,1),1,player.DisplayName.."'s home\nGateway → Shared world"
 	homeText.TextColor3,homeText.TextSize,homeText.TextStrokeTransparency,homeText.Parent=Color3.new(1,1,1),16,0.3,homeLabel
 	player.RespawnLocation = spawn
+	player.CharacterAdded:Connect(function() player:SetAttribute("CurrentRegion","Home") end)
 	for i = 1, 4 do
 		local x, z = ((i-1)%2)*12-6, math.floor((i-1)/2)*12-9
 		local plot = part(island, "Plot" .. i, Vector3.new(9,0.6,9), center + Vector3.new(x,2.3,z), Color3.fromRGB(104,69,43))
@@ -143,13 +145,9 @@ local function init(player)
 			RS.Remotes.FarmFeedback:FireClient(player, success, message)
 		end)
 	end
-	-- Stop at the facing island edges. Overlapping grass at the same surface
-	-- height causes flickering as the renderer alternates between both faces.
-	local sharedEdge, homeEdge = 36, center.X - 32
-	part(island, "PathToGathering", Vector3.new(homeEdge-sharedEdge,1,8),
-		Vector3.new((sharedEdge+homeEdge)/2,65.5,18), Color3.fromRGB(168,130,86))
 	island.Parent = workspace
 	islands[player] = island
+	require(script.Parent.GatewayService).RegisterHome(player,island,center)
 	publish(player)
 	require(script.Parent.QuestService).Init(player,ok and saved.Quests or nil)
 	local egg=part(island,"WelcomeEgg",Vector3.new(2,3,2),center+Vector3.new(7,3.5,18),Color3.fromRGB(249,226,159))

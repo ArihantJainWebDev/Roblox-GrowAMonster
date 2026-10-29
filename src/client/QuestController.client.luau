@@ -28,6 +28,11 @@ local userToggled=false
 toggle.Activated:Connect(function() expanded=not expanded;userToggled=true end)
 local function targetFor(id)
 	local island=workspace:FindFirstChild("Island_"..player.UserId)
+	local world=workspace:FindFirstChild("WorldFoundation")
+	local region=player:GetAttribute("CurrentRegion")
+	local homeGate=world and world:FindFirstChild("HomeGateway")
+	if (id=="Hatch" or id=="Plant" or id=="Harvest" or id=="Home") and region=="Hub" then return homeGate end
+	if (id=="Gather" or id=="Grove" or id=="Evolve") and region=="Home" then return island and island:FindFirstChild("ReturnGateway") end
 	if id=="Hatch" then return island and island:FindFirstChild("WelcomeEgg") end
 	if id=="Plant" or id=="Harvest" then
 		if not island then return end

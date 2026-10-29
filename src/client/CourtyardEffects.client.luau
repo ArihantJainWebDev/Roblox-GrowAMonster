@@ -1,24 +1,24 @@
--- Effects for the isolated art-review courtyard only; no player state changes.
+-- Reconstruct the authored hub courtyard and its local water effects.
 local RunService=game:GetService("RunService")
-local root=workspace:WaitForChild("FountainCourtyard",15)
-if not root then return end
+local world=workspace:WaitForChild("WorldFoundation",90)
+if not world then return end
+local Map=require(game.ReplicatedStorage.Shared.WorldConfig)
 local player=game.Players.LocalPlayer
 local artFolder=game.ReplicatedStorage:WaitForChild("ArtReview")
 local ok,result=pcall(function()
 	local art=require(artFolder:WaitForChild("Geometry"))
 	local courtyard=require(artFolder:WaitForChild("Courtyard"))
-	return courtyard.Build(art,{RuntimePreview=true})
+	return courtyard.Build(art,{RuntimePreview=true,Integrated=true,Origin=Map.Hub})
 end)
 if not ok then
 	player:SetAttribute("CourtyardPreviewStatus","Build failed: "..tostring(result))
-	local partial=workspace:FindFirstChild("FountainCourtyardVisuals")
+	local partial=workspace:FindFirstChild("FountainHubVisuals")
 	if partial then partial:Destroy() end
 	warn("Courtyard preview could not create its mesh content: "..tostring(result))
 	return
 end
--- Replace only this client's review copy; gameplay state is untouched.
-root:Destroy()
-root=result
+-- Terrain and server interactions remain authoritative.
+local root=result
 player:SetAttribute("CourtyardPreviewStatus","Ready")
 local rings={}
 for _,part in root:GetChildren() do

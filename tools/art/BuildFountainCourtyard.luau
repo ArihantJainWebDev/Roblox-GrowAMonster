@@ -3,7 +3,7 @@ local Courtyard={}
 function Courtyard.Build(Art,options)
 	options=options or {}
 	assert(not game:GetService("RunService"):IsRunning() or options.RuntimePreview,"Runtime use is limited to the isolated review preview")
-	local name=options.RuntimePreview and "FountainCourtyardVisuals" or "FountainCourtyard"
+	local name=options.Integrated and "FountainHubVisuals" or options.RuntimePreview and "FountainCourtyardVisuals" or "FountainCourtyard"
 	local old=workspace:FindFirstChild(name);if old then old:Destroy() end
 	local root=Instance.new("Model");root.Name=name;root.Parent=workspace
 	root:SetAttribute("ReviewStage","Courtyard visual acceptance pending")
@@ -21,6 +21,7 @@ function Courtyard.Build(Art,options)
 		local p=part(name,Vector3.new(width,depth or width,(b-a).Magnitude),(a+b)/2,wood,Enum.Material.Wood)
 		p.CFrame=CFrame.lookAt((a+b)/2,b);return p
 	end
+	local stoneGroups={}
 	local function wedgeStone(name,center,angle,r0,r1,height,arc,color)
 		local v,f={},{}
 		for _,y in {-.1,height} do
@@ -29,19 +30,26 @@ function Courtyard.Build(Art,options)
 			end
 		end
 		for _,t in {{1,3,2},{2,3,4},{5,6,7},{6,8,7},{1,2,5},{2,6,5},{3,7,4},{4,7,8},{1,5,3},{3,5,7},{2,4,6},{4,8,6}} do table.insert(f,t) end
-		local p=Art.MakeMesh(root,name,v,f,color);p.CanCollide=true;return p
+		local key=tostring(color)
+		local group=stoneGroups[key] or {Vertices={},Faces={},Color=color};stoneGroups[key]=group
+		local offset=#group.Vertices
+		for _,point in v do table.insert(group.Vertices,point) end
+		for _,triangle in f do table.insert(group.Faces,{offset+triangle[1],offset+triangle[2],offset+triangle[3]}) end
 	end
 	-- A coherent raised garden terrace with a rock underside, not a review plane.
-	local cliff=Art.MakeCliff(root,"CourtyardCliff",Vector3.zero,132)
-	cliff.Size=Vector3.new(cliff.Size.X*3.25,cliff.Size.Y*1.15,cliff.Size.Z*3.6)
-	cliff.Position=Vector3.new(0,-16.8,0)
-	Art.MakeSurface(root,"MeadowEdge",{{0,-.3},{35,-.3},{36,-.1},{35.8,.18},{0,.18}},96,Color3.fromRGB(92,134,70),nil,5,.045)
+	if not options.Integrated then
+		local cliff=Art.MakeCliff(root,"CourtyardCliff",Vector3.zero,132)
+		cliff.Size=Vector3.new(cliff.Size.X*3.25,cliff.Size.Y*1.15,cliff.Size.Z*3.6)
+		cliff.Position=Vector3.new(0,-16.8,0)
+		Art.MakeSurface(root,"MeadowEdge",{{0,-.3},{35,-.3},{36,-.1},{35.8,.18},{0,.18}},96,Color3.fromRGB(92,134,70),nil,5,.045)
+	end
 	-- Collision is intentionally simple and independent from the decorative shell.
 	local floor=part("WalkableFoundation",Vector3.new(62,.4,58),Vector3.new(0,-.15,0),cream,Enum.Material.Limestone)
 	floor.Transparency=1
 	for row=0,2 do
 		for i=0,31 do wedgeStone("CourtyardPaver",Vector3.zero,(i+row*.5)*math.pi/16,11+row*3,13.92+row*3,.24,math.pi/16-.009,(i+row)%4==0 and dark or cream) end
 	end
+	for _,group in stoneGroups do Art.MakeMesh(root,"CourtyardPaving",group.Vertices,group.Faces,group.Color) end
 	for z=-33,-21,4 do
 		for _,x in {-2.3,2.3} do part("EntryPaver",Vector3.new(4.4,.3,3.8),Vector3.new(x,.15,z),cream,Enum.Material.Limestone) end
 	end
@@ -169,7 +177,7 @@ function Courtyard.Build(Art,options)
 	end
 	local landing=part("ReviewLanding",Vector3.new(8,.3,6),Vector3.new(0,.15,-30),cream,Enum.Material.Limestone)
 	root:SetAttribute("LocalLanding",Vector3.new(0,4,-30))
-	root:PivotTo(root:GetPivot()+Vector3.new(3600,120,0))
+	root:PivotTo(root:GetPivot()+(options.Origin or Vector3.new(3600,120,0)))
 	root:SetAttribute("ReviewLanding",landing.Position+Vector3.new(0,4,0))
 	root:SetAttribute("AssemblyReady",true)
 	return root

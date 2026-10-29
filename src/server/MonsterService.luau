@@ -277,7 +277,7 @@ function MonsterService.Start()
 				local facePoint = root.Position - root.CFrame.LookVector * 2
 				local lookAt = Vector3.new(facePoint.X, position.Y, facePoint.Z)
 				local target = CFrame.lookAt(position, lookAt)
-				if not positionInitialized[player.UserId] then
+				if not positionInitialized[player.UserId] or (model:GetPivot().Position-root.Position).Magnitude>40 then
 					model:PivotTo(target)
 					positionInitialized[player.UserId] = true
 				else
