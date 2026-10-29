@@ -29,3 +29,12 @@ User should recheck both portal sides and approach from normal height, fruit bra
 
 
 Final-source review: all 27 Rojo-mapped source files matched the current local files after newline normalization. On the final dense-canopy build, mature apple crops measured about 6.73 studs high / 6.75 wide; berry bushes about 2.39 high / 6.62 wide, with root-plane gaps still below 0.000013 studs. A fallen wild apple's bounding-box bottom matched server GroundPosition within 0.000009 studs. Both native E gateway directions passed; health 100. Returned the test character home and restored the ordinary camera. No publish or Git push performed.
+
+
+## Creek overlay correction — 29 October 2026
+
+User screenshot exposed the authored SpringWatercourse mesh as an elevated cyan strip. Removed that independent mesh and all SpringCascadeFlow overlay beams instead of tuning another guessed height. The channel now renders actual carved Terrain Water, with Grass converted to Ground immediately along its banks. The cliff waterfall source reads the server-measured outlet water height. World terrain rebuild version is sky-foundation-10.
+
+Edit verification: no SpringWatercourse/SpringCascadeFlow objects remain; all five channel control-point raycasts hit native Water. Sample elevations were approximately 488.22, 477.64, 450.86, 432.84 and 433.85 studs. This verifies native water presence, not a claim of a hydraulic fluid simulation. Play/close visual checks are recorded separately.
+
+Creek continuity verification: carve every channel sample before filling water, preventing later air cuts from erasing earlier water. All 69 centreline ray samples now hit native Terrain Water. Source and Studio terrain updated together.

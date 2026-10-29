@@ -2,6 +2,12 @@
 
 Notable project changes are recorded here, newest first. Planning decisions are not evidence of implemented features.
 
+## Unreleased — Native creek water and C1 baby production
+
+- Removed the elevated creek ribbon/flow overlays; native Terrain Water supplies the stream surface and the waterfall uses the measured outlet height.
+- Added the first textured Baby Sprout mesh, seven-joint rig, authored paws/claws and client-rendered companion. Server ground-following and feed reaction signals replace the sphere model. Native generation source model: 71146011257533.
+- Play verified mesh loading, 15 mesh parts, seven joints and ground contact. Full family, finished C2 animation and new multiplayer/device regression remain open; see docs/creatures/C1_BABY_IMPLEMENTATION.md.
+
 ## Unreleased — Grounding corrections and creature/gameplay plan
 
 - Removed floating connector slab geometry, grounded portal feet/thresholds, and attached orchard fruit to real branch sockets.

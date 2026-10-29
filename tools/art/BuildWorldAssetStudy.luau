@@ -4,7 +4,7 @@ local AssetService = game:GetService("AssetService")
 local Study = {}
 local stone = Color3.fromRGB(187,181,160)
 local lightStone = Color3.fromRGB(216,207,179)
-local function meshPart(parent,name,vertices,faces,color,material)
+local function meshPart(parent,name,vertices,faces,color,material,smooth)
 	local clean={}
 	for _,t in faces do
 		if (vertices[t[2]]-vertices[t[1]]):Cross(vertices[t[3]]-vertices[t[1]]).Magnitude>1e-8 then table.insert(clean,t) end
@@ -18,10 +18,20 @@ local function meshPart(parent,name,vertices,faces,color,material)
 	local center=(min+max)/2
 	local ids={}
 	for i,p in vertices do ids[i]=mesh:AddVertex(p-center) end
+ local normals={}
+ if smooth then
+  local sums={};for i in vertices do sums[i]=Vector3.zero end
+  for _,t in faces do
+   local n=(vertices[t[2]]-vertices[t[1]]):Cross(vertices[t[3]]-vertices[t[1]])
+   for _,index in t do sums[index]+=n end
+  end
+  for i,n in sums do normals[i]=mesh:AddNormal(n.Magnitude>1e-8 and n.Unit or Vector3.yAxis) end
+ end
 	for i,t in faces do
 		local face=mesh:AddTriangle(ids[t[1]],ids[t[2]],ids[t[3]])
 		local n=(vertices[t[2]]-vertices[t[1]]):Cross(vertices[t[3]]-vertices[t[1]])
-		if n.Magnitude>0 then local normal=mesh:AddNormal(n.Unit);mesh:SetFaceNormals(face,{normal,normal,normal}) end
+  if smooth then mesh:SetFaceNormals(face,{normals[t[1]],normals[t[2]],normals[t[3]]})
+  elseif n.Magnitude>0 then local normal=mesh:AddNormal(n.Unit);mesh:SetFaceNormals(face,{normal,normal,normal}) end
 		if i%1500==0 then task.wait() end
 	end
 	-- Freeze each finished piece before creating the next one. Keeping dozens

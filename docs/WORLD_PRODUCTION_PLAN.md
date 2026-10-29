@@ -118,3 +118,6 @@ User reports pre-W4 multiplayer working with three people and requests W4 implem
 ## Creature and gameplay commitment — 29 October 2026
 
 After the reported W4 grounding/sign/crop correction pass, proceed to C1/C2. Add G1 Monster-led exploration after C2 and before final U1/R1 integration; see gameplay/G1_MONSTER_EXPLORATION.md. The current prototype loop is not the final intended gameplay. The approved direction is exploration enabled by raising/evolving the companion; specific quest beats and ability trials remain proposed until their gate is reviewed. See creatures/C1_CREATURE_BRIEF.md for the baby-first modeling pipeline.
+
+## Current work — C1 baby
+W4 creek overlay corrected; first textured baby mesh/rig integrated. C1 family and C2 animation are not complete. Detailed evidence: docs/creatures/C1_BABY_IMPLEMENTATION.md. Continue baby review, family production, C2, then G1; retain open R1 checks.

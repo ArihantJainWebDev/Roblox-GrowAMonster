@@ -29,3 +29,6 @@ Gateway acceptance: owned Home routing, Return to Hub, safe arrival, retrigger g
 29 October 2026: user reports the pre-W4 three-player multiplayer test works. W4 rollout is now implemented for review; see world/W4_WORLD_BUILD.md. This closes the reported baseline functional multiplayer deferral, not R1 or new W4 presentation/device regression requirements.
 
 - [ ] G1: contextual companion actions, the complete exploration trial/destination, persistent discoveries and equal branch access pass single/multiplayer and device tests. See gameplay/G1_MONSTER_EXPLORATION.md. The expansion is planned, not implemented.
+
+## C1 baby gate
+Runtime load, 15 meshes, seven joints and measured ground contact passed. Actual-model visual acceptance, full family, finished animation, slope/bridge/gateway regression, three-player visibility and device performance remain open. See creatures/C1_BABY_IMPLEMENTATION.md.

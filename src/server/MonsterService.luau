@@ -45,77 +45,17 @@ local function getStage(xp: number)
 	return Config.GrowthStages[1]
 end
 
-local function addWeldedPart(model: Model, body: BasePart, name: string, size: Vector3, offset: CFrame, color: Color3, shape: Enum.PartType?): Part
-	local part = Instance.new("Part")
-	part.Name = name
-	part.Size = size
-	part.Shape = shape or Enum.PartType.Block
-	part.CFrame = body.CFrame * offset
-	part.Color = color
-	part.Material = Enum.Material.SmoothPlastic
-	part.Anchored = false
-	part.CanCollide = false
-	part.CanTouch = false
-	part.CanQuery = false
-	part.Massless = true
-	part.Parent = model
-	local weld = Instance.new("WeldConstraint")
-	weld.Part0 = body
-	weld.Part1 = part
-	weld.Parent = body
-	return part
-end
-
 local function makeCompanion(player: Player)
-	local id = player.UserId
-	local oldModel = workspace:FindFirstChild("Companion_" .. id)
-	if oldModel then oldModel:Destroy() end
-
-	local model = Instance.new("Model")
-	model.Name = "Companion_" .. id
-	local body = Instance.new("Part")
-	body.Name = "Body"
-	body.Shape = Enum.PartType.Ball
-	body.Size = Vector3.new(3, 3, 3)
-	body.CFrame = CFrame.new(0, 68, 0)
-	body.Anchored = true
-	body.CanCollide = false
-	body.CanTouch = false
-	body.CanQuery = false
-	body.Material = Enum.Material.SmoothPlastic
-	body.Color = Color3.fromRGB(116, 218, 133)
-	body.Parent = model
-
-	-- A pale belly, clear eyes, smile, little feet, and leaf tuft give Sprout a readable face.
-	addWeldedPart(model, body, "Belly", Vector3.new(1.75, 1.85, 0.28), CFrame.new(0, -0.35, -1.35), Color3.fromRGB(190, 241, 156), Enum.PartType.Ball)
-	for _, side in { -1, 1 } do
-		addWeldedPart(model, body, "EyeWhite", Vector3.new(0.62, 0.72, 0.25), CFrame.new(side * 0.48, 0.42, -1.38), Color3.fromRGB(255, 255, 255), Enum.PartType.Ball)
-		addWeldedPart(model, body, "Pupil", Vector3.new(0.25, 0.34, 0.14), CFrame.new(side * 0.48, 0.4, -1.58), Color3.fromRGB(35, 48, 55), Enum.PartType.Ball)
-		addWeldedPart(model, body, "Foot", Vector3.new(0.82, 0.48, 0.9), CFrame.new(side * 0.82, -1.35, -0.05), Color3.fromRGB(83, 177, 103), Enum.PartType.Ball)
-	end
-	addWeldedPart(model, body, "Smile", Vector3.new(0.38, 0.14, 0.12), CFrame.new(0, -0.05, -1.55), Color3.fromRGB(56, 91, 62), Enum.PartType.Ball)
-	addWeldedPart(model, body, "Leaf", Vector3.new(0.62, 1.05, 0.3), CFrame.new(0, 1.55, 0) * CFrame.Angles(0, 0, math.rad(-18)), Color3.fromRGB(66, 174, 89), Enum.PartType.Ball)
-
-	local billboard = Instance.new("BillboardGui")
-	billboard.Name = "Nameplate"
-	billboard.Size = UDim2.fromOffset(180, 48)
-	billboard.StudsOffset = Vector3.new(0, 2.7, 0)
-	billboard.AlwaysOnTop = true
-	billboard.Adornee = body
-	billboard.Parent = model
-	local label = Instance.new("TextLabel")
-	label.Size = UDim2.fromScale(1, 1)
-	label.BackgroundTransparency = 1
-	label.Text = "Baby Sprout"
-	label.TextColor3 = Color3.new(1, 1, 1)
-	label.TextStrokeTransparency = 0.3
-	label.Font = Enum.Font.GothamBold
-	label.TextScaled = true
-	label.Parent = billboard
-
-	model.PrimaryPart = body
-	model.Parent = workspace
-	return model
+ local old=workspace:FindFirstChild("Companion_"..player.UserId);if old then old:Destroy() end
+ local model=Instance.new("Model");model.Name="Companion_"..player.UserId;model:SetAttribute("OwnerUserId",player.UserId)
+ local body=Instance.new("Part");body.Name="Body";body.Size=Vector3.new(.2,.2,.2);body.Transparency=1
+ body.Anchored,body.CanCollide,body.CanTouch,body.CanQuery=true,false,false,false;body.Parent=model
+ local label=Instance.new("BillboardGui");label.Name="Nameplate";label.Size=UDim2.fromOffset(130,24)
+ label.StudsOffset=Vector3.new(0,2.9,0);label.MaxDistance=35;label.Adornee=body;label.Parent=model
+ local text=Instance.new("TextLabel");text.Size=UDim2.fromScale(1,1);text.BackgroundTransparency=1;text.Text="Baby Sprout"
+ text.TextSize=13;text.TextColor3=Color3.fromRGB(235,243,223);text.TextStrokeTransparency=.4;text.Font=Enum.Font.GothamBold;text.Parent=label
+ model.PrimaryPart=body;model.Parent=workspace
+ return model
 end
 
 local function updateState(player: Player)
@@ -138,15 +78,11 @@ local function updateState(player: Player)
 	local label = model:FindFirstChild("Nameplate") and model.Nameplate:FindFirstChildWhichIsA("TextLabel")
 	local path = state.Path and Evolution.Paths[state.Path]
 	if label then label.Text = path and path.Name or stage.Name end
-	if path then
-		model.Body.Color = path.Color
-		model.Leaf.Color = path.Accent
-		model.Leaf.Shape = state.Path == "Crystal" and Enum.PartType.Block or Enum.PartType.Ball
-		model.Leaf.Material = state.Path == "Crystal" and Enum.Material.Neon or Enum.Material.SmoothPlastic
-		model.Belly.Color = path.Accent
-	end
-	local ratio = stage.Scale + (state.GrowthXP / Config.MaxXP) * 0.15
-	model:ScaleTo(ratio)
+ local ratio=stage.Scale+(state.GrowthXP/Config.MaxXP)*.15
+ model:SetAttribute("VisualScale",ratio)
+ model:SetAttribute("Path",state.Path or "")
+ if model:FindFirstChild("Nameplate") then model.Nameplate.StudsOffset=Vector3.new(0,2.5*ratio+.35,0) end
+
 end
 
 local function createCompanion(player: Player)
@@ -184,6 +120,7 @@ local function onFeed(player: Player, foodId)
 	local grantedXP = math.min(cap - state.GrowthXP, foodXP)
 	state.GrowthXP += grantedXP
 	reactionUntil[player.UserId] = now + 0.55
+ local companion=workspace:FindFirstChild("Companion_"..player.UserId);if companion then companion:SetAttribute("LastReaction",workspace:GetServerTimeNow()) end
 	updateState(player)
 	feedFeedback:FireClient(player, true, grantedXP)
 	require(script.Parent.QuestService).Record(player,"Feed")
@@ -260,32 +197,32 @@ function MonsterService.Start()
 	end)
 	for _, player in Players:GetPlayers() do createCompanion(player) end
 
-	RunService.Heartbeat:Connect(function(deltaTime)
-		local now = os.clock()
-		local alpha = math.clamp(deltaTime * 8, 0, 1)
-		for _, player in Players:GetPlayers() do
-			local character = player.Character
-			local root = character and character:FindFirstChild("HumanoidRootPart")
-			local model = workspace:FindFirstChild("Companion_" .. player.UserId)
-			if root and model and model:IsA("Model") then
-				local bob = math.sin(now * 3 + player.UserId % 17) * 0.12
-				if now < (reactionUntil[player.UserId] or 0) then
-					bob += math.sin((now - (reactionUntil[player.UserId] - 0.55)) * math.pi / 0.55) * 1.2
-				end
-				local position = root.Position + root.CFrame.RightVector * FOLLOW_OFFSET.X + Vector3.new(0, FOLLOW_OFFSET.Y + bob, 0)
-				-- Turn the face slightly toward the owner's over-the-shoulder view.
-				local facePoint = root.Position - root.CFrame.LookVector * 2
-				local lookAt = Vector3.new(facePoint.X, position.Y, facePoint.Z)
-				local target = CFrame.lookAt(position, lookAt)
-				if not positionInitialized[player.UserId] or (model:GetPivot().Position-root.Position).Magnitude>40 then
-					model:PivotTo(target)
-					positionInitialized[player.UserId] = true
-				else
-					model:PivotTo(model:GetPivot():Lerp(target, alpha))
-				end
-			end
-		end
-	end)
+ RunService.Heartbeat:Connect(function(deltaTime)
+  local alpha=1-math.exp(-math.min(deltaTime,.1)*8)
+  for _,player in Players:GetPlayers() do
+   local character=player.Character;local root=character and character:FindFirstChild("HumanoidRootPart")
+   local model=workspace:FindFirstChild("Companion_"..player.UserId)
+   if root and model then
+    local desired=root.Position+root.CFrame.RightVector*3.8-root.CFrame.LookVector*.5
+    local current=model:GetPivot().Position
+    local snap=not positionInitialized[player.UserId] or (current-root.Position).Magnitude>40
+    local pos=snap and desired or current:Lerp(desired,alpha)
+    local params=RaycastParams.new();params.FilterType=Enum.RaycastFilterType.Include
+    local surfaces={workspace.Terrain,workspace:FindFirstChild("WorldFoundation"),workspace:FindFirstChild("Island_"..player.UserId)}
+    params.FilterDescendantsInstances=surfaces;params.IgnoreWater=true
+    local hit=workspace:Raycast(Vector3.new(pos.X,root.Position.Y+12,pos.Z),Vector3.new(0,-50,0),params)
+    if hit then
+     pos=Vector3.new(pos.X,hit.Position.Y,pos.Z)
+     local motion=Vector3.new(desired.X-current.X,0,desired.Z-current.Z)
+     local forward=motion.Magnitude>.3 and motion.Unit or Vector3.new(root.CFrame.LookVector.X,0,root.CFrame.LookVector.Z)
+     local up=hit.Normal.Y>.75 and hit.Normal or Vector3.yAxis
+     forward=(forward-up*forward:Dot(up)).Unit
+     local target=CFrame.lookAt(pos,pos+forward,up)
+     model:PivotTo(target);positionInitialized[player.UserId]=true
+    end
+   end
+  end
+ end)
 end
 
 return MonsterService

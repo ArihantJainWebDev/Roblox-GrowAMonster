@@ -50,7 +50,8 @@ while courtyard.Parent and not courtyard:GetAttribute("AssemblyReady") do task.w
 local water=courtyard:FindFirstChild("WaterEffectAnchor")
 if water then
 	local top=Instance.new("Part");top.Name="WaterfallAnchor";top.Size=Vector3.one;top.Anchored,top.CanCollide,top.Transparency=true,false,1
-	top.Position=Vector3.new(150,Map.ZoneHeight(Map.Zones[2],150,-240),-240);top.Parent=root
+	local outlet=RS:WaitForChild("SceneGround"):WaitForChild("150.00:-240.00")
+	top.Position=outlet.Value-Vector3.new(0,.05,0);top.Parent=root
 	local a=Instance.new("Attachment");a.Parent=top
 	local b=Instance.new("Attachment");b.Position=Vector3.new(0,215-top.Position.Y,0);b.Parent=top
 	local beam=Instance.new("Beam");beam.Name="OrchardWaterfall";beam.Attachment0,beam.Attachment1=a,b

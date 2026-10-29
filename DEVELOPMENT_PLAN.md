@@ -119,3 +119,6 @@ User reports three-player multiplayer working and authorizes W4. Environment pas
 ## Authorized next sequence — 29 October 2026
 
 User approves correcting reported W4 defects, then proper creatures and deeper gameplay. Active order: W4 grounding/sign/crop correction → C1 baby mesh pipeline and full family → C2 animation/behavior → G1 monster-led exploration → U1 → R1. See docs/creatures/C1_CREATURE_BRIEF.md and docs/gameplay/G1_MONSTER_EXPLORATION.md. Do not substitute ongoing scenery additions for starting C1. G1 is a dedicated milestone; its detailed trial/garden proposal is not implemented content.
+
+## C1 baby implementation — 29 October 2026
+Native creek correction and first textured baby/rig are implemented. See docs/creatures/C1_BABY_IMPLEMENTATION.md for evidence and limits. C1 remains open for actual-model review, egg, young and three elemental meshes; C2 finished animation, G1 expanded gameplay and R1 regression remain outstanding. Existing stages temporarily reuse the baby mesh.

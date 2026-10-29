@@ -200,7 +200,7 @@ local function atmosphere()
 end
 function Service.Start()
 	if game:GetService("RunService"):IsRunning() then
-		for _,name in {"EditorCourtyardPreview","EditorWorldScenery"} do
+		for _,name in {"EditorCourtyardPreview","EditorWorldScenery","EditorCreaturePreview"} do
 			local preview=workspace:FindFirstChild(name)
 			if preview then preview.Parent=game.ServerStorage end
 		end
@@ -217,15 +217,23 @@ function Service.Start()
 		Terrain:FillBall(Vector3.new(340,springY-2,-210),11,Enum.Material.Air)
 		Terrain:FillBall(Vector3.new(340,springY-5,-210),8,Enum.Material.Water)
 		local stream={Vector2.new(340,-210),Vector2.new(300,-222),Vector2.new(250,-232),Vector2.new(200,-239),Vector2.new(150,-240)}
+  local waterPoints={}
 		for i=1,#stream-1 do
 			local a,b=stream[i],stream[i+1];local steps=math.ceil((b-a).Magnitude/3)
 			for j=0,steps do
 				local p=a:Lerp(b,j/steps);local y=Map.ZoneHeight(orchard,p.X,p.Y)
 				Terrain:FillBall(Vector3.new(p.X,y-1,p.Y),5,Enum.Material.Air)
-				Terrain:FillBall(Vector3.new(p.X,y-3,p.Y),3.5,Enum.Material.Water)
+    table.insert(waterPoints,Vector3.new(p.X,y-3,p.Y))
+    local banks=Region3.new(Vector3.new(p.X-6,y-8,p.Y-6),Vector3.new(p.X+6,y+10,p.Y+6)):ExpandToGrid(4)
+    Terrain:ReplaceMaterial(banks,4,Enum.Material.Grass,Enum.Material.Ground)
 			end
 			task.wait()
 		end
+  -- Fill only after every cut: later air cuts must not erase upstream water.
+  for i,point in waterPoints do
+   Terrain:FillBall(point,3.5,Enum.Material.Water)
+   if i%20==0 then task.wait() end
+  end
 		local anchors=Instance.new("Folder");anchors.Name="LandmarkAnchors";anchors.Parent=world
 		for i,point in {Vector2.new(190,-160),Vector2.new(245,-210),Vector2.new(310,-122),Vector2.new(365,-185),Vector2.new(260,200),Vector2.new(340,220)} do
 			local y=Service.SurfaceAt(point.X,point.Y)
@@ -266,6 +274,7 @@ function Service.Start()
 	for _,point in {Vector2.new(356,-224),Vector2.new(329,-182),Vector2.new(199,-124),Vector2.new(259,161),Vector2.new(310,197),Vector2.new(282,194),Vector2.new(337,207),Vector2.new(334,150),Vector2.new(346,-204),Vector2.new(333,-216),Vector2.new(316,-214),Vector2.new(297,-229),Vector2.new(274,-224),Vector2.new(253,-240),Vector2.new(224,-231),Vector2.new(197,-247),Vector2.new(172,-235)} do anchor(point.X,point.Y) end
 	for _,x in {-3.8,3.8} do for _,z in {-2.5,2.5} do anchor(356+x,-224+z) end end
 	for _,side in {-1,1} do anchor(310+side*11.7,197) end
+	anchor(150,-240) -- native water surface at the cliffward outlet
 	if not world:FindFirstChild("GroveRuinBoundaries") then
 		local bounds=Instance.new("Folder");bounds.Name="GroveRuinBoundaries";bounds.Parent=world
 		local y=Service.SurfaceAt(310,197)

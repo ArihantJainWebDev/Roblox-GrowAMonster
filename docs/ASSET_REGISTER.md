@@ -46,3 +46,6 @@ W4 final pass also includes a jointed Grove arch and botanical crest, individual
 
 
 C1_CREATURE_FAMILY_V1.png is a generated project concept reference, saved in docs/creatures with prompt provenance. It is not a mesh, texture atlas, rig or accepted production asset. Baby-first modeling/rig acceptance remains required.
+
+## C1 native-generated baby
+Source model 71146011257533, generation 222513a4-52d5-4e3d-a526-ee6a67c81e59, Roblox Studio native generator. Seven textured segments plus project-authored paws/claws. Full prompt and asset manifest: assets/creatures/baby. Actual-model review pending; no paid purchase. Model asset created, experience not published.

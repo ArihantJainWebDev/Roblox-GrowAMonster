@@ -162,3 +162,6 @@ ArtReview.WorldScenery owns original regional/home/crop/fruit geometry. SceneryC
 ## Grounding correction
 
 WorldService publishes SceneGround Vector3Values for curated decoration positions. FoodService publishes each node GroundPosition; GatewayService publishes LeftFootY/RightFootY. Client scenery aligns to these server measurements, explicit root pivots and actual tree branch attachments. Terrain-owned connector paths replace thin decorative slabs. Gameplay authority is unchanged. See docs/world/W4_CORRECTIONS_01.md.
+
+## Mesh companion rendering
+BabySproutAsset supplies immutable mesh references/transforms; BabyRig constructs a seven-joint client rig with authored paws. CompanionVisuals renders replicated server companion anchors. MonsterService owns growth/validation/ground following; visuals have no collision or authority. EditorCreaturePreview is archived in Play. See docs/creatures/C1_BABY_IMPLEMENTATION.md.

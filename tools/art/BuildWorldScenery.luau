@@ -96,32 +96,7 @@ function Scenery.Build(Art,parent,treeTemplate,courtyard,Map)
  for i,p in {Vector2.new(346,-204),Vector2.new(333,-216),Vector2.new(316,-214),Vector2.new(297,-229),Vector2.new(274,-224),Vector2.new(253,-240),Vector2.new(224,-231),Vector2.new(197,-247),Vector2.new(172,-235)} do
   local at=ground(Map,p.X,p.Y,Map.Zones[2]);rock(Art,root,"SpringBankBoulder",at-Vector3.new(0,.7,0),Vector3.new(2.5+i%2,2.4,2.2),190+i)
  end
- local water=courtyard:FindFirstChild("WaterEffectAnchor")
- if water then
-  local stream={Vector2.new(340,-210),Vector2.new(300,-222),Vector2.new(250,-232),Vector2.new(200,-239),Vector2.new(150,-240)}
-  local channelVertices,channelFaces={},{}
-  for i=1,#stream-1 do
-   local a,b=stream[i],stream[i+1]
-   local count=math.ceil((b-a).Magnitude/6)
-   for j=0,count-1 do
-    local p,q=a:Lerp(b,j/count),a:Lerp(b,(j+1)/count)
-    local p3=Vector3.new(p.X,Map.ZoneHeight(Map.Zones[2],p.X,p.Y)-1.2,p.Y)
-    local q3=Vector3.new(q.X,Map.ZoneHeight(Map.Zones[2],q.X,q.Y)-1.2,q.Y)
-    local forward=(q3-p3).Unit;local across=Vector3.new(-forward.Z,0,forward.X).Unit*1.85
-    local start=#channelVertices
-    for _,v in {p3-across,p3+across,q3-across,q3+across} do table.insert(channelVertices,v) end
-    table.insert(channelFaces,{start+1,start+2,start+3});table.insert(channelFaces,{start+2,start+4,start+3})
-    local anchor=part(root,"StreamFlowAnchor",Vector3.one,p3,Color3.new(1,1,1));anchor.Transparency=1
-    local aa=Instance.new("Attachment");aa.Parent=anchor
-    local bb=Instance.new("Attachment");bb.Position=q3-p3;bb.Parent=anchor
-    local beam=water.FlowingWater0:Clone();beam.Name="SpringCascadeFlow";beam.Attachment0,beam.Attachment1=aa,bb
-    beam.CurveSize0,beam.CurveSize1=0,0;beam.Width0,beam.Width1=.24,.24;beam.TextureLength,beam.TextureSpeed=7,.6;beam.Segments=1
-    beam.Transparency=NumberSequence.new(.7);beam.Parent=anchor
-   end
-  end
-  local channel=Art.MakeMesh(root,"SpringWatercourse",channelVertices,channelFaces,Color3.fromRGB(84,159,164),Enum.Material.Glass)
-  channel.Transparency=.35
- end
+ -- Creek water is actual Terrain Water; no independently elevated ribbon or flow beams.
  -- A spring garden and a resting place on the upper orchard terrace.
  local rest=ground(Map,356,-224,Map.Zones[2])
  for _,x in {-2,2} do part(root,"RestBenchFoot",Vector3.new(.6,1.5,.8),rest+Vector3.new(x,.75,0),stone,Enum.Material.Rock) end

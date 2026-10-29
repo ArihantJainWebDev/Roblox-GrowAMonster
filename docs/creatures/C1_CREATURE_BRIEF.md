@@ -35,3 +35,6 @@ After the current W4 corrections, start the baby mesh pipeline. Do not keep addi
 See C1_CREATURE_FAMILY_V1.png, generated with the built-in image tool. Baby/young turnaround directions, seed egg and Fire/Crystal/Nature evolution directions are proposed for review. CONCEPT_PROMPT_FULL_V1.md records the exact initial prompt and targeted correction. Incorrect gray-avatar scale annotations were removed; approximate creature sizes are working targets only. Tail neutral pose, exact toes, leaf layering, topology and joint locations must be resolved in the model specification before mesh acceptance.
 
 The next production action after design approval is ONE actual baby mesh and rig in Studio, reviewed at avatar scale. Do not interpret the image as a completed, imported or rigged asset or proof of identical in-engine fidelity.
+
+## Implementation status update
+First baby mesh and rig now implemented; see C1_BABY_IMPLEMENTATION.md. Earlier proposal-only status is historical. Actual-model visual approval, remaining family and C2 animation are open.

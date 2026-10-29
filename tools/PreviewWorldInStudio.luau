@@ -27,6 +27,13 @@ local ok,result=pcall(function()
   require(library).Build(require(geometry),container,root.Original_Broadleaf,root,map)
  end
  workspace.WorldFoundation:SetAttribute("EditorPreviewVersion",map.Version)
+ local creatureFolder=game.StarterPlayer.StarterPlayerScripts.GameClient:FindFirstChild("creatures")
+ if creatureFolder and creatureFolder:FindFirstChild("BabyRig") then
+  local oldCreature=workspace:FindFirstChild("EditorCreaturePreview");if oldCreature then oldCreature:Destroy() end
+  local creature=require(fresh(creatureFolder.BabyRig,"BabyRig")).Build()
+  creature.Name="EditorCreaturePreview";creature:SetAttribute("EditorPreview",true)
+  creature:PivotTo(CFrame.new(map.Hub+Vector3.new(0,.65,-25)));creature.Parent=workspace
+ end
  return {TerrainVersion=map.Version,CourtyardBuild=root:GetAttribute("CourtyardBuild")}
 end)
 scratch:Destroy()
