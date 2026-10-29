@@ -35,8 +35,11 @@ local function update()
   local fruit=node:FindFirstChild("Fruit")
   if fruit and not node:FindFirstChild("LocalFoodVisuals") then
    local visual=Scenery.Fruit(Art,node,node:GetAttribute("FoodId"));visual.Name="LocalFoodVisuals"
-   visual:PivotTo(visual:GetPivot()+fruit.Position)
-   Scenery.WildPlant(Art,node,fruit.Position)
+   local base=node:GetAttribute("GroundPosition")
+   if not base then visual:Destroy();continue end
+   local berry=node:GetAttribute("FoodId")=="Berry"
+   visual:PivotTo(CFrame.new(base+Vector3.new(0,berry and 1.25 or .45,0)))
+   Scenery.WildPlant(Art,node,base,berry)
   end
  end
  for _,island in workspace:GetChildren() do
@@ -55,7 +58,7 @@ local function update()
      local old=plot:FindFirstChild("CropVisuals");if old then old:Destroy() end
      if config then
       local visual=crops[id][stage]:Clone();visual.Name="CropVisuals";visual.Parent=plot
-      visual:PivotTo(visual:GetPivot()+plot.Position+Vector3.new(0,.32,0))
+      visual:PivotTo(CFrame.new(plot.Position+Vector3.new(0,.3,0)))
      end
      plot:SetAttribute("LocalAppearance",key)
     end

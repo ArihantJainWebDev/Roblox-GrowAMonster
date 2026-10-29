@@ -169,3 +169,7 @@ Outdoor route material decision — 29 October 2026: use natural stone/rock trai
 ## W4 environment interaction update
 
 Orchard and Grove use distinct planted/mineral compositions; four farm beds show apple/berry growth and ripe fruit. Browse seeds at the home propagation bench, then plant using the existing plot prompts. Ownership is shown on a physical garden sign; food uses nearby native prompts instead of distant name billboards. Crop timings, costs, yields, food values and evolution requirements are unchanged.
+
+## Gameplay depth direction — 29 October 2026
+
+The user approved moving toward monster-led exploration. Raising/evolving a companion should unlock contextual actions, discoveries and destinations, giving farming/feeding a purpose beyond XP accumulation. G1 is the explicit expansion milestone after creature models/animations. Its initial trial/garden/quest outline is specified as a proposal in docs/gameplay/G1_MONSTER_EXPLORATION.md; no combat/trading/breeding expansion is implied.

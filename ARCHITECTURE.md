@@ -157,3 +157,8 @@ ReplicatedStorage.ArtReview.CourtyardDetails maps tools/art/BuildCourtyardDetail
 ## W4 scene and farm presentation
 
 ArtReview.WorldScenery owns original regional/home/crop/fruit geometry. SceneryController clones cached models and derives growth appearance from server Crop/ReadyAt attributes for streamed homes. GatheringController applies the existing personal cooldown to the new local fruit meshes. FarmController opens its existing seed menu through the owned SeedCounter prompt; server FarmService retains all purchasing, planting, harvesting and ownership authority. WorldConfig.TreeGroups shares tree positions with WorldService clearings and simple trunk collisions. EditorWorldScenery is separate from runtime presentation.
+
+
+## Grounding correction
+
+WorldService publishes SceneGround Vector3Values for curated decoration positions. FoodService publishes each node GroundPosition; GatewayService publishes LeftFootY/RightFootY. Client scenery aligns to these server measurements, explicit root pivots and actual tree branch attachments. Terrain-owned connector paths replace thin decorative slabs. Gameplay authority is unchanged. See docs/world/W4_CORRECTIONS_01.md.

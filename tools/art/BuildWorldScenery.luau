@@ -10,6 +10,9 @@ end
 local function move(model,offset) model:PivotTo(model:GetPivot()+offset) end
 local function ground(Map,x,z,zone)
  local params=RaycastParams.new();params.FilterType=Enum.RaycastFilterType.Include;params.FilterDescendantsInstances={workspace.Terrain}
+ local anchors=game.ReplicatedStorage:FindFirstChild("SceneGround")
+ local fixed=anchors and anchors:FindFirstChild(string.format("%.2f:%.2f",x,z))
+ if fixed then return fixed.Value end
  local hit=workspace:Raycast(Vector3.new(x,640,z),Vector3.new(0,-400,0),params)
  return Vector3.new(x,hit and hit.Position.Y or Map.ZoneHeight(zone,x,z)+2,z)
 end
@@ -33,19 +36,23 @@ local function foliage(Art,parent,name,points,seed,color)
  if #leaves>0 then Art.MakeLeaves(parent,name,leaves,color) end
 end
 local function sign(parent,text,pos,yaw)
- local pole=part(parent,"TrailSignPost",Vector3.new(.45,4,.45),pos+Vector3.new(0,2,0),timber)
- local board=part(parent,"TrailSign",Vector3.new(6,1.8,.3),pos+Vector3.new(0,3.6,0),Color3.fromRGB(81,104,89))
- board.CFrame=CFrame.new(board.Position)*CFrame.Angles(0,yaw or 0,0)
- for _,face in {Enum.NormalId.Front,Enum.NormalId.Back} do
- local gui=Instance.new("SurfaceGui");gui.Face=face;gui.CanvasSize=Vector2.new(480,144);gui.Parent=board
- local label=Instance.new("TextLabel");label.Size=UDim2.fromScale(1,1);label.BackgroundTransparency=1;label.Text=text
- label.Font=Enum.Font.GothamMedium;label.TextSize=29;label.TextColor3=Color3.fromRGB(239,229,197);label.TextWrapped=true;label.Parent=gui
+ local frame=CFrame.new(pos)*CFrame.Angles(0,yaw or 0,0)
+ for _,side in {-1,1} do
+  part(parent,"TrailSignPost",Vector3.new(.28,2.65,.28),frame:PointToWorldSpace(Vector3.new(side*2.35,1.325,0)),timber)
  end
- return pole
+ local board=part(parent,"TrailSign",Vector3.new(6,1.8,.3),frame:PointToWorldSpace(Vector3.new(0,3.55,0)),Color3.fromRGB(67,90,77))
+ board.CFrame=frame*CFrame.new(0,3.55,0)
+ for _,face in {Enum.NormalId.Front,Enum.NormalId.Back} do
+  local gui=Instance.new("SurfaceGui");gui.Name="Sign"..face.Name;gui.Face=face;gui.CanvasSize=Vector2.new(480,144);gui.LightInfluence=.35;gui.Parent=board
+  local label=Instance.new("TextLabel");label.Position=UDim2.fromOffset(12,6);label.Size=UDim2.new(1,-24,1,-12);label.BackgroundTransparency=1;label.Text=text
+  label.Font=Enum.Font.GothamMedium;label.TextScaled=true;label.TextColor3=Color3.fromRGB(239,229,197);label.TextWrapped=true;label.Parent=gui
+  local limit=Instance.new("UITextSizeConstraint");limit.MaxTextSize=30;limit.MinTextSize=15;limit.Parent=label
+ end
+ return board
 end
 function Scenery.Fruit(Art,parent,kind)
  if fruitTemplates[kind] then local copy=fruitTemplates[kind]:Clone();copy.Parent=parent;return copy end
- local model=Instance.new("Model");model.Name="AuthoredFruit";model.Parent=parent
+ local model=Instance.new("Model");model.Name="AuthoredFruit";model.WorldPivot=CFrame.new();model.Parent=parent
  local color=kind=="Berry" and Color3.fromRGB(126,84,168) or kind=="GoldenApple" and Color3.fromRGB(218,174,66) or Color3.fromRGB(191,72,54)
  if kind=="Berry" then
   for i=0,4 do local a=i*2.4;Art.MakeSurface(model,"BerryDrupe"..i,{{0,-.3},{.22,-.26},{.3,0},{.22,.25},{0,.3}},12,color,Vector3.new(math.cos(a)*.24,(i%2)*.28,math.sin(a)*.24),5,.08) end
@@ -70,7 +77,14 @@ function Scenery.Build(Art,parent,treeTemplate,courtyard,Map)
   tree:PivotTo(tree:GetPivot()*CFrame.Angles(0,index*1.7,0));tree.Parent=root
   if region==2 then for _,leaf in tree:GetChildren() do if leaf.Name:match("LeafSprays") then leaf.Color=leaf.Color:Lerp(Color3.fromRGB(91,143,133),.5) end end end
   if region==1 then
-   for i=1,4 do local apple=Scenery.Fruit(Art,root,"Apple");apple:ScaleTo(.85);move(apple,p+Vector3.new(math.cos(i*2.4)*3.5,7+i%3,math.sin(i*2.4)*3.5)) end
+   for _,i in {1,3,6,8} do
+    local socket=tree.BranchingTrunk:FindFirstChild("FruitSocket"..i)
+    if socket then
+     local apple=Scenery.Fruit(Art,tree,"Apple");apple:ScaleTo(.85)
+     local target=socket.WorldPosition-Vector3.new(.04,.66,0)*.85
+     apple:PivotTo(CFrame.new(target));apple:SetAttribute("BranchSocket",socket.Name)
+    end
+   end
   end
   for j=1,3 do local a=j*2.4+index;table.insert(region==1 and shrubs or ferns,p+Vector3.new(math.cos(a)*5,-.2,math.sin(a)*5)) end
   if index%3==0 then rock(Art,root,"RootShoulderStone",p+Vector3.new(5,-.5,3),Vector3.new(2,2.4,1.5),index) end
@@ -171,6 +185,7 @@ function Scenery.Home(Art,island)
  local existing=island:FindFirstChild("HomeGarden");if existing then return existing end
  local root=Instance.new("Model");root.Name="HomeGarden";root.Parent=island
  local center=island.Grass.Position
+ local mulchV,mulchF={},{};local soilRng=Random.new(771)
  for i=1,4 do local plot=island:FindFirstChild("Plot"..i);if plot then
   local p=plot.Position
   for _,side in {-1,1} do
@@ -178,7 +193,15 @@ function Scenery.Home(Art,island)
    part(root,"RaisedBedEdge",Vector3.new(.45,.8,9.8),p+Vector3.new(side*4.7,.15,0),timber)
   end
   for furrow=-3,3,1.5 do part(root,"SoilFurrow",Vector3.new(.14,.08,8),p+Vector3.new(furrow,.32,0),Color3.fromRGB(69,48,33),Enum.Material.Ground) end
+  for j=1,45 do
+   local at=p+Vector3.new(soilRng:NextNumber(-4,4),.315,soilRng:NextNumber(-4,4))
+   local a=soilRng:NextNumber(0,math.pi*2);local along=Vector3.new(math.cos(a),0,math.sin(a))*soilRng:NextNumber(.12,.3)
+   local across=Vector3.new(-along.Z,0,along.X)*.4;local n=#mulchV
+   for _,v in {at-along,at+across+Vector3.new(0,.04,0),at+along,at-across} do table.insert(mulchV,v) end
+   table.insert(mulchF,{n+1,n+2,n+3});table.insert(mulchF,{n+1,n+3,n+4})
+  end
  end end
+ Art.MakeMesh(root,"BedMulchAndSoilClods",mulchV,mulchF,Color3.fromRGB(94,65,40),Enum.Material.Ground)
  local own=island:GetAttribute("OwnerUserId");local player=game.Players:GetPlayerByUserId(own)
  sign(root,(player and player.DisplayName or "Player").."'s garden",center+Vector3.new(16,2,17),-.5)
  local old=island.HomeSpawn:FindFirstChild("HomeLabel");if old then old.Enabled=false end
@@ -194,17 +217,23 @@ function Scenery.Home(Art,island)
  root:SetAttribute("Build","W4-home-01")
  return root
 end
-function Scenery.WildPlant(Art,node,position)
+function Scenery.WildPlant(Art,node,base,berry)
  local leaves={}
- for j=0,9 do local a=j*2.4;local p=position-Vector3.new(0,1.6,0)
-  table.insert(leaves,{p,p+Vector3.new(math.cos(a)*1.5,.8+(j%3)*.35,math.sin(a)*1.5),.45})
+ for j=0,9 do local a=j*2.4
+  table.insert(leaves,{base-Vector3.new(0,.04,0),base+Vector3.new(math.cos(a)*1.3,.65+(j%3)*.2,math.sin(a)*1.3),.35})
  end
  Art.MakeLeaves(node,"LocalPlant",leaves,Color3.fromRGB(64,112,73))
+ if berry then
+  local top=base+Vector3.new(.04,1.91,0)
+  local stem=part(node,"BerryBearingStem",Vector3.new(.08,.08,(top-base).Magnitude),(top+base)/2,timber)
+  stem.CFrame=CFrame.lookAt(stem.Position,top)
+ end
 end
 function Scenery.Gateway(Art,gate)
  if gate:FindFirstChild("GardenGateway") then return end
  local root=Instance.new("Model");root.Name="GardenGateway";root.Parent=gate
  local base=gate.Position-Vector3.new(0,3.5,0)
+ local ray=RaycastParams.new();ray.FilterType=Enum.RaycastFilterType.Include;ray.FilterDescendantsInstances={workspace.Terrain}
  local vertices,faces={},{}
  for j=0,24 do local a=j*math.pi/24
   for _,z in {-.8,.8} do for _,r in {3.9,4.9} do table.insert(vertices,base+Vector3.new(math.cos(a)*r,4+math.sin(a)*r,z)) end end
@@ -212,8 +241,12 @@ function Scenery.Gateway(Art,gate)
  end
  Art.MakeMesh(root,"GatewayStoneArch",vertices,faces,Color3.fromRGB(181,176,151),Enum.Material.Limestone)
  for _,side in {-1,1} do
-  part(root,"GatewayButtress",Vector3.new(1.1,4,1.6),base+Vector3.new(side*4.4,2,0),stone,Enum.Material.Rock)
-  part(root,"GatewayFoot",Vector3.new(2,.7,2.4),base+Vector3.new(side*4.4,.35,0),stone,Enum.Material.Rock)
+  local x=base.X+side*4.4
+  local hit=workspace:Raycast(Vector3.new(x,base.Y+20,base.Z),Vector3.new(0,-60,0),ray)
+  local y=gate:GetAttribute(side<0 and "LeftFootY" or "RightFootY") or (hit and hit.Position.Y or base.Y)
+  local height=math.max(.7,base.Y+4-y)
+  part(root,"GatewayButtress",Vector3.new(1.1,height,1.6),Vector3.new(x,y+height/2,base.Z),stone,Enum.Material.Rock)
+  part(root,"GatewayFoot",Vector3.new(2,.7,2.4),Vector3.new(x,y+.25,base.Z),stone,Enum.Material.Rock)
  end
  local leaves={};for i=-1,1 do local p=base+Vector3.new(0,8.8,0);table.insert(leaves,{p,p+Vector3.new(i*.8,1.4-math.abs(i)*.4,0),.28}) end
  Art.MakeLeaves(root,"GatewayBotanicalCrest",leaves,Color3.fromRGB(132,159,117))
@@ -228,20 +261,39 @@ function Scenery.Gateway(Art,gate)
  local membrane=Art.MakeMesh(root,"GatewayVeil",v,f,Color3.fromRGB(126,206,195),Enum.Material.Glass);membrane.Transparency=.4
 end
 function Scenery.Crop(Art,parent,id,stage)
- local root=Instance.new("Model");root.Name="CropTemplate";root.Parent=parent
- local height=stage==1 and 1.3 or stage==2 and 2.4 or 3.8
+ local root=Instance.new("Model");root.Name="CropTemplate";root.WorldPivot=CFrame.new();root.Parent=parent
+ local rng=Random.new(441)
+ local leaves={};local sockets={}
  if id=="Apple" then
-  part(root,"SaplingTrunk",Vector3.new(.2,height,.2),Vector3.new(0,height/2,0),timber)
-  for j=0,3 do
-   local a=j*2.4;local endPoint=Vector3.new(math.cos(a)*height*.38,height*.65+j*.15,math.sin(a)*height*.38)
-   local branch=part(root,"SaplingBranch",Vector3.new(.1,.1,endPoint.Magnitude),endPoint/2,timber);branch.CFrame=CFrame.lookAt(endPoint/2,endPoint)
+  Art.MakeSurface(root,"RootedSaplingTrunk",{{0,-.08},{.65,-.08},{.43,.2},{.24,1.2},{.18,3.8},{.07,6.2},{0,6.6}},14,timber,nil,5,.15)
+  for j=0,5 do
+   local a=j*2.4;local start=Vector3.new(0,2+j*.42,0)
+   local tip=Vector3.new(math.cos(a)*1.8,4.5+j*.26,math.sin(a)*1.8)
+   local branch=part(root,"SaplingBranch",Vector3.new(.16,.16,(tip-start).Magnitude),(tip+start)/2,timber)
+   branch.CFrame=CFrame.lookAt(branch.Position,tip)
+   table.insert(sockets,tip)
+   for k=0,23 do
+    local angle=k*2.4;local base=tip+Vector3.new(rng:NextNumber(-.4,.4),rng:NextNumber(.1,.7),rng:NextNumber(-.4,.4))
+    table.insert(leaves,{base,base+Vector3.new(math.cos(angle)*rng:NextNumber(1.2,2.1),rng:NextNumber(.2,1.1),math.sin(angle)*rng:NextNumber(1.2,2.1)),rng:NextNumber(.65,.85)})
+   end
+  end
+  for j=0,5 do local a=j*math.pi/3;local tip=Vector3.new(math.cos(a)*1.2,-.05,math.sin(a)*1.2)
+   local rootBranch=part(root,"ExposedRoot",Vector3.new(.16,.1,tip.Magnitude),tip/2,timber);rootBranch.CFrame=CFrame.lookAt(tip/2,tip)
+  end
+ else
+  for _,base in {Vector3.new(-1.7,0,-1.3),Vector3.new(1.7,0,-.9),Vector3.new(0,0,1.7)} do
+   for j=0,3 do local a=j*2.4;local tip=base+Vector3.new(math.cos(a)*.85,1.5+(j%2)*.45,math.sin(a)*.85)
+    local stem=part(root,"RootedBerryStem",Vector3.new(.08,.08,(tip-base).Magnitude),(tip+base)/2,timber);stem.CFrame=CFrame.lookAt(stem.Position,tip)
+    table.insert(sockets,tip)
+    for k=0,14 do local angle=k*2.4;table.insert(leaves,{tip*.8+base*.2,tip+Vector3.new(math.cos(angle)*1.25,rng:NextNumber(.1,.7),math.sin(angle)*1.25),.6}) end
+   end
   end
  end
- local points={}
- for j=0,4 do local a=j*2.4;table.insert(points,Vector3.new(math.cos(a)*.4,height*(id=="Apple" and .65 or .15),math.sin(a)*.4)) end
- foliage(Art,root,"CropLeafSprays",points,stage*10+(id=="Apple" and 1 or 2),id=="Apple" and Color3.fromRGB(99,145,69) or Color3.fromRGB(64,119,83))
- if stage==3 then for j=0,3 do local a=j*2.4;local fruit=Scenery.Fruit(Art,root,id);fruit:ScaleTo(.7);move(fruit,Vector3.new(math.cos(a)*1.2,id=="Apple" and 2+j*.25 or 1.2,math.sin(a)*1.2)) end end
- root:ScaleTo(stage==1 and .32 or stage==2 and .62 or .9)
+ Art.MakeLeaves(root,"CropCanopy",leaves,id=="Apple" and Color3.fromRGB(96,141,70) or Color3.fromRGB(62,112,79))
+ if stage==3 then for i,point in sockets do if i%2==0 then
+  local fruit=Scenery.Fruit(Art,root,id);fruit:ScaleTo(.65);fruit:PivotTo(CFrame.new(point-Vector3.new(.04,.66,0)*.65))
+ end end end
+ root:ScaleTo(stage==1 and .26 or stage==2 and .6 or .9)
  return root
 end
 return Scenery

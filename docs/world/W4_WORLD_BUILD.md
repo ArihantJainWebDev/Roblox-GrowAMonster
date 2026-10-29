@@ -54,3 +54,5 @@ Added the Grove's 17-stud ancestral arch after the first review showed its stand
 The stream now uses an authored translucent watercourse with narrow scrolling highlights rather than a broad white beam. Runtime scenery requests shared-world streaming before ground alignment; landscape construction runs beside home/crop preparation. Regional decor hides beyond 650 studs from the character to avoid rendering detached scenery where distant terrain streams out.
 
 Final fresh Play: landscape Ready, crops Ready, cover W4-cover-03, ruin collision present. Native E opens the owned seed panel. All four mature plot appearances were observed with CropVisuals (Apple:3 on plots 1/2, Berry:3 on 3/4) in the normal-timer review. Returned to Edit with the W4 preview intact. The final spring screenshot request stalled and was cancelled; no additional screenshot acceptance is inferred. No publish performed.
+
+Reported grounding/sign/crop defects are addressed in correction pass 01. See W4_CORRECTIONS_01.md for root causes and measured checks. Final user visual regression is still open; this does not automatically accept W4.

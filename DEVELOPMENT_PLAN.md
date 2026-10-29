@@ -115,3 +115,7 @@ User route review — 29 October 2026: screenshots exposed bridge/terrain joins 
 ## W4 environment rollout — 29 October 2026
 
 User reports three-player multiplayer working and authorizes W4. Environment pass implemented across orchard, Grove, gateways, wild food and all four personal farm beds. Seed shop now opens at a bench; crop spheres are replaced by three-stage plant models. See docs/world/W4_WORLD_BUILD.md for exact checks and remaining visual/device/W4 multiplayer regression gates. This is not accepted stage completion.
+
+## Authorized next sequence — 29 October 2026
+
+User approves correcting reported W4 defects, then proper creatures and deeper gameplay. Active order: W4 grounding/sign/crop correction → C1 baby mesh pipeline and full family → C2 animation/behavior → G1 monster-led exploration → U1 → R1. See docs/creatures/C1_CREATURE_BRIEF.md and docs/gameplay/G1_MONSTER_EXPLORATION.md. Do not substitute ongoing scenery additions for starting C1. G1 is a dedicated milestone; its detailed trial/garden proposal is not implemented content.

@@ -38,22 +38,7 @@ function Details.Build(Art,root,options)
  for _,r in {19.95,23.2} do for i=0,95 do local a=i*math.pi/48;table.insert(rim,Vector3.new(math.cos(a)*r,.11,math.sin(a)*r)) end end
  for i=1,96 do local j=i%96+1;table.insert(rf,{i,j,i+96});table.insert(rf,{j,j+96,i+96}) end
  Art.MakeMesh(root,"OuterMosaicBorder",rim,rf,trim,Enum.Material.Limestone)
- if options and options.Integrated then
-  local ray=RaycastParams.new();ray.FilterType=Enum.RaycastFilterType.Include;ray.FilterDescendantsInstances={workspace.Terrain}
-  local origin=options.Origin
-  for _,ends in {{Vector3.new(-32,0,-24),Vector3.new(-46,0,-25)},{Vector3.new(32,0,-24),Vector3.new(45,0,-30)},{Vector3.new(32,0,28),Vector3.new(45,0,35)}} do
-   local a,b=ends[1],ends[2];local direction=(b-a).Unit;local right=Vector3.new(-direction.Z,0,direction.X)
-   local steps=math.ceil((b-a).Magnitude/3)
-   for j=0,steps do for _,side in {-1,1} do
-    local p=a:Lerp(b,j/steps)+right*side*1.6
-    local hit=workspace:Raycast(origin+p+Vector3.new(0,40,0),Vector3.new(0,-80,0),ray)
-    if hit then
-     p=Vector3.new(p.X,hit.Position.Y-origin.Y+.12,p.Z)
-     box("CourtTrailConnections",p,Vector3.new(3.05,.24,(b-a).Magnitude/steps-.08),cream,Enum.Material.Limestone,CFrame.lookAt(p,p+direction))
-    end
-   end end
-  end
- end
+ -- Outdoor connections use grounded terrain stone, not floating connector slabs.
  -- Low perimeter edging leaves the cardinal entrances open.
  for _,side in {-1,1} do
   for z=-31,31,4 do

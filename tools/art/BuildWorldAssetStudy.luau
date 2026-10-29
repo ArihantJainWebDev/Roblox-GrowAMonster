@@ -131,12 +131,13 @@ local function cliff(parent,name,offset,seed)
 end
 local function tree(parent,offset,seed)
 	local m=Instance.new("Model");m.Name="Original_Broadleaf";m.Parent=parent
-	local rng=Random.new(seed);local v,f={},{};local groups={{},{},{}}
+	local rng=Random.new(seed);local v,f={},{};local groups={{},{},{}};local sockets={}
 	tube(v,f,{offset,offset+Vector3.new(.3,7,0),offset+Vector3.new(-.3,14,.4),offset+Vector3.new(.5,21,0)},{1.2,.85,.55,.12},10)
 	for i=0,9 do
 		local a=i*2.4;local y=10+(i%4)*2.7
 		local start=offset+Vector3.new(0,y,0)
 		local endpoint=offset+Vector3.new(math.cos(a)*(6+i%3),y+4,math.sin(a)*(6+i%3))
+		table.insert(sockets,endpoint)
 		tube(v,f,{start,start:Lerp(endpoint,.5)+Vector3.new(0,1,0),endpoint},{.45,.25,.05},7)
 		for j=1,5 do
 			local angle=a+(j-3)*.48
@@ -149,7 +150,8 @@ local function tree(parent,offset,seed)
 			end
 		end
 	end
-	meshPart(m,"BranchingTrunk",v,f,Color3.fromRGB(112,86,58),Enum.Material.Wood)
+	local trunk=meshPart(m,"BranchingTrunk",v,f,Color3.fromRGB(112,86,58),Enum.Material.Wood)
+	for i,point in sockets do local socket=Instance.new("Attachment");socket.Name="FruitSocket"..i;socket.Position=trunk.CFrame:PointToObjectSpace(point);socket.Parent=trunk end
 	for i,color in {Color3.fromRGB(73,116,67),Color3.fromRGB(103,143,74),Color3.fromRGB(135,162,88)} do leafMesh(m,"LeafSprays"..i,groups[i],color) end
 	return m
 end

@@ -43,3 +43,6 @@ BuildCourtyardDetails.luau contains project-authored masonry/paving meshes, bota
 BuildWorldScenery.luau authors rock profiles, lobed apples/berry clusters, plant sprays, gateway arch/veil/crest, terracotta pots, stage-based saplings/bushes, Grove mineral silhouettes, spring canopy and watercourse. Regional trees clone the existing original broadleaf family; native engine materials and existing author-generated fountain texture provide surfaces/flow highlights. No external imports, purchases or uploads added. Review/license route is project-authored; visual approval and device profiling remain open. See world/W4_WORLD_BUILD.md.
 
 W4 final pass also includes a jointed Grove arch and botanical crest, individually grounded piers/posts, native LeafyGrass meadow patches and the authored translucent spring strip. No externally sourced asset added.
+
+
+C1_CREATURE_FAMILY_V1.png is a generated project concept reference, saved in docs/creatures with prompt provenance. It is not a mesh, texture atlas, rig or accepted production asset. Baby-first modeling/rig acceptance remains required.

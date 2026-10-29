@@ -107,6 +107,7 @@ local function createNodes()
 		model:SetAttribute("RequiresEvolution", entry[5] == true)
 		local surfaceY=assert(require(script.Parent.WorldService).SurfaceAt(x,z), "Food node outside terrain: "..id)
 		local base = Vector3.new(x, surfaceY + 0.65, z)
+		model:SetAttribute("GroundPosition",Vector3.new(x,surfaceY,z))
 		part(model, "Bush", Vector3.new(3.4, 1.3, 3.4), base, Color3.fromRGB(64, 136, 79), Enum.PartType.Ball)
 		local fruit = part(model, "Fruit", Vector3.new(1.3, 1.3, 1.3), base + Vector3.new(0, 1.25, 0), food.Color, Enum.PartType.Ball)
 		fruit.Transparency=1

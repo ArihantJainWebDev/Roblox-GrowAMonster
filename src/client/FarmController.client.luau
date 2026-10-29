@@ -63,7 +63,7 @@ local function refresh()
 			local prompt = plot:FindFirstChildOfClass("ProximityPrompt")
 			prompt.ObjectText = crop and (crop.Name .. (seconds>0 and " • "..seconds.."s" or " • Ready!")) or "Empty plot"
 			prompt.ActionText = crop and "Harvest" or "Plant selected seed"
-			plot.Color = Color3.fromRGB(104,69,43)
+			plot.Color = Color3.fromRGB(76,52,35)
 		end
 	end
 end

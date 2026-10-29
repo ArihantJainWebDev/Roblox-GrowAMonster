@@ -114,3 +114,7 @@ User requested construction after the courtyard study. W2 functional foundation 
 ## W4 current status — 29 October 2026
 
 User reports pre-W4 multiplayer working with three people and requests W4 implementation. Environment rollout pass W4-landscape-02 / W4-home-01 is implemented in Studio and local sources. See world/W4_WORLD_BUILD.md. User visual review, new presentation/bench-flow multiplayer regression and device/performance/persistence evidence remain open; no full W4 acceptance is claimed.
+
+## Creature and gameplay commitment — 29 October 2026
+
+After the reported W4 grounding/sign/crop correction pass, proceed to C1/C2. Add G1 Monster-led exploration after C2 and before final U1/R1 integration; see gameplay/G1_MONSTER_EXPLORATION.md. The current prototype loop is not the final intended gameplay. The approved direction is exploration enabled by raising/evolving the companion; specific quest beats and ability trials remain proposed until their gate is reviewed. See creatures/C1_CREATURE_BRIEF.md for the baby-first modeling pipeline.

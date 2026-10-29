@@ -133,6 +133,13 @@ local function gradeBridge(a,b)
  Terrain:WriteVoxels(region,4,m,o)
 end
 local function buildStoneTrails()
+ for _,ends in {{Vector3.new(-32,0,-24),Vector3.new(-48,0,-25)},{Vector3.new(32,0,-24),Vector3.new(45,0,-30)},{Vector3.new(32,0,28),Vector3.new(45,0,35)}} do
+  local count=math.ceil((ends[2]-ends[1]).Magnitude/3)
+  for j=0,count do
+   local p=Map.Hub+ends[1]:Lerp(ends[2],j/count)
+   Terrain:ReplaceMaterial(Region3.new(p-Vector3.new(4,12,4),p+Vector3.new(4,18,4)):ExpandToGrid(4),4,Enum.Material.Ground,Enum.Material.Rock)
+  end
+ end
  for _,route in Map.Routes do for i=1,#route.Points-1 do
   local a,b=route.Points[i],route.Points[i+1]
   local steps=math.ceil((b-a).Magnitude/3)
@@ -240,14 +247,25 @@ function Service.Start()
 		spawn.Neutral,spawn.Duration,spawn.Parent=true,0,world
 		world:SetAttribute("Version",Map.Version);world:SetAttribute("Ready",true)
 	end
- if workspace.WorldFoundation:GetAttribute("GroundCoverVersion")~="W4-cover-03" then
+ if workspace.WorldFoundation:GetAttribute("GroundCoverVersion")~="W4-cover-04" then
   Service.ApplyGroundCover()
   buildStoneTrails()
   meadowCover(Map.Zones[2]);meadowCover(Map.Zones[3])
-  workspace.WorldFoundation:SetAttribute("GroundCoverVersion","W4-cover-03")
+  workspace.WorldFoundation:SetAttribute("GroundCoverVersion","W4-cover-04")
  end
 	-- Client-authored masonry has simple server-owned boundaries at the same placement.
 	local world=workspace.WorldFoundation
+	local anchors=game.ReplicatedStorage:FindFirstChild("SceneGround") or Instance.new("Folder")
+	anchors.Name="SceneGround";anchors.Parent=game.ReplicatedStorage
+	local function anchor(x,z)
+		local name=string.format("%.2f:%.2f",x,z)
+		local value=anchors:FindFirstChild(name) or Instance.new("Vector3Value")
+		value.Name=name;value.Value=Vector3.new(x,assert(Service.SurfaceAt(x,z)),z);value.Parent=anchors
+	end
+	for _,group in Map.TreeGroups do for _,entry in group do anchor(entry[1],entry[2]) end end
+	for _,point in {Vector2.new(356,-224),Vector2.new(329,-182),Vector2.new(199,-124),Vector2.new(259,161),Vector2.new(310,197),Vector2.new(282,194),Vector2.new(337,207),Vector2.new(334,150),Vector2.new(346,-204),Vector2.new(333,-216),Vector2.new(316,-214),Vector2.new(297,-229),Vector2.new(274,-224),Vector2.new(253,-240),Vector2.new(224,-231),Vector2.new(197,-247),Vector2.new(172,-235)} do anchor(point.X,point.Y) end
+	for _,x in {-3.8,3.8} do for _,z in {-2.5,2.5} do anchor(356+x,-224+z) end end
+	for _,side in {-1,1} do anchor(310+side*11.7,197) end
 	if not world:FindFirstChild("GroveRuinBoundaries") then
 		local bounds=Instance.new("Folder");bounds.Name="GroveRuinBoundaries";bounds.Parent=world
 		local y=Service.SurfaceAt(310,197)

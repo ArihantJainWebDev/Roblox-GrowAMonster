@@ -2,6 +2,13 @@
 
 Notable project changes are recorded here, newest first. Planning decisions are not evidence of implemented features.
 
+## Unreleased — Grounding corrections and creature/gameplay plan
+
+- Removed floating connector slab geometry, grounded portal feet/thresholds, and attached orchard fruit to real branch sockets.
+- Rooted wild food and crop models using server terrain anchors and origin pivots; expanded mature tree/bush foliage, root detail and soil mulch.
+- Rebuilt physical sign supports/text layouts. Recorded measured grounding checks in docs/world/W4_CORRECTIONS_01.md.
+- Added the C1 creature family concept/brief and explicit G1 monster-led exploration milestone. Models, rigs, animations and G1 gameplay are not claimed implemented.
+
 ## Unreleased — W4 environment rollout
 
 - Added orchard/Grove planting, original fruit and rocks, spring canopy/bench/watercourse, trail signs and authored portal frames.

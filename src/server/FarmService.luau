@@ -135,7 +135,7 @@ local function init(player)
 	player.CharacterAdded:Connect(function() player:SetAttribute("CurrentRegion","Home") end)
 	for i = 1, 4 do
 		local x, z = ((i-1)%2)*12-6, math.floor((i-1)/2)*12-9
-		local plot = part(island, "Plot" .. i, Vector3.new(9,0.6,9), center + Vector3.new(x,2.3,z), Color3.fromRGB(104,69,43))
+		local plot = part(island, "Plot" .. i, Vector3.new(9,0.6,9), center + Vector3.new(x,2.3,z), Color3.fromRGB(76,52,35))
 		plot.Material=Enum.Material.Ground
 		local prompt = Instance.new("ProximityPrompt")
 		prompt.ActionText, prompt.ObjectText, prompt.MaxActivationDistance, prompt.HoldDuration = "Plant / Harvest", "Farm plot " .. i, 10, 0.3
