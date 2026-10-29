@@ -49,3 +49,5 @@ C1_CREATURE_FAMILY_V1.png is a generated project concept reference, saved in doc
 
 ## C1 native-generated baby
 Source model 71146011257533, generation 222513a4-52d5-4e3d-a526-ee6a67c81e59, Roblox Studio native generator. Seven textured segments plus project-authored paws/claws. Full prompt and asset manifest: assets/creatures/baby. Actual-model review pending; no paid purchase. Model asset created, experience not published.
+
+Seed egg shell/sepals/nest and young leaf mantle are project-authored geometry. Young reuses the registered baby mesh/texture IDs with changed anatomical proportions and joint placement, not a new native generation. No additional external asset/upload. See creatures/C1_EGG_YOUNG.md.

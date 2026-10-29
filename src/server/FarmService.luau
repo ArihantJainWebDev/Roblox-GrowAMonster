@@ -155,17 +155,20 @@ local function init(player)
 	publish(player)
 	require(script.Parent.QuestService).Init(player,ok and saved.Quests or nil)
 	local egg=part(island,"WelcomeEgg",Vector3.new(2,3,2),center+Vector3.new(7,3.5,18),Color3.fromRGB(249,226,159))
-	egg.Shape=Enum.PartType.Ball
+	egg.Transparency=1;egg.CanCollide=false
+ local ground=require(script.Parent.WorldService).SurfaceAt(egg.Position.X,egg.Position.Z)
+ egg:SetAttribute("GroundPosition",Vector3.new(egg.Position.X,ground or egg.Position.Y-1.5,egg.Position.Z))
+ egg:SetAttribute("Hatched",false)
 	local welcome=Instance.new("ProximityPrompt")
 	welcome.ActionText,welcome.ObjectText,welcome.MaxActivationDistance,welcome.HoldDuration="Meet Sprout","Your starter egg",10,0.3
 	welcome.RequiresLineOfSight,welcome.Parent=false,egg
-	if require(script.Parent.MonsterService).GetSnapshot(player).Hatched then egg.Transparency=1;egg.CanCollide=false;welcome.Enabled=false end
+	if require(script.Parent.MonsterService).GetSnapshot(player).Hatched then egg:SetAttribute("Hatched",true);welcome.Enabled=false end
 	welcome.Triggered:Connect(function(who)
 		local root=who.Character and who.Character:FindFirstChild("HumanoidRootPart")
 		local hum=who.Character and who.Character:FindFirstChildOfClass("Humanoid")
 		if who~=player or not root or not hum or hum.Health<=0 or (root.Position-egg.Position).Magnitude>12 then return end
 		if not require(script.Parent.MonsterService).Hatch(player) then return end
-		egg.Transparency,egg.CanCollide,welcome.Enabled=1,false,false
+		egg:SetAttribute("Hatched",true);welcome.Enabled=false
 		require(script.Parent.QuestService).Record(player,"Hatch")
 	end)
 	if player.Character then player.Character:PivotTo(CFrame.new(center + Vector3.new(0,7,18))) end

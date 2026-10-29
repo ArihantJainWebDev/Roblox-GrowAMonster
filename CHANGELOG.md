@@ -2,6 +2,17 @@
 
 Notable project changes are recorded here, newest first. Planning decisions are not evidence of implemented features.
 
+## Unreleased — Seed egg and young Sprout
+
+- Replaced the starter ball with an authored botanical seed shell/nest, grounded to terrain, with a hatch shell effect and retained empty nest.
+- Added a young anatomical variant with longer torso/limbs, wider stance, relocated joints and a leaf mantle/crest. The 100-growth transition now switches actual rig templates and stride length.
+- Native hatch and feed-at-99 threshold checks passed in Play. See docs/creatures/C1_EGG_YOUNG.md for provenance, review status and remaining work.
+
+## Unreleased — Tail correction and C2 following
+
+- Replaced the generated intersecting tail with an authored rearward tail. Replaced fixed side-following with travelled-route following, bounded acceleration/braking/turning, stopping distance and distant relocation recovery.
+- Smoothed client poses and tied gait phase to actual distance travelled. Home turn/stop and sloped bridge Play checks passed; detailed limits and remaining acceptance are in docs/creatures/C2_FOLLOWING.md.
+
 ## Unreleased — Native creek water and C1 baby production
 
 - Removed the elevated creek ribbon/flow overlays; native Terrain Water supplies the stream surface and the waterfall uses the measured outlet height.

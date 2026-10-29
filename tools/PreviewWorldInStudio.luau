@@ -29,10 +29,19 @@ local ok,result=pcall(function()
  workspace.WorldFoundation:SetAttribute("EditorPreviewVersion",map.Version)
  local creatureFolder=game.StarterPlayer.StarterPlayerScripts.GameClient:FindFirstChild("creatures")
  if creatureFolder and creatureFolder:FindFirstChild("BabyRig") then
-  local oldCreature=workspace:FindFirstChild("EditorCreaturePreview");if oldCreature then oldCreature:Destroy() end
-  local creature=require(fresh(creatureFolder.BabyRig,"BabyRig")).Build()
-  creature.Name="EditorCreaturePreview";creature:SetAttribute("EditorPreview",true)
-  creature:PivotTo(CFrame.new(map.Hub+Vector3.new(0,.65,-25)));creature.Parent=workspace
+  for _,name in {"EditorCreaturePreview","EditorCreatureFamily"} do local old=workspace:FindFirstChild(name);if old then old:Destroy() end end
+  local rig=fresh(creatureFolder.BabyRig,"BabyRig")
+  rig.Source=rig.Source:gsub("RS%.ArtReview%.Geometry","script.Parent.Geometry")
+  local family=Instance.new("Model");family.Name="EditorCreatureFamily";family:SetAttribute("EditorPreview",true);family.Parent=workspace
+  for i,stage in {"Baby","Young"} do
+   local creature=require(rig).Build(stage);creature.Name=stage
+   creature:PivotTo(CFrame.new(map.Hub+Vector3.new((i-1)*4,.65,-25)));creature.Parent=family
+  end
+  if creatureFolder:FindFirstChild("SeedEgg") then
+   local egg=fresh(creatureFolder.SeedEgg,"SeedEgg")
+   egg.Source=egg.Source:gsub("game%.ReplicatedStorage%.ArtReview%.Geometry","script.Parent.Geometry")
+   local seed=require(egg).Build();seed:PivotTo(CFrame.new(map.Hub+Vector3.new(-4,.65,-25)));seed.Parent=family
+  end
  end
  return {TerrainVersion=map.Version,CourtyardBuild=root:GetAttribute("CourtyardBuild")}
 end)

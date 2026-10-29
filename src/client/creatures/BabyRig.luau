@@ -39,12 +39,36 @@ local function paw(parent,leg)
  end
  local claws=Art.MakeMesh(parent,"ThreeToeClaws",v,f,Color3.fromRGB(192,181,142),Enum.Material.SmoothPlastic);weld(leg,claws)
 end
-function Rig.Build()
+local function buildTail(parent,young)
+ -- An external rearward sweep replaces the generated coil that crossed the torso.
+ -- Bury the root inside the rump; the former high, open root exposed a gap.
+ local path={Vector3.new(0,.57,.32),Vector3.new(0,.57,.65),Vector3.new(0,.57,.94),Vector3.new(.04,.55,1.25),Vector3.new(.12,.52,1.58),Vector3.new(.25,.56,1.88),Vector3.new(.38,.7,2.1)}
+ if young then for i,point in path do path[i]=Vector3.new(point.X*1.2,point.Y+.22,point.Z*1.18+.22) end end
+ local radii={.20,.23,.20,.16,.12,.075,.008};local v,f={},{};local n=24
+ for j,point in path do
+  local direction=(path[math.min(#path,j+1)]-path[math.max(1,j-1)]).Unit
+  local right=direction:Cross(Vector3.yAxis).Unit;local up=right:Cross(direction).Unit
+  for i=0,n-1 do local a=i*math.pi*2/n;table.insert(v,point+(right*math.cos(a)+up*math.sin(a))*radii[j]) end
+  if j>1 then for i=1,n do local a=(j-2)*n+i;local b=(j-2)*n+i%n+1
+   table.insert(f,{a,a+n,b});table.insert(f,{b,a+n,b+n})
+  end end
+ end
+ local base=#v+1;table.insert(v,path[1])
+ local tip=#v+1;table.insert(v,path[#path])
+ for i=1,n do
+  table.insert(f,{base,i,i%n+1})
+  table.insert(f,{tip,(#path-1)*n+i%n+1,(#path-1)*n+i})
+ end
+ return Art.MakeMesh(parent,"tail_geom",v,f,Color3.fromRGB(83,157,119),Enum.Material.SmoothPlastic,true)
+end
+function Rig.Build(stage)
+ local young=stage=="Young"
  local model=Instance.new("Model");model.Name="BabySproutRig";model.WorldPivot=CFrame.new()
  local root=Instance.new("Part");root.Name="RigRoot";root.Size=Vector3.new(.2,.2,.2);root.Transparency=1
  root.Anchored,root.CanCollide,root.CanTouch,root.CanQuery=true,false,false,false;root.Parent=model;model.PrimaryPart=root
  local pieces={}
  for _,data in Manifest.Parts do
+  if data.Name=="tail_geom" then continue end
   local p=AssetService:CreateMeshPartAsync(Content.fromUri(data.MeshId),{CollisionFidelity=Enum.CollisionFidelity.Box,RenderFidelity=Enum.RenderFidelity.Automatic})
   p.Name=data.Name;p.Size=Vector3.new(table.unpack(data.Size));p.CFrame=CFrame.new(table.unpack(data.CFrame))
   p.TextureID=data.TextureID;p.Color=Color3.new(table.unpack(data.Color));p.Material=Enum.Material[data.Material]
@@ -55,9 +79,22 @@ function Rig.Build()
   end
   p.Parent=model;pieces[data.Name]=p
  end
+ if young then
+  for name,p in pieces do
+   if name=="body_geom" then p.Size*=Vector3.new(1.13,1.12,1.35);p.CFrame=CFrame.new(0,1.4,.12)
+   elseif name=="head_geom" then p.Size*=1.03;p.CFrame=CFrame.new(0,2.65,-.72)
+   else
+    local front=name:match("front")~=nil
+    p.Size*=Vector3.new(1.15,1.4,1.13)
+    p.CFrame=CFrame.new(p.Position.X*1.3,p.Position.Y*1.4,front and -.78 or .42)
+   end
+  end
+ end
+ pieces.tail_geom=buildTail(model,young)
+ pieces.tail_geom.Anchored=false;pieces.tail_geom.Massless=true;pieces.tail_geom.CanQuery=false
  local body=assert(pieces.body_geom);joint(root,body,"BodyRoot",Vector3.zero)
- joint(body,assert(pieces.head_geom),"Neck",Vector3.new(0,1.65,-.5))
- joint(body,assert(pieces.tail_geom),"TailBase",Vector3.new(0,.8,.68))
+ joint(body,assert(pieces.head_geom),"Neck",young and Vector3.new(0,2.25,-.65) or Vector3.new(0,1.65,-.5))
+ joint(body,assert(pieces.tail_geom),"TailBase",young and Vector3.new(0,.79,.81) or Vector3.new(0,.57,.50))
  local names={
   {"front left leg_geom","ForeLeft"},{"front right leg_geom","ForeRight"},
   {"rear left leg_geom","HindLeft"},{"rear right leg_geom","HindRight"},
@@ -65,19 +102,28 @@ function Rig.Build()
  for _,info in names do
   local leg=assert(pieces[info[1]]);joint(body,leg,info[2],leg.Position+Vector3.new(0,leg.Size.Y*.43,0));paw(model,leg)
  end
+ if young then
+  local leaves={}
+  for side=-1,1,2 do for i=0,3 do
+   table.insert(leaves,{Vector3.new(side*.18,2.05-i*.15,-.15+i*.19),Vector3.new(side*(.63-i*.04),1.85-i*.17,.32+i*.22),.24})
+  end end
+  for i=0,3 do table.insert(leaves,{Vector3.new(0,2.05-i*.1,-.18+i*.28),Vector3.new(0,2.55-i*.17,.10+i*.3),.22}) end
+  local mantle=Art.MakeLeaves(model,"YoungLeafMantle",leaves,Color3.fromRGB(53,116,78));weld(body,mantle)
+ end
+ model:SetAttribute("LifeStage",young and "Young" or "Baby")
+ model:SetAttribute("StrideLength",young and 2.1 or 1.7)
  local controller=Instance.new("AnimationController");controller.Name="CompanionAnimation";controller.Parent=model
  Instance.new("Animator",controller)
  model:SetAttribute("AssetVersion",Manifest.Version);model:SetAttribute("RigType","Motor6D-quadruped")
  return model
 end
-function Rig.Pose(model,time,speed,reaction)
+function Rig.Pose(model,phase,speed,reaction,time)
  local body=model:FindFirstChild("body_geom");if not body then return end
- local gait=math.min(speed/10,1)*.14
- local phase=time*8
+ local gait=math.min(speed/3,1)*.55
  for name,offset in {ForeLeft=0,HindRight=0,ForeRight=math.pi,HindLeft=math.pi} do
   local motor=body:FindFirstChild(name);if motor then motor.Transform=CFrame.Angles(math.sin(phase+offset)*gait,0,0) end
  end
  local neck=body:FindFirstChild("Neck");if neck then neck.Transform=CFrame.Angles(math.sin(time*1.5)*.025+reaction*.12,math.sin(time*.8)*.04,0) end
- local tail=body:FindFirstChild("TailBase");if tail then tail.Transform=CFrame.Angles(0,math.sin(time*2.2)*.12,0) end
+ local tail=body:FindFirstChild("TailBase");if tail then tail.Transform=CFrame.Angles(0,math.sin(time*2.2)*.07,0) end
 end
 return Rig

@@ -165,3 +165,7 @@ WorldService publishes SceneGround Vector3Values for curated decoration position
 
 ## Mesh companion rendering
 BabySproutAsset supplies immutable mesh references/transforms; BabyRig constructs a seven-joint client rig with authored paws. CompanionVisuals renders replicated server companion anchors. MonsterService owns growth/validation/ground following; visuals have no collision or authority. EditorCreaturePreview is archived in Play. See docs/creatures/C1_BABY_IMPLEMENTATION.md.
+
+CompanionMotion now owns breadcrumb route state and bounded movement on the server. CompanionVisuals smooths replicated anchors and derives gait phase from horizontal distance. BabyRig replaces the intersecting generated tail with an authored rearward sweep. See docs/creatures/C2_FOLLOWING.md for limits.
+
+SeedEgg authors a floor-origin shell/nest; SeedEggVisuals follows server WelcomeEgg GroundPosition and Hatched attributes. Server still validates the hatch. BabyRig.Build(stage) assembles baby/young variants; CompanionVisuals switches cached templates on authoritative Stage and uses per-rig stride. See docs/creatures/C1_EGG_YOUNG.md.

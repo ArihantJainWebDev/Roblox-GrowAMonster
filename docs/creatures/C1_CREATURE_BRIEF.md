@@ -38,3 +38,5 @@ The next production action after design approval is ONE actual baby mesh and rig
 
 ## Implementation status update
 First baby mesh and rig now implemented; see C1_BABY_IMPLEMENTATION.md. Earlier proposal-only status is historical. Actual-model visual approval, remaining family and C2 animation are open.
+
+Seed egg and young variant implemented; see C1_EGG_YOUNG.md for actual construction, threshold tests and review limits. Baby appearance/following accepted by user; egg/young visual acceptance pending. Elemental forms remain unbuilt.

@@ -25,3 +25,5 @@ Review this actual baby before reproducing the family. Egg, young and Fire/Cryst
 
 ### User screenshot review — paw correction
 User screenshots exposed the rough paw appearance and uneven ear silhouette. Paw triangle winding was inward; reversed it, closed the soles and added optional vertex-normal smoothing to the geometry helper (other scenery keeps flat shading). Updated Studio sources and rebuilt the review model. The generated head/ear asymmetry is unresolved; do not mark visual acceptance passed. Build and diff checks passed. Movement-specific symptoms require clarification from the user.
+
+Tail correction now implemented: the generated coil is excluded and replaced by an authored rearward sweep. C2 route-following and distance-based gait are implemented; see C2_FOLLOWING.md for evidence and remaining acceptance. Earlier fixed-offset behavior and tail defect entries are historical.

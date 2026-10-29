@@ -200,7 +200,7 @@ local function atmosphere()
 end
 function Service.Start()
 	if game:GetService("RunService"):IsRunning() then
-		for _,name in {"EditorCourtyardPreview","EditorWorldScenery","EditorCreaturePreview"} do
+		for _,name in {"EditorCourtyardPreview","EditorWorldScenery","EditorCreaturePreview","EditorCreatureFamily"} do
 			local preview=workspace:FindFirstChild(name)
 			if preview then preview.Parent=game.ServerStorage end
 		end

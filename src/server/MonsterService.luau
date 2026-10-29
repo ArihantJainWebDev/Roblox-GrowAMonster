@@ -7,7 +7,8 @@ local Evolution = require(ReplicatedStorage.Shared:WaitForChild("EvolutionConfig
 local MonsterService = {}
 local FoodService = require(script.Parent:WaitForChild("FoodService"))
 local FEED_COOLDOWN = 0.8
-local FOLLOW_OFFSET = Vector3.new(3.5, -1.3, 0)
+local Motion = require(script.Parent.CompanionMotion)
+local followers = {}
 local states = {}
 local lastFeedAt: { [number]: number } = {}
 local reactionUntil: { [number]: number } = {}
@@ -78,10 +79,10 @@ local function updateState(player: Player)
 	local label = model:FindFirstChild("Nameplate") and model.Nameplate:FindFirstChildWhichIsA("TextLabel")
 	local path = state.Path and Evolution.Paths[state.Path]
 	if label then label.Text = path and path.Name or stage.Name end
- local ratio=stage.Scale+(state.GrowthXP/Config.MaxXP)*.15
+ local ratio=stage.Id=="Young" and (1+math.max(0,state.GrowthXP-100)/200*.1) or (1+state.GrowthXP/100*.15)
  model:SetAttribute("VisualScale",ratio)
  model:SetAttribute("Path",state.Path or "")
- if model:FindFirstChild("Nameplate") then model.Nameplate.StudsOffset=Vector3.new(0,2.5*ratio+.35,0) end
+ if model:FindFirstChild("Nameplate") then model.Nameplate.StudsOffset=Vector3.new(0,(stage.Id=="Young" and 3.15 or 2.5)*ratio+.35,0) end
 
 end
 
@@ -190,6 +191,7 @@ function MonsterService.Start()
 		states[player.UserId] = nil
 		initialized[player.UserId] = nil
 		positionInitialized[player.UserId] = nil
+        followers[player.UserId] = nil
 		lastFeedAt[player.UserId] = nil
 		reactionUntil[player.UserId] = nil
 		local model = workspace:FindFirstChild("Companion_" .. player.UserId)
@@ -198,28 +200,32 @@ function MonsterService.Start()
 	for _, player in Players:GetPlayers() do createCompanion(player) end
 
  RunService.Heartbeat:Connect(function(deltaTime)
-  local alpha=1-math.exp(-math.min(deltaTime,.1)*8)
   for _,player in Players:GetPlayers() do
    local character=player.Character;local root=character and character:FindFirstChild("HumanoidRootPart")
    local model=workspace:FindFirstChild("Companion_"..player.UserId)
    if root and model then
-    local desired=root.Position+root.CFrame.RightVector*3.8-root.CFrame.LookVector*.5
-    local current=model:GetPivot().Position
-    local snap=not positionInitialized[player.UserId] or (current-root.Position).Magnitude>40
-    local pos=snap and desired or current:Lerp(desired,alpha)
-    local params=RaycastParams.new();params.FilterType=Enum.RaycastFilterType.Include
-    local surfaces={workspace.Terrain,workspace:FindFirstChild("WorldFoundation"),workspace:FindFirstChild("Island_"..player.UserId)}
-    params.FilterDescendantsInstances=surfaces;params.IgnoreWater=true
-    local hit=workspace:Raycast(Vector3.new(pos.X,root.Position.Y+12,pos.Z),Vector3.new(0,-50,0),params)
-    if hit then
-     pos=Vector3.new(pos.X,hit.Position.Y,pos.Z)
-     local motion=Vector3.new(desired.X-current.X,0,desired.Z-current.Z)
-     local forward=motion.Magnitude>.3 and motion.Unit or Vector3.new(root.CFrame.LookVector.X,0,root.CFrame.LookVector.Z)
-     local up=hit.Normal.Y>.75 and hit.Normal or Vector3.yAxis
-     forward=(forward-up*forward:Dot(up)).Unit
-     local target=CFrame.lookAt(pos,pos+forward,up)
-     model:PivotTo(target);positionInitialized[player.UserId]=true
+    local state=followers[player.UserId]
+    local relocated=not state or (root.Position-state.LastOwner).Magnitude>65
+    if relocated then
+     local initial=root.Position-root.CFrame.LookVector*4
+     state=Motion.New(initial,root.CFrame.LookVector,root.Position);followers[player.UserId]=state
+     model:SetAttribute("Relocation",(model:GetAttribute("Relocation") or 0)+1)
     end
+    local pos=Motion.Step(state,root.Position,deltaTime)
+    local params=RaycastParams.new();params.FilterType=Enum.RaycastFilterType.Include
+    local surfaces={workspace.Terrain}
+    for _,name in {"WorldFoundation","Island_"..player.UserId} do
+     local surface=workspace:FindFirstChild(name);if surface then table.insert(surfaces,surface) end
+    end
+    params.FilterDescendantsInstances=surfaces;params.IgnoreWater=true
+    local hit=workspace:Raycast(Vector3.new(pos.X,root.Position.Y+12,pos.Z),Vector3.new(0,-60,0),params)
+    if hit and (relocated or math.abs(hit.Position.Y-state.Position.Y)<2) then
+     pos=Vector3.new(pos.X,hit.Position.Y,pos.Z)
+     local up=hit.Normal.Y>.85 and hit.Normal or Vector3.yAxis
+     local forward=(state.Forward-up*state.Forward:Dot(up)).Unit
+     model:PivotTo(CFrame.lookAt(pos,pos+forward,up));state.Position=pos
+    else state.Speed=0 end
+    model:SetAttribute("MoveSpeed",state.Speed)
    end
   end
  end)

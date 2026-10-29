@@ -122,3 +122,11 @@ User approves correcting reported W4 defects, then proper creatures and deeper g
 
 ## C1 baby implementation — 29 October 2026
 Native creek correction and first textured baby/rig are implemented. See docs/creatures/C1_BABY_IMPLEMENTATION.md for evidence and limits. C1 remains open for actual-model review, egg, young and three elemental meshes; C2 finished animation, G1 expanded gameplay and R1 regression remain outstanding. Existing stages temporarily reuse the baby mesh.
+
+## C2 following implementation
+
+User review update: corrected baby/tail appearance and current walking/turning/stopping are accepted as good enough for this stage. Next: seed egg and young Sprout, then elemental family forms. Full animation, multiplayer/device and persistence gates remain tracked separately; historical awaiting-review statements below are superseded for this desktop pass.
+Tail intersection correction and first natural-following pass implemented. Home walks/corner/stop, stationary rotation and sloped bridge checks passed; see docs/creatures/C2_FOLLOWING.md. User review, multiplayer/device regression and finished C2 animation remain open.
+
+## Seed egg and young form implementation
+Seed egg mesh/nest, hatch shell effect and distinct young anatomical variant implemented. Native hatch and feed-at-99 transition passed. See docs/creatures/C1_EGG_YOUNG.md. User visual review remains open; next production work is Fire/Crystal/Nature forms, then remaining C2 and G1. Earlier egg/young-unbuilt entries are historical.
