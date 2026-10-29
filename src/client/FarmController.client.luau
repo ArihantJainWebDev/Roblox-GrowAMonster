@@ -38,7 +38,8 @@ local function refresh()
 	end
 	local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
 	local island = workspace:FindFirstChild("Island_"..player.UserId)
-	panel.Visible = island ~= nil and root ~= nil and (root.Position-island.Grass.Position).Magnitude < 40
+	local grass = island and island:FindFirstChild("Grass")
+	panel.Visible = grass ~= nil and root ~= nil and (root.Position-grass.Position).Magnitude < 40
 	if island then
 		for i=1,4 do
 			local plot = island:FindFirstChild("Plot"..i)

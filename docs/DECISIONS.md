@@ -48,3 +48,7 @@ The roadmap records current recommendations for these, but playtests can revise 
 ## 29 October 2026 — Production quality requirement
 
 User requires a proper fantasy world: sculpted terrain, fountain, clouds/sky, architecture, foliage and then custom characters. No flat empty platform world or primitive-sphere substitutes as final art. Inspect free assets when appropriate; verify rights, scripts, scale and style before use. No unverified quality claims or blanket promises to refine later. Use docs/WORLD_PRODUCTION_PLAN.md and docs/QUALITY_GATES.md; user review of real Studio results determines acceptance.
+
+## 29 October 2026 — Layout 02 approved by user
+
+Compact hub plus walkable orchard/Grove loop approved. Replace individual home docks with Home and Return-to-Hub gateways; actual player homes occupy a separate same-server residential zone. Visitor menu respects access policy, which remains undecided. Six players is not an approved limit. Physical home slots are independent of account saves. User approval applies to layout, not asset quality or final measured dimensions.

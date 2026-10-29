@@ -4,6 +4,15 @@
     "$className": "DataModel",
     "ReplicatedStorage": {
       "$className": "ReplicatedStorage",
+      "ArtReview": {
+        "$className": "Folder",
+        "Geometry": {
+          "$path": "tools/art/BuildWorldAssetStudy.luau"
+        },
+        "Courtyard": {
+          "$path": "tools/art/BuildFountainCourtyard.luau"
+        }
+      },
       "Shared": {
         "$path": "src/shared"
       }
@@ -20,6 +29,34 @@
         "$className": "StarterPlayerScripts",
         "GameClient": {
           "$path": "src/client"
+        }
+      }
+    },
+    "Workspace": {
+      "$className": "Workspace",
+      "FountainCourtyard": {
+        "$className": "Model",
+        "$ignoreUnknownInstances": true,
+        "$attributes": {
+          "ArtReviewOnly": true
+        },
+        "ReviewSupport": {
+          "$className": "Part",
+          "$properties": {
+            "Anchored": true,
+            "Transparency": 1,
+            "Size": [
+              62,
+              0.4,
+              58
+            ],
+            "Position": [
+              3600,
+              119.85,
+              0
+            ],
+            "CanCollide": true
+          }
         }
       }
     }

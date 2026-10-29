@@ -15,3 +15,17 @@ No external production assets have been selected or approved. Concept images and
 | Animation / audio / interface assets | Authored or licensed sources | Unselected | Pending | Pending | Pending | Required for C2/U1 |
 
 Record adapted asset paths, original backups, modifications and attribution alongside each selected item. Paid assets require explicit user authorization. Do not assert an asset exists, is free or is usable until checked.
+
+## W1 sourcing findings
+
+See world/ASSET_SHORTLIST.md. Two free Creator Store candidates imported successfully but failed actual script inspection and were removed. No production candidate approved. W1 import access is proven; usable quality/provenance/material/collision proof remains incomplete.
+
+## Inspection pass 02
+
+Nine additional models inspected. No production approval. Detailed judgments: world/ASSET_INSPECTION_PASS_02.md; source IDs/counts/status: ../assets/review/candidate-manifest.json. Import/material display works; coherent main fountain, broadleaf foliage, cliff kit, provenance and durable asset ownership remain unresolved.
+
+## Original authored route — 29 October 2026
+
+A working EditableMesh authoring path now produces original fountain, cliff and broadleaf mesh studies. Source and OBJ/MTL export live in tools/art and assets/review. See world/ORIGINAL_ASSET_STUDY.md. Provenance is project-authored; visual acceptance, production materials/collision, animation/audio, static persistence and performance remain unpassed. No production asset approval is implied.
+
+Fountain audio candidate 9120557315 (ProSoundEffects), free Creator Store result checked 29 October 2026, preloaded/played in this place. Original courtyard uses author-owned procedural mesh/image data; the runtime API setting and static persistence/replication route remain explicit dependencies. See world/FOUNTAIN_COURTYARD_REVIEW.md.

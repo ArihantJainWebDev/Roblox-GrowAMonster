@@ -141,3 +141,7 @@ QuestService owns objective facts and ordered one-time rewards. Validated action
 ## World/art production boundary — 29 October 2026
 
 Follow docs/WORLD_PRODUCTION_PLAN.md. Separate authored environment/asset data from gameplay services; migrate gameplay anchors and transforms without losing validation or state IDs. Verify Rojo/Studio ownership for meshes, terrain and imported models before replacing runtime-generated scenery. Preserve source assets and import metadata. VisualSample is an unaccepted preview, not production world architecture. A visible template plane and above-cloud rendering must be audited in the actual place.
+
+## Approved home travel architecture — 29 October 2026
+
+Gateway travel stays within the same server. Server-owned player-to-island mapping resolves destinations; do not trust client coordinates or ownership claims. Validate access, live character, destination readiness, request rate and safe landing. Coordinate companion/spawn/quest anchors after travel. Home slots may change across sessions without changing account-owned data. Streaming or distance offers no security boundary. Implementation remains pending.

@@ -84,3 +84,17 @@ Phase 7 visual study started with the recommended Sunlit Sky Gardens direction. 
 ## Active plan precedence — 29 October 2026
 
 The detailed world/art production plan and quality gates supersede the generic polish approach and the small visual study. Historical prototype implementation entries are not visual approval or release acceptance. Deferred checks remain open; the current primitive sample is unaccepted. See docs/ASSET_REGISTER.md for required asset sourcing.
+
+W1 proposal 01: docs/world/WORLD_BLUEPRINT_V1.png and W1_BLUEPRINT.md created. Asset shortlist recorded; two inspected imports rejected and removed due to unrelated scripts. Layout awaits review; critical asset feasibility remains open. No detailed production world construction begun.
+
+## Layout approval — 29 October 2026
+
+User approved layout 02 with Home/Return-to-Hub gateways and a separate same-server residential zone. Fixed home docks and the six-player proposal are superseded. Shared exploration remains walkable. W1 asset feasibility and tested capacity/device targets remain open; see docs/world/WORLD_BLUEPRINT_V2.png. This decision supersedes the earlier proposal-01 awaiting-review entry.
+
+W1 asset comparison pass 02: nine actual imports inspected and viewed; architecture/secondary-rock candidates retained for review, no production assets accepted. See docs/world/ASSET_INSPECTION_PASS_02.md. Distant Edit review shelf is not part of the approved production layout.
+
+W1 feasibility: original mesh generation works in Studio. Authored fountain/cliff/tree studies and source geometry export prepared; see docs/world/ORIGINAL_ASSET_STUDY.md. Original asset visual review remains open. This is an authoring proof, not W2 terrain implementation or accepted world art.
+
+Courtyard review build assembled; see docs/world/FOUNTAIN_COURTYARD_REVIEW.md. Runtime visual acceptance is blocked by disabled Editable Mesh / Image APIs, confirmed by an ordinary LocalScript probe. Audio playback passed. User notified of the required setting; no asset upload performed.
+
+Courtyard runtime blocker resolved: user enabled Mesh / Image APIs; per-piece mesh freezing fixed memory limits. Desktop Play sample renders correctly with moving effects/audio. Await user visual acceptance; full world, device/performance and multiplayer/persistence checks remain open.

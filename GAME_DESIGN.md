@@ -154,3 +154,7 @@ Hatch, gather, plant, harvest, feed, return home, evolve, then claim the Grove b
 ## Production world direction — 29 October 2026
 
 Build a substantial, crafted fantasy archipelago above clouds with sculpted terrain, believable cliff undersides, water/fountain, layered vegetation, coherent architecture and purposeful exploration routes. Flat square platforms, a visible template ground plane and primitive creature studies are not accepted final visuals. docs/WORLD_PRODUCTION_PLAN.md specifies required spaces, asset methods and review gates; it supersedes the old small-island visual target without changing the core gameplay pillars.
+
+## Approved multiplayer world layout — 29 October 2026
+
+Keep a compact shared fountain hub and walkable orchard/Grove loop. A Home gateway leads to the player-owned floating island in a separate residential zone within the same server; each home has Return to Hub. Home slots do not require individual hub docks. Player capacity follows performance testing, not a six-dock limit. Visiting uses a permission-aware menu; the precise visit policy still needs a decision.

@@ -66,3 +66,15 @@ Notable project changes are recorded here, newest first. Planning decisions are 
 - Added asset register and custom/free-asset fallback policy; no external assets selected yet.
 - Recorded visible-ground/cloud/terrain and primitive-art defects as unresolved. Current VisualSample is unaccepted.
 - Replaced stale top-level status and generic Phase 7 brief. Gameplay prototype acceptance does not close deferred release checks.
+
+- Added W1 archipelago blueprint, proposed dimensions/elevations/routes and source shortlist. Inspected and rejected two free imports containing unrelated scripts despite no-script listing claims; removed both from isolated storage. W1 is not accepted.
+
+- Recorded user approval of layout 02: gateway-based same-server homes, compact hub and walkable shared exploration. Superseded physical home docks/six-slot proposal. Updated blueprint, ownership/travel requirements and W1 acceptance tracking; no gameplay implementation changed.
+
+- Inspected nine free Creator Store candidates in isolated storage and actual Studio views. Added durable candidate manifest and asset inspection report; kept gameplay unchanged. No production asset approved.
+
+- Established an original EditableMesh authoring route and built fountain, cliff-shell and folded-leaf tree studies in Studio. Added deterministic generator and standard OBJ/MTL export, with explicit unresolved production requirements. No gameplay startup or world replacement changed.
+
+- Assembled the original fountain courtyard with portico, paving, planting, benches, lanterns, procedural water textures, Beams, splashes/ripples and a loaded spatial fountain loop. Found Edit-to-Play mesh-content loss; prepared a local reconstruction path, blocked pending Roblox Editable Mesh / Image API enablement. W3 not marked complete.
+
+- Verified courtyard runtime rendering after user enabled mesh/image APIs. Fixed editable-mesh memory exhaustion by freezing/releasing each mesh; observed working water textures, changing ripples, audio playback and player-height geometry. Guarded farm HUD against partially replicated islands. Courtyard awaits visual acceptance; whole-world gates remain open.

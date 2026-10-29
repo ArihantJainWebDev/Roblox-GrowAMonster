@@ -21,7 +21,7 @@ The opening view must establish scale, show the fountain/hub landmark and imply 
 | Space | Required contents and purpose |
 |---|---|
 | Central sky-garden hub | Modeled stone fountain and plaza; sculpted planted terraces; hatchery architecture; benches, lamps and coherent wayfinding; readable routes to homes, orchard and Grove. |
-| Personal home island | Irregular terrain and cliff underside, a proper hatch nook, exactly four integrated farm beds, storage/seed-shop interaction presentation, clear arrival/return point and coherent boundaries. |
+| Personal home island | Irregular terrain and cliff underside, a proper hatch nook, exactly four integrated farm beds, storage/seed-shop interaction presentation, Home/Return-to-Hub gateway landings and coherent boundaries. |
 | Orchard and gathering landscape | Varied elevation, authored fruit patches, winding paths, canopy and clearings, a small stream/spring, rock formations, at least two optional discoveries with understandable rewards. |
 | Element Grove | Distinct crystal, flowering and warm-stone landmarks within one coherent region; evolution requirement communicated before the journey; existing bloom reward and food patches integrated into the landscape. |
 | Connections and vistas | Short purposeful bridges, stairs and graded paths, safe readable edges, resting/view points, distant scenery suggesting a larger sky world. Background scenery must not imply playable routes where none exist. |
@@ -30,7 +30,7 @@ The world is not limited to the three old flat platforms. Its footprint and elev
 
 ## Stage W1 — Blueprint and feasibility
 
-Deliver: top-down map, elevation/section sketches, key camera views, measured avatar-scale paths and destination list. Define walkable versus background areas, quest routes, farm locations, interaction positions and multiplayer home allocation. Connect homes without bridges passing through other homes. Preserve gameplay IDs/state while changing transforms.
+Deliver: top-down map, elevation/section sketches, key camera views, measured avatar-scale paths and destination list. Define walkable versus background areas, quest routes, farm locations, interaction positions and multiplayer home allocation. Use the approved Home gateway and separate same-server residential zone; no fixed home docks or home-to-hub bridge ring. Keep the shared exploration world walkable. Server capacity is not fixed at six and must be established by performance testing. Preserve gameplay IDs/state while changing transforms.
 
 Create an asset breakdown for fountain, architecture, cliff kit, bridges, trees, shrubs, flowers, rocks, crops, egg and monsters. Inspect available modeling/import tools and prove one authored or sourced mesh can enter Studio with correct scale, materials and collision. Do not promise asset quality before this proof.
 
@@ -100,4 +100,8 @@ When custom output fails the quality target: identify the deficient item, inspec
 
 Use one stage at a time. Maintain stage status as Planned / In progress / Awaiting review / Accepted / Blocked. Accepted requires the stated evidence and user review; agent praise or successful code execution is not acceptance. Keep functional checks separate from visual acceptance. Record known defects and dependencies, not blanket “refine later” notes. A change to scope or standard requires a written decision.
 
-Current next action: W1 blueprint and asset/import feasibility. No world-art gate is accepted, and the existing VisualSample must not become the production template by default.
+Current next action: finish W1 asset/import feasibility and device/capacity targets. User approved layout 02 with gateway-based homes on 29 October 2026; full W1 and world-art gates remain open, and the existing VisualSample must not become the production template by default.
+
+## Approved layout amendment — 29 October 2026
+
+Use docs/world/WORLD_BLUEPRINT_V2.png and W1_BLUEPRINT.md. The fountain hub stays compact. A Home gateway serves owned homes in a separate residential area of the same server; each home returns to the hub by gateway. Visits use a permission-aware destination menu. Visit policy remains a separate decision. Fixed physical home docks and the earlier six-slot proposal are superseded. Shared hub/orchard/Grove routes remain walkable. Layout approval does not approve final assets, precise dimensions/elevations or untested performance.
