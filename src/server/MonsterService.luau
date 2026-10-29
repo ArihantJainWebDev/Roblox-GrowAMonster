@@ -126,6 +126,7 @@ local function updateState(player: Player)
 	player:SetAttribute("MonsterName", state.SpeciesId)
 	player:SetAttribute("MonsterXP", state.GrowthXP)
 	player:SetAttribute("MonsterStage", state.StageId)
+	player:SetAttribute("MonsterHatched",state.Hatched==true)
 	player:SetAttribute("MonsterPath", state.Path or "")
 	player:SetAttribute("MonsterGrowthCap", state.Path and Evolution.MaxXP or Evolution.AtXP)
 	player:SetAttribute("ExplorationUnlocked", state.Path ~= nil)
@@ -156,13 +157,13 @@ local function createCompanion(player: Player)
 		GrowthXP = 0,
 		StageId = Config.GrowthStages[1].Id,
 	}
-	makeCompanion(player)
 	updateState(player)
 end
 
 local function onFeed(player: Player, foodId)
 	local state = states[player.UserId]
 	if not state then return end
+	if not state.Hatched then return end
 	if not require(script.Parent.FarmService).CanChange(player) then return end
 	local humanoid = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
 	if not humanoid or humanoid.Health <= 0 then return end
@@ -185,6 +186,7 @@ local function onFeed(player: Player, foodId)
 	reactionUntil[player.UserId] = now + 0.55
 	updateState(player)
 	feedFeedback:FireClient(player, true, grantedXP)
+	require(script.Parent.QuestService).Record(player,"Feed")
 end
 
 function MonsterService.GetSnapshot(player: Player)
@@ -196,6 +198,7 @@ function MonsterService.GetSnapshot(player: Player)
 		GrowthXP = state.GrowthXP,
 		StageId = state.StageId,
 		Path = state.Path,
+		Hatched = state.Hatched == true,
 	}
 end
 
@@ -206,7 +209,21 @@ function MonsterService.RestoreSnapshot(player, snapshot)
 	local xp = tonumber(snapshot.GrowthXP) or 0
 	if xp ~= xp or math.abs(xp) == math.huge then xp = 0 end
 	state.GrowthXP = math.clamp(math.floor(xp), state.Path and Evolution.AtXP or 0, state.Path and Evolution.MaxXP or Evolution.AtXP)
+	state.Hatched = snapshot.Hatched == true or state.GrowthXP > 0 or state.Path ~= nil
+	local model=workspace:FindFirstChild("Companion_"..player.UserId)
+	if state.Hatched and not model then makeCompanion(player) end
+	if not state.Hatched and model then model:Destroy() end
 	updateState(player)
+end
+
+function MonsterService.Hatch(player)
+	local state=states[player.UserId]
+	if not state or not require(script.Parent.FarmService).CanChange(player) then return false end
+	if state.Hatched then return true end
+	state.Hatched=true
+	makeCompanion(player)
+	updateState(player)
+	return true
 end
 
 function MonsterService.TryEvolve(player, pathId)
@@ -216,9 +233,11 @@ function MonsterService.TryEvolve(player, pathId)
 	local humanoid = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
 	if not humanoid or humanoid.Health <= 0 then return false, "Respawn first" end
 	if state.Path then return false, "Your path is already chosen" end
+	if not state.Hatched then return false,"Hatch your starter egg first" end
 	if state.GrowthXP < Evolution.AtXP then return false, "Reach 100 growth first" end
 	state.Path = pathId
 	updateState(player)
+	require(script.Parent.QuestService).Record(player,"Evolve")
 	reactionUntil[player.UserId] = os.clock() + 0.55
 	return true, "Evolved into " .. Evolution.Paths[pathId].Name .. "! Element Grove unlocked."
 end

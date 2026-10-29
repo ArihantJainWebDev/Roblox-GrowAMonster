@@ -74,3 +74,9 @@ Detailed phase briefs live in `docs/phases/`. A phase is complete only when its 
 - Phase 5 implementation underway: first elemental choice at 100 growth, equal growth cap of 300, Element Grove reward interaction. Save/rejoin remains deferred, not passed.
 
 Phase 5 evolution prototype implemented; live selection guards and post-evolution feeding passed. Pending: Grove playthrough, phone input/layout, multiplayer isolation, and deferred save/rejoin. Final art stays in Phase 7.
+
+## Phase 6 update - 2026-10-29
+
+User confirmed Phase 5 gameplay works. Phase 6 onboarding/region prototype is implemented; live chain checks passed. Pending: first-time user playthrough, phone layout/input, saved-profile recovery and multiplayer. Previously deferred checks remain open; production art stays Phase 7.
+
+Phase 7 visual study started with the recommended Sunlit Sky Gardens direction. Review the actual Studio sample before extending the style. Detailed custom meshes, creature rigging/animation and final materials remain outstanding.

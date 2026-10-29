@@ -67,6 +67,7 @@ feedButton.TextColor3 = Color3.fromRGB(25, 45, 30)
 feedButton.Parent = panel
 Instance.new("UICorner", feedButton).CornerRadius = UDim.new(0, 10)
 refresh = function()
+	gui.Enabled=player:GetAttribute("MonsterHatched")==true
 	local xp = player:GetAttribute("MonsterXP") or 0
 	local cap = player:GetAttribute("MonsterGrowthCap") or Evolution.AtXP
 	local path = Evolution.Paths[player:GetAttribute("MonsterPath")]
@@ -90,7 +91,7 @@ refresh = function()
 	elseif count == 0 then feedButton.Text = "Collect " .. FoodConfig.Foods[selected].Name
 	else feedButton.Text = "Feed " .. FoodConfig.Foods[selected].Name end
 end
-for _, attribute in { "MonsterXP", "MonsterStage", "MonsterPath", "MonsterGrowthCap", "FoodCount" } do
+for _, attribute in { "MonsterXP", "MonsterStage", "MonsterPath", "MonsterGrowthCap", "MonsterHatched", "FoodCount" } do
 	player:GetAttributeChangedSignal(attribute):Connect(refresh)
 end
 for _, id in FoodConfig.Order do player:GetAttributeChangedSignal("Food_" .. id):Connect(refresh) end

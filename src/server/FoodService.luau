@@ -73,12 +73,14 @@ function FoodService.TryCollect(player, nodeId)
 	for _, count in inventory do total += count end
 	if total >= Config.Capacity then return false, "Basket full — feed Sprout first" end
 	local foodId = node:GetAttribute("FoodId")
+	if node:GetAttribute("RequiresEvolution") and not require(script.Parent.MonsterService).GetSnapshot(player).Path then return false,"Choose an element at 100 growth to gather here" end
 	-- Claim before publishing, with no yield: duplicate requests cannot grant twice.
 	local readyAt = now + Config.Foods[foodId].Respawn
 	readyTimes[player][nodeId] = readyAt
 	inventory[foodId] += 1
 	player:SetAttribute("NodeReady_" .. nodeId, readyAt)
 	publish(player)
+	require(script.Parent.QuestService).Record(player,"Gather")
 	return true, foodId
 end
 
@@ -101,6 +103,8 @@ local function createNodes()
 		{ "Apple05", "Apple", -10, 22 }, { "Apple06", "Apple", 10, 22 },
 		{ "Berry01", "Berry", -24, -22 }, { "Berry02", "Berry", 24, -22 },
 		{ "Berry03", "Berry", 0, -22 }, { "Golden01", "GoldenApple", 0, 30 },
+		{ "GroveApple01", "Apple", -18, -86 }, { "GroveBerry01", "Berry", 18, -86 },
+		{ "GroveGolden01", "GoldenApple", -18, -114 },
 	}
 	local top = workspace:WaitForChild("GrowAMonsterWorld"):WaitForChild("IslandTop")
 	local surfaceY = top.Position.Y + top.Size.Y / 2
@@ -110,6 +114,7 @@ local function createNodes()
 		local model = Instance.new("Model")
 		model.Name = id
 		model:SetAttribute("FoodId", foodId)
+		model:SetAttribute("RequiresEvolution", z < -60)
 		local base = Vector3.new(x, surfaceY + 0.65, z)
 		part(model, "Bush", Vector3.new(3.4, 1.3, 3.4), base, Color3.fromRGB(64, 136, 79), Enum.PartType.Ball)
 		local fruit = part(model, "Fruit", Vector3.new(1.3, 1.3, 1.3), base + Vector3.new(0, 1.25, 0), food.Color, Enum.PartType.Ball)

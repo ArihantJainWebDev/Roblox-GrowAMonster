@@ -26,6 +26,7 @@ local function save(player, release)
 	profile.Saving = true
 	local snapshot = { Coins = profile.Coins, Seeds = table.clone(profile.Seeds), Plots = {} }
 	snapshot.Monster = require(script.Parent.MonsterService).GetSnapshot(player)
+	snapshot.Quests = require(script.Parent.QuestService).GetSnapshot(player)
 	for i, plot in profile.Plots do snapshot.Plots[i] = table.clone(plot) end
 	local ok, result = pcall(function()
 		return store:UpdateAsync(tostring(player.UserId), function(old)
@@ -50,6 +51,12 @@ local function publish(player)
 		plot:SetAttribute("ReadyAt", data.ReadyAt or 0)
 	end
 end
+function Service.AddCoins(player,amount)
+	if not Service.CanChange(player) or typeof(amount)~="number" or amount<0 or amount%1~=0 then return false end
+	profiles[player].Coins=math.min(1000000,profiles[player].Coins+amount)
+	player:SetAttribute("FarmCoins",profiles[player].Coins)
+	return true
+end
 function Service.Act(player, index, cropId)
 	local p, island = profiles[player], islands[player]
 	if p and p.Persistent and os.time() >= p.Lease then p.Blocked = true end
@@ -67,6 +74,7 @@ function Service.Act(player, index, cropId)
 		p.Coins += Config.HarvestCoins
 		p.Plots[index] = {}
 		publish(player)
+		require(script.Parent.QuestService).Record(player,"Harvest")
 		return true, "Harvested! Seed returned and +3 coins"
 	end
 	if typeof(cropId) ~= "string" or not Config.Crops[cropId] then return false, "Choose a seed" end
@@ -74,6 +82,7 @@ function Service.Act(player, index, cropId)
 	p.Seeds[cropId] -= 1
 	p.Plots[index] = { Crop = cropId, ReadyAt = os.time() + Config.Crops[cropId].Seconds }
 	publish(player)
+	require(script.Parent.QuestService).Record(player,"Plant")
 	return true, "Planted " .. Config.Crops[cropId].Name
 end
 local function init(player)
@@ -115,6 +124,12 @@ local function init(player)
 	local spawn = Instance.new("SpawnLocation")
 	spawn.Name, spawn.Size, spawn.Position = "HomeSpawn", Vector3.new(6,1,6), center + Vector3.new(0,2.5,18)
 	spawn.Anchored, spawn.Transparency, spawn.Neutral, spawn.Parent = true, 1, true, island
+	local homeLabel=Instance.new("BillboardGui")
+	homeLabel.Name,homeLabel.Size,homeLabel.StudsOffset,homeLabel.MaxDistance="HomeLabel",UDim2.fromOffset(220,50),Vector3.new(0,7,0),100
+	homeLabel.Adornee,homeLabel.Parent=spawn,spawn
+	local homeText=Instance.new("TextLabel")
+	homeText.Size,homeText.BackgroundTransparency,homeText.Text=UDim2.fromScale(1,1),1,player.DisplayName.."'s home\nBridge → Wild food"
+	homeText.TextColor3,homeText.TextSize,homeText.TextStrokeTransparency,homeText.Parent=Color3.new(1,1,1),16,0.3,homeLabel
 	player.RespawnLocation = spawn
 	for i = 1, 4 do
 		local x, z = ((i-1)%2)*12-6, math.floor((i-1)/2)*12-9
@@ -136,6 +151,21 @@ local function init(player)
 	island.Parent = workspace
 	islands[player] = island
 	publish(player)
+	require(script.Parent.QuestService).Init(player,ok and saved.Quests or nil)
+	local egg=part(island,"WelcomeEgg",Vector3.new(2,3,2),center+Vector3.new(7,3.5,18),Color3.fromRGB(249,226,159))
+	egg.Shape=Enum.PartType.Ball
+	local welcome=Instance.new("ProximityPrompt")
+	welcome.ActionText,welcome.ObjectText,welcome.MaxActivationDistance,welcome.HoldDuration="Meet Sprout","Your starter egg",10,0.3
+	welcome.RequiresLineOfSight,welcome.Parent=false,egg
+	if require(script.Parent.MonsterService).GetSnapshot(player).Hatched then egg.Transparency=1;egg.CanCollide=false;welcome.Enabled=false end
+	welcome.Triggered:Connect(function(who)
+		local root=who.Character and who.Character:FindFirstChild("HumanoidRootPart")
+		local hum=who.Character and who.Character:FindFirstChildOfClass("Humanoid")
+		if who~=player or not root or not hum or hum.Health<=0 or (root.Position-egg.Position).Magnitude>12 then return end
+		if not require(script.Parent.MonsterService).Hatch(player) then return end
+		egg.Transparency,egg.CanCollide,welcome.Enabled=1,false,false
+		require(script.Parent.QuestService).Record(player,"Hatch")
+	end)
 	if player.Character then player.Character:PivotTo(CFrame.new(center + Vector3.new(0,7,18))) end
 end
 function Service.Start()

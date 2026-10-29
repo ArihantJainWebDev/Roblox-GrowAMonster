@@ -44,8 +44,18 @@ Notable project changes are recorded here, newest first. Planning decisions are 
 
 - Fixed Phase 4 bridge/grass surface overlap: bridge now spans only the gap between island edges, removing coplanar flicker. Applied geometry correction to the active Play session as well.
 
-## Unreleased — Phase 5 evolution prototype
+## Unreleased â€” Phase 5 evolution prototype
 
 - Added confirmed Fire/Crystal/Nature selection at 100 growth, equal progression to 300, prototype branch appearances, and Element Grove reward interaction.
 - Added growth/path serialization to the leased farm save; persistence verification remains deferred.
 - Recorded Phase 4 farming user checks passed and deferred save/rejoin testing.
+
+## Unreleased - Phase 6 onboarding prototype
+
+- Added owned egg hatching, eight server-tracked objectives with one-time coin rewards, collapsible guidance and target markers.
+- Added Grove landmarks/signs and three evolution-validated food patches. Quest/hatch state joins the existing save record.
+- Live quest-chain integration passed. User acceptance, phone, deferred save/rejoin and multiplayer review remain pending.
+
+- Tutorial completion now removes the guide and target marker automatically, including when loading an already completed journey.
+
+- Added a Sunlit Sky Gardens visual study: hatchery canopy, egg nest, raised crop bed, flowering tree, paving and static baby creature maquette. This is a review sample, not final production art.

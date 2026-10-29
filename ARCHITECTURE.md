@@ -133,3 +133,7 @@ FarmService owns per-player islands, four plot states, seed/coin balances and fa
 ## Phase 5 progression
 
 EvolutionConfig defines branches and thresholds. MonsterService owns TryEvolve and validates RestoreSnapshot; client attributes only mirror private state. FarmService serializes MonsterService snapshots alongside farm data under the same lease. EvolutionController offers preview/confirmation; ExplorationService checks server snapshots before granting an Element Grove reward. Food inventory remains session-only.
+
+## Phase 6 onboarding
+
+QuestService owns objective facts and ordered one-time rewards. Validated actions call Record from server services; clients cannot claim progress. Coin reward and step advancement do not yield. QuestController derives guidance from replicated step state. FarmService saves quest snapshots; MonsterService persists Hatched and migrates legacy grown/evolved monsters. Rejoin/storage-failure checks remain pending.

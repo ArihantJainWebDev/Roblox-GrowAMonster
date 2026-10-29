@@ -146,3 +146,7 @@ The first farm slice uses apple saplings (30s/3 apples) and berry bushes (60s/4 
 ## Phase 5 prototype defaults
 
 First evolution unlocks at 100 growth. Fire, Crystal, and Nature share equal XP and a 300 cap. Element Grove grants all evolved branches 2 berries per 60 seconds per player. Choice saves with monster data when storage is available; Studio preview resets.
+
+## Phase 6 prototype onboarding
+
+Hatch, gather, plant, harvest, feed, return home, evolve, then claim the Grove bloom. Eight objectives award 23 coins total and remember valid actions completed out of order. Guidance can be collapsed. Element Grove is expanded with landmarks/signs and three food patches. Final art remains Phase 7.

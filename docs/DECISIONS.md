@@ -37,3 +37,10 @@ The roadmap records current recommendations for these, but playtests can revise 
 - Confirmation makes the path permanent for that monster; save/rejoin verification stays deferred at user request.
 - Extend the current leased farm record with monster XP/path rather than creating a second competing save. Consolidate persistence before release.
 - Production models/textures/animation remain Phase 7.
+
+## 2026-10-29 - Phase 6 onboarding
+
+- Real egg hatching preserves legacy grown/evolved companions.
+- Eight objectives grant 23 one-time coins; valid out-of-order actions are remembered.
+- Expand Element Grove as the first region. No path blocks ordinary food/farming.
+- Deferred persistence/multiplayer checks remain open; production art stays Phase 7.
