@@ -1,6 +1,6 @@
 # G1 — Monster-led exploration
 
-Status: Approved direction; detailed slice proposed for implementation after C1/C2. 29 October 2026. The user said to proceed after discussing proper monsters and meaningful gameplay. Features below are a concrete production proposal, not implemented or playtested content.
+Status: Partial implementation as of 30 October 2026. Follow/Stay/Come/Pet and one companion-powered interaction at the existing Grove bloom are implemented and desktop tested; see G1_GROVE_INTERACTION.md and ../creatures/C2_ACTIONS_AND_CONTROLS.md. The complete caretaker quest, multi-step trial, new garden and discovery journal below remain the production target, not completed content. User visual review is deferred; multiplayer/device/persistence gates remain open.
 
 ## Goal
 

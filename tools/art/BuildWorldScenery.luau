@@ -205,7 +205,14 @@ function Scenery.WildPlant(Art,node,base,berry)
  end
 end
 function Scenery.Gateway(Art,gate)
- if gate:FindFirstChild("GardenGateway") then return end
+ local previous=gate:FindFirstChild("GardenGateway")
+ -- Reapply this before the cached-visual return: streamed native pieces can arrive later.
+ if previous then
+  local frame=gate:FindFirstChild("CurvedGatewayFrame")
+  if frame then for _,part in frame:GetChildren() do if part:IsA("BasePart") then part.LocalTransparencyModifier=1 end end end
+ end
+ if previous and previous:GetAttribute("Build")=="W4-gateway-03" then return end
+ if previous then previous:Destroy() end
  local root=Instance.new("Model");root.Name="GardenGateway";root.Parent=gate
  local base=gate.Position-Vector3.new(0,3.5,0)
  local ray=RaycastParams.new();ray.FilterType=Enum.RaycastFilterType.Include;ray.FilterDescendantsInstances={workspace.Terrain}
@@ -233,7 +240,10 @@ function Scenery.Gateway(Art,gate)
  for j=0,24 do local a=j*math.pi/24;table.insert(v,base+Vector3.new(math.cos(a)*3.5,4+math.sin(a)*3.5,0)) end
  local center=#v+1;table.insert(v,base+Vector3.new(0,3,0));local f={}
  for j=1,center-1 do table.insert(f,{center,j,j%(center-1)+1}) end
- local membrane=Art.MakeMesh(root,"GatewayVeil",v,f,Color3.fromRGB(126,206,195),Enum.Material.Glass);membrane.Transparency=.4
+ local membrane=Art.MakeMesh(root,"GatewayVeil",v,f,Color3.fromRGB(113,205,198),Enum.Material.Neon);membrane.Transparency=.48
+ root:SetAttribute("Build","W4-gateway-03")
+ local frame=gate:FindFirstChild("CurvedGatewayFrame")
+ if frame then for _,part in frame:GetChildren() do if part:IsA("BasePart") then part.LocalTransparencyModifier=1 end end end
 end
 function Scenery.Crop(Art,parent,id,stage)
  local root=Instance.new("Model");root.Name="CropTemplate";root.WorldPivot=CFrame.new();root.Parent=parent

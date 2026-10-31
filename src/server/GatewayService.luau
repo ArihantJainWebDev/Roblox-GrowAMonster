@@ -34,8 +34,12 @@ local function makeGate(parent,name,position,label,destination,owner)
 	local surface=require(script.Parent.WorldService).SurfaceAt
 	local y=assert(surface(position.X,position.Z))
 	position=Vector3.new(position.X,y,position.Z)
-	local p=Instance.new("Part");p.Name,p.Size,p.Position=name,Vector3.new(7,7,1),position+Vector3.new(0,3.5,0)
-	p.Anchored,p.CanCollide,p.Transparency,p.Material,p.Color=true,false,.65,Enum.Material.Neon,Color3.fromRGB(111,204,197);p.Parent=parent
+ -- Replace only this gateway's legacy frame/threshold if it already exists in the place.
+ for _,old in parent:GetChildren() do
+  if old:IsA("BasePart") and (old.Name==name or ((old.Name=="GatewayPillar" or old.Name=="GatewayLintel" or old.Name=="GatewayThreshold") and (old.Position-position).Magnitude<14)) then old:Destroy() end
+ end
+ local p=Instance.new("Part");p.Name,p.Size,p.Position=name,Vector3.new(7,7,1),position+Vector3.new(0,3.5,0)
+	p.Anchored,p.CanCollide,p.Transparency,p.Material,p.Color=true,false,1,Enum.Material.Neon,Color3.fromRGB(111,204,197);p.Parent=parent
 	local left=surface(position.X-4.4,position.Z) or y
 	local right=surface(position.X+4.4,position.Z) or y
 	p:SetAttribute("LeftFootY",left);p:SetAttribute("RightFootY",right)
@@ -43,12 +47,7 @@ local function makeGate(parent,name,position,label,destination,owner)
 	local threshold=Instance.new("Part");threshold.Name="GatewayThreshold";threshold.Size=Vector3.new(9.8,y+.08-bottom,3.4)
 	threshold.Position=Vector3.new(position.X,(y+.08+bottom)/2,position.Z);threshold.Anchored=true
 	threshold.Material=Enum.Material.Limestone;threshold.Color=Color3.fromRGB(155,153,132);threshold.Parent=parent
-	for _,x in {-4,4} do
-		local stone=Instance.new("Part");stone.Name="GatewayPillar";stone.Size=Vector3.new(1.4,8,1.6)
-		stone.Position=position+Vector3.new(x,4,0);stone.Anchored=true;stone.Material=Enum.Material.Limestone;stone.Color=Color3.fromRGB(192,184,157);stone.Parent=parent
-	end
-	local top=Instance.new("Part");top.Name="GatewayLintel";top.Size=Vector3.new(10,1.2,2);top.Position=position+Vector3.new(0,8.4,0)
-	top.Anchored=true;top.Material=Enum.Material.Limestone;top.Color=Color3.fromRGB(192,184,157);top.Parent=parent
+ require(script.Parent.GatewayFrame).Build(p,position,left,right)
 	local prompt=Instance.new("ProximityPrompt");prompt.ActionText,prompt.ObjectText,prompt.HoldDuration,prompt.MaxActivationDistance="Travel",label,.35,10
 	prompt.RequiresLineOfSight=false;prompt.Parent=p
 	prompt.Triggered:Connect(function(player)

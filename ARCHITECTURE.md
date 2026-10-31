@@ -169,3 +169,12 @@ BabySproutAsset supplies immutable mesh references/transforms; BabyRig construct
 CompanionMotion now owns breadcrumb route state and bounded movement on the server. CompanionVisuals smooths replicated anchors and derives gait phase from horizontal distance. BabyRig replaces the intersecting generated tail with an authored rearward sweep. See docs/creatures/C2_FOLLOWING.md for limits.
 
 SeedEgg authors a floor-origin shell/nest; SeedEggVisuals follows server WelcomeEgg GroundPosition and Hatched attributes. Server still validates the hatch. BabyRig.Build(stage) assembles baby/young variants; CompanionVisuals switches cached templates on authoritative Stage and uses per-rig stride. See docs/creatures/C1_EGG_YOUNG.md.
+
+CompanionNavigation supersedes historical player breadcrumbs: current-owner goals, short-lived PathfindingService waypoints and obstacle/ground checks feed bounded CompanionMotion steering. SpawnLocation markers have no collision. Details and recovery limits: docs/creatures/C2_NAVIGATION_CORRECTIONS.md.
+
+ElementForms builds young-rig variants with welded head/tail ornaments and cached 256-pixel palette textures. CompanionVisuals prefetches per-client templates and switches by each anchor's Path. Image/template work is shared across players; branch balance and persisted Path remain server-authoritative. EditorEvolutionPreview is archived during Play. See docs/creatures/C1_ELEMENTAL_FORMS.md.
+
+## Server-timed creature actions and context commands
+MonsterService owns whitelisted owner commands, busy/cooldown/distance checks, short action holds and server-timed Action cues. CompanionVisuals performs timed template crossfades; BabyRig poses existing joints; CompanionEffects owns transient food/hearts/element channels and cleanup. SeedEggVisuals synchronizes shell shaking/opening with the hatch cue. ExplorationService supplies only the whitelisted Grove target, validates approach/channel/completion and grants the existing reward once per cooldown. Commands/interaction activity are session-only; persisted monster/quest schemas are unchanged. Details: docs/creatures/C2_ACTIONS_AND_CONTROLS.md and docs/gameplay/G1_GROVE_INTERACTION.md.
+
+GroundCover is a material-only server helper for home lawns/clearings. Art.MakeLeaves marks camera foliage; CameraFoliage applies temporary local visibility changes near the lens. Gateway visuals use W4-gateway-02 and rebuild stale local versions. See docs/world/W4_CAMERA_FOLIAGE_FIX.md.

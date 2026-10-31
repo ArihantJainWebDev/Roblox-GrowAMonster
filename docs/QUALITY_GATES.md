@@ -32,3 +32,7 @@ Gateway acceptance: owned Home routing, Return to Hub, safe arrival, retrigger g
 
 ## C1 baby gate
 Runtime load, 15 meshes, seven joints and measured ground contact passed. Actual-model visual acceptance, full family, finished animation, slope/bridge/gateway regression, three-player visibility and device performance remain open. See creatures/C1_BABY_IMPLEMENTATION.md.
+
+Elemental appearance pass: all three templates loaded, remote-selected branch/label matched, seven joints retained, branch re-selection and pre-threshold guards passed, Crystal snapshot restoration passed. User visual acceptance, actual save/rejoin, three-player isolation and mobile memory/performance remain open. See creatures/C1_ELEMENTAL_FORMS.md.
+
+C2/action and G1 context pass: native hatch/F menu, Stay with zero displacement, recall, Pet without XP, 99→100 feed transition, Fire charge/reveal, effect cleanup, interrupted Grove channel with zero reward, repeat/cooldown protection, all three elemental two-berry rewards and Stay→respawn Follow passed in desktop Play. Actual save/rejoin, physical phone/controller, three-player isolation/performance and user visual acceptance remain unpassed. See creatures/C2_ACTIONS_AND_CONTROLS.md and gameplay/G1_GROVE_INTERACTION.md.

@@ -1,21 +1,15 @@
--- Follow the owner's travelled route, with bounded speed and turning.
+-- Approach the current owner/active navigation waypoint; never replay player history.
 local Motion={}
 local function flat(v) return Vector3.new(v.X,0,v.Z) end
 function Motion.New(position,forward,owner)
- return {Position=position,Forward=flat(forward).Unit,Speed=0,Route={},LastOwner=owner,Walking=false}
+ return {Position=position,Forward=flat(forward).Unit,Speed=0,LastOwner=owner,Walking=false}
 end
-function Motion.Step(s,owner,dt)
+function Motion.Step(s,owner,dt,target)
  dt=math.min(dt,.05)
- local moved=flat(owner-s.LastOwner).Magnitude
- if moved>=1.2 then
-  table.insert(s.Route,owner);s.LastOwner=owner
-  if #s.Route>100 then table.remove(s.Route,1) end
- end
+ s.LastOwner=owner
  local distance=flat(owner-s.Position).Magnitude
- if distance>6 then s.Walking=true elseif distance<3.8 then s.Walking=false;s.Route={} end
- while #s.Route>1 and flat(s.Route[1]-s.Position).Magnitude<1.2 do table.remove(s.Route,1) end
- local target=s.Route[1] or owner
- local delta=flat(target-s.Position)
+ if distance>6 then s.Walking=true elseif distance<3.8 then s.Walking=false end
+ local delta=flat((target or owner)-s.Position)
  local desiredSpeed=0
  if s.Walking and delta.Magnitude>.1 then
   local desired=delta.Unit

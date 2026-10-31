@@ -173,3 +173,6 @@ Orchard and Grove use distinct planted/mineral compositions; four farm beds show
 ## Gameplay depth direction — 29 October 2026
 
 The user approved moving toward monster-led exploration. Raising/evolving a companion should unlock contextual actions, discoveries and destinations, giving farming/feeding a purpose beyond XP accumulation. G1 is the explicit expansion milestone after creature models/animations. Its initial trial/garden/quest outline is specified as a proposal in docs/gameplay/G1_MONSTER_EXPLORATION.md; no combat/trading/breeding expansion is implied.
+
+## Current implemented companion interactions — 30 October
+Follow, Stay, Come Here and Pet are playable. The Grove bloom now asks the evolved companion to approach and channel its element before awarding the existing repeatable two-berry reward; all branches are equally viable. Hatch, feeding, growth and evolution have a first procedural action presentation. This is the first contextual gameplay action, not the complete G1 caretaker/trial/garden/journal. User visual review and release gates remain open.

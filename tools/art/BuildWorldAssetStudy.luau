@@ -77,7 +77,9 @@ local function leafMesh(parent,name,leaves,color)
 		table.insert(v,base);table.insert(v,mid+side*width);table.insert(v,mid+Vector3.new(0,.22,0));table.insert(v,mid-side*width);table.insert(v,tip)
 		for _,t in {{1,2,3},{1,3,4},{2,5,3},{3,5,4}} do table.insert(f,{n+t[1],n+t[2],n+t[3]}) end
 	end
-	return meshPart(parent,name,v,f,color,Enum.Material.SmoothPlastic)
+ local leaves=meshPart(parent,name,v,f,color,Enum.Material.SmoothPlastic)
+ leaves:SetAttribute("CameraFoliage",true)
+ return leaves
 end
 local function tube(v,f,points,radii,segments)
 	local start=#v

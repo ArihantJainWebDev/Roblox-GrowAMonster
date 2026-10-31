@@ -82,7 +82,7 @@ function Rig.Build(stage)
  if young then
   for name,p in pieces do
    if name=="body_geom" then p.Size*=Vector3.new(1.13,1.12,1.35);p.CFrame=CFrame.new(0,1.4,.12)
-   elseif name=="head_geom" then p.Size*=1.03;p.CFrame=CFrame.new(0,2.65,-.72)
+   elseif name=="head_geom" then p.Size*=1.03;p.CFrame=CFrame.new(0,2.47,-.69)
    else
     local front=name:match("front")~=nil
     p.Size*=Vector3.new(1.15,1.4,1.13)
@@ -93,7 +93,7 @@ function Rig.Build(stage)
  pieces.tail_geom=buildTail(model,young)
  pieces.tail_geom.Anchored=false;pieces.tail_geom.Massless=true;pieces.tail_geom.CanQuery=false
  local body=assert(pieces.body_geom);joint(root,body,"BodyRoot",Vector3.zero)
- joint(body,assert(pieces.head_geom),"Neck",young and Vector3.new(0,2.25,-.65) or Vector3.new(0,1.65,-.5))
+ joint(body,assert(pieces.head_geom),"Neck",young and Vector3.new(0,2.07,-.62) or Vector3.new(0,1.65,-.5))
  joint(body,assert(pieces.tail_geom),"TailBase",young and Vector3.new(0,.79,.81) or Vector3.new(0,.57,.50))
  local names={
   {"front left leg_geom","ForeLeft"},{"front right leg_geom","ForeRight"},
@@ -102,14 +102,8 @@ function Rig.Build(stage)
  for _,info in names do
   local leg=assert(pieces[info[1]]);joint(body,leg,info[2],leg.Position+Vector3.new(0,leg.Size.Y*.43,0));paw(model,leg)
  end
- if young then
-  local leaves={}
-  for side=-1,1,2 do for i=0,3 do
-   table.insert(leaves,{Vector3.new(side*.18,2.05-i*.15,-.15+i*.19),Vector3.new(side*(.63-i*.04),1.85-i*.17,.32+i*.22),.24})
-  end end
-  for i=0,3 do table.insert(leaves,{Vector3.new(0,2.05-i*.1,-.18+i*.28),Vector3.new(0,2.55-i*.17,.10+i*.3),.22}) end
-  local mantle=Art.MakeLeaves(model,"YoungLeafMantle",leaves,Color3.fromRGB(53,116,78));weld(body,mantle)
- end
+ -- Young keeps the integrated textured foliage in the family mesh.
+ -- Detached flat add-on mantle panels were removed rather than posing as wings.
  model:SetAttribute("LifeStage",young and "Young" or "Baby")
  model:SetAttribute("StrideLength",young and 2.1 or 1.7)
  local controller=Instance.new("AnimationController");controller.Name="CompanionAnimation";controller.Parent=model
@@ -117,13 +111,31 @@ function Rig.Build(stage)
  model:SetAttribute("AssetVersion",Manifest.Version);model:SetAttribute("RigType","Motor6D-quadruped")
  return model
 end
-function Rig.Pose(model,phase,speed,reaction,time)
+function Rig.Pose(model,phase,speed,reaction,time,action)
  local body=model:FindFirstChild("body_geom");if not body then return end
+ action=action or {};local kind=action.Kind;local age=action.Age or 100
+ local feeding=(kind=="Feed" or kind=="Grow") and age<1.35
+ local chew=feeding and math.sin(math.max(0,age-.35)*math.pi*5)^2 or 0
+ local pet=kind=="Pet" and age<1.8
+ local emerge=kind=="Hatch" and math.clamp((age-1)/1.5,0,1) or 1
  local gait=math.min(speed/3,1)*.55
  for name,offset in {ForeLeft=0,HindRight=0,ForeRight=math.pi,HindLeft=math.pi} do
-  local motor=body:FindFirstChild(name);if motor then motor.Transform=CFrame.Angles(math.sin(phase+offset)*gait,0,0) end
+  local motor=body:FindFirstChild(name)
+  if motor then motor.Transform=CFrame.Angles(math.sin(phase+offset)*gait+(feeding and -.035*chew or 0),0,0) end
  end
- local neck=body:FindFirstChild("Neck");if neck then neck.Transform=CFrame.Angles(math.sin(time*1.5)*.025+reaction*.12,math.sin(time*.8)*.04,0) end
- local tail=body:FindFirstChild("TailBase");if tail then tail.Transform=CFrame.Angles(0,math.sin(time*2.2)*.07,0) end
+ local neck=body:FindFirstChild("Neck")
+ local happy=pet and math.sin(age*math.pi/1.8) or 0
+ local channel=kind and kind:match("^Ability") and math.sin(math.clamp(age/2.3,0,1)*math.pi) or 0
+ if neck then
+  neck.Transform=CFrame.Angles(math.sin(time*1.5)*.025-chew*.13+(1-emerge)*-.14-channel*.10,(1-channel)*math.sin(time*.8)*.09,math.sin(time*2)*.015+happy*.16)
+ end
+ local tail=body:FindFirstChild("TailBase")
+ if tail then tail.Transform=CFrame.Angles(0,math.sin(time*(pet and 8 or 2.2))*(pet and .18 or .07),0) end
+ local bodyRoot=model.RigRoot:FindFirstChild("BodyRoot")
+ if bodyRoot then
+  local joy=pet and math.abs(math.sin(age*math.pi*2))*.055 or 0
+  local charge=kind=="Evolve" and age<1.25 and math.sin(age*math.pi/1.25)*.035 or 0
+  bodyRoot.Transform=CFrame.new(0,joy-charge,0)*CFrame.Angles(charge*.8,0,0)
+ end
 end
 return Rig

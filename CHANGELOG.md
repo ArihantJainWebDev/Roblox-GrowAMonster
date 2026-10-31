@@ -2,6 +2,35 @@
 
 Notable project changes are recorded here, newest first. Planning decisions are not evidence of implemented features.
 
+## Unreleased — Recurring rectangular gateway frame
+
+- Removed the old rectangular server frame and visible rectangular prompt plane; the replicated fallback/collision frame now follows the curved arch.
+- Reapplied native-frame visibility handling before the cached-artwork return and cleaned legacy gate pieces on creation. Native-fallback screenshot, visibility-reset and round-trip travel checks passed. See docs/world/W4_CURVED_GATEWAY_REGRESSION.md.
+
+## Unreleased — Camera foliage and gateway visibility
+
+- Added near-camera fading for decorative leaf meshes to prevent seed-bench foliage filling the lens.
+- Added continuous low home ground cover/paths and widened the gateway clearing; terrain heights/collision are preserved.
+- Replaced the thin Glass portal surface with a versioned Neon membrane. Reproduced-camera, fade restoration, material/occupancy and round-trip travel checks passed. See docs/world/W4_CAMERA_FOLIAGE_FIX.md.
+
+## Unreleased — Creature actions, commands and Grove interaction
+
+- Added egg emergence, visible food/chew reaction, staged growth/evolution reveals, Pet affection and temporary-effect cleanup using server-timed action cues.
+- Added owner-only Follow/Stay/Come/Pet controls, nearby prompt/menu, recall shortcut/button, validation and action cooldowns.
+- Replaced the existing Grove berry claim with companion approach → elemental channel → validated reward, including interruption and duplicate/cooldown protection. Full G1 quest/garden/journal remains unbuilt.
+- Evidence and review limits: docs/creatures/C2_ACTIONS_AND_CONTROLS.md and docs/gameplay/G1_GROVE_INTERACTION.md.
+
+## Unreleased — Elemental Sprout appearances
+
+- Added Fire, Crystal and Nature palettes plus original crests, tail ornaments and botanical antlers/blossoms on the shared young rig.
+- Companion visuals now select cached templates from the authoritative evolution path. Correct branch selection, reselection guard, early-choice guard and snapshot restoration passed desktop Play checks.
+- Added a creature-only editor comparison tool and provenance/limits in docs/creatures/C1_ELEMENTAL_FORMS.md. User visual acceptance and multiplayer/device regression remain open.
+
+## Unreleased — Spawn collision and companion navigation corrections
+
+- Disabled invisible home/hub spawn-pad collision and removed detached young-form mantle panels.
+- Replaced player breadcrumb replay with current-owner navigation, obstacle pathfinding, bounded step/hop handling and blocked recovery. See docs/creatures/C2_NAVIGATION_CORRECTIONS.md for evidence and limits.
+
 ## Unreleased — Seed egg and young Sprout
 
 - Replaced the starter ball with an authored botanical seed shell/nest, grounded to terrain, with a hatch shell effect and retained empty nest.

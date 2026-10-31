@@ -2,6 +2,7 @@ local Map=require(game.ReplicatedStorage.Shared.WorldConfig)
 local Terrain=workspace.Terrain
 local Players=game:GetService("Players")
 local Service={}
+local GroundCover=require(script.Parent.GroundCover)
 local function part(parent,name,size,pos,color,material)
 	local p=Instance.new("Part");p.Name,p.Size,p.Position=name,size,pos
 	p.Anchored,p.Color,p.Material=true,color,material or Enum.Material.SmoothPlastic
@@ -47,14 +48,10 @@ end
 -- Replace material only: preserve terrain occupancy, heights and collision.
 -- Roblox grows decorative blades on Grass even when a prop covers that surface.
 local function clearGrass(center,width,depth)
- local region=Region3.new(center-Vector3.new(width/2,14,depth/2),center+Vector3.new(width/2,14,depth/2)):ExpandToGrid(4)
- Terrain:ReplaceMaterial(region,4,Enum.Material.Grass,Enum.Material.Ground)
+ GroundCover.Clear(center,width,depth)
 end
 function Service.ApplyHomeGroundCover(center)
- clearGrass(center+Vector3.new(0,2,-3),30,32) -- four beds and their aisles
- clearGrass(center+Vector3.new(3,2,18),22,16) -- spawn and egg
- clearGrass(center+Vector3.new(-16,2,-15),16,16) -- return gateway
- clearGrass(center+Vector3.new(-15,2,17),14,12) -- propagation bench
+ GroundCover.Home(center)
 end
 function Service.ApplyGroundCover()
  clearGrass(Map.Hub,68,70) -- courtyard, fountain, furniture and portico
@@ -200,7 +197,7 @@ local function atmosphere()
 end
 function Service.Start()
 	if game:GetService("RunService"):IsRunning() then
-		for _,name in {"EditorCourtyardPreview","EditorWorldScenery","EditorCreaturePreview","EditorCreatureFamily"} do
+		for _,name in {"EditorCourtyardPreview","EditorWorldScenery","EditorCreaturePreview","EditorCreatureFamily","EditorEvolutionPreview"} do
 			local preview=workspace:FindFirstChild(name)
 			if preview then preview.Parent=game.ServerStorage end
 		end
@@ -253,6 +250,7 @@ function Service.Start()
 		local spawn=Instance.new("SpawnLocation");spawn.Name="HubSpawn";spawn.Anchored=true
 		spawn.Size,spawn.Position,spawn.Transparency=Vector3.new(8,1,8),Map.HubArrival-Vector3.new(0,3,0),1
 		spawn.Neutral,spawn.Duration,spawn.Parent=true,0,world
+  spawn.CanCollide,spawn.CanTouch,spawn.CanQuery=false,false,false
 		world:SetAttribute("Version",Map.Version);world:SetAttribute("Ready",true)
 	end
  if workspace.WorldFoundation:GetAttribute("GroundCoverVersion")~="W4-cover-04" then

@@ -23,12 +23,15 @@ Run.RenderStepped:Connect(function()
   local shell=data.Model:FindFirstChild("Shell")
   if not shell then continue end
   if data.Anchor:GetAttribute("Hatched") then
-   data.Start=data.Start or os.clock()
-   local t=math.clamp((os.clock()-data.Start)/.65,0,1)
+   data.Start=data.Start or data.Anchor:GetAttribute("HatchStartedAt") or workspace:GetServerTimeNow()
+   local age=workspace:GetServerTimeNow()-data.Start
+   local t=math.clamp((age-.90)/1.05,0,1)
+   local shake=age<.90 and math.sin(age*28)*(.015+age*.055) or 0
    for p,cf in data.Original do
     p.Transparency=t
     local localPosition=data.Frame:PointToObjectSpace(cf.Position)
-    p.CFrame=cf+Vector3.new(localPosition.X*t*.3,t*.5,localPosition.Z*t*.3)
+    local displacement=Vector3.new(localPosition.X*t*.85,t*.48,localPosition.Z*t*.85)
+    p.CFrame=data.Frame*CFrame.Angles(0,0,shake)*data.Frame:ToObjectSpace(cf)+displacement
    end
    if t>=1 then shell:Destroy() end
   end

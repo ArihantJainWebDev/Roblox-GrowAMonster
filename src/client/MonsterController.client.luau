@@ -84,14 +84,16 @@ refresh = function()
 		button.BackgroundColor3 = selected == id and Color3.fromRGB(61, 118, 87) or Color3.fromRGB(59, 70, 80)
 	end
 	local count = player:GetAttribute("Food_" .. selected) or 0
-	local canFeed = count > 0 and xp < cap
+	local busy=(player:GetAttribute("CompanionAction") or "")~=""
+ local canFeed = count > 0 and xp < cap and not busy
 	feedButton.Active, feedButton.AutoButtonColor = canFeed, canFeed
 	feedButton.BackgroundColor3 = canFeed and Color3.fromRGB(112, 206, 125) or Color3.fromRGB(144, 159, 148)
-	if xp >= cap then feedButton.Text = path and "Prototype growth cap reached" or "Choose evolution to keep growing"
+	if busy then feedButton.Text="Sprout is busy…"
+ elseif xp >= cap then feedButton.Text = path and "Fully grown · explore the Grove" or "Choose evolution to keep growing"
 	elseif count == 0 then feedButton.Text = "Collect " .. FoodConfig.Foods[selected].Name
 	else feedButton.Text = "Feed " .. FoodConfig.Foods[selected].Name end
 end
-for _, attribute in { "MonsterXP", "MonsterStage", "MonsterPath", "MonsterGrowthCap", "MonsterHatched", "FoodCount" } do
+for _, attribute in { "MonsterXP", "MonsterStage", "MonsterPath", "MonsterGrowthCap", "MonsterHatched", "FoodCount", "CompanionAction" } do
 	player:GetAttributeChangedSignal(attribute):Connect(refresh)
 end
 for _, id in FoodConfig.Order do player:GetAttributeChangedSignal("Food_" .. id):Connect(refresh) end
@@ -111,8 +113,9 @@ local function showFeedback(message)
 		end
 	end)
 end
-remotes:WaitForChild("FeedFeedback").OnClientEvent:Connect(function(accepted, amount)
-	if accepted then showFeedback(string.format("Sprout is happy! +%d growth", amount))
+remotes:WaitForChild("FeedFeedback").OnClientEvent:Connect(function(accepted, amount, message)
+	if message then showFeedback(message)
+ elseif accepted then showFeedback(string.format("Sprout is happy! +%d growth", amount))
 	elseif (player:GetAttribute("MonsterXP") or 0) >= (player:GetAttribute("MonsterGrowthCap") or Evolution.AtXP) then showFeedback("Choose your evolution at 100 growth, or explore if already evolved.")
 	else showFeedback("You don't have that food. Try collecting some.") end
 end)

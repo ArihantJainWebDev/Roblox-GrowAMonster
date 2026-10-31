@@ -130,3 +130,16 @@ Tail intersection correction and first natural-following pass implemented. Home 
 
 ## Seed egg and young form implementation
 Seed egg mesh/nest, hatch shell effect and distinct young anatomical variant implemented. Native hatch and feed-at-99 transition passed. See docs/creatures/C1_EGG_YOUNG.md. User visual review remains open; next production work is Fire/Crystal/Nature forms, then remaining C2 and G1. Earlier egg/young-unbuilt entries are historical.
+
+## 30 October — reported companion defects
+Invisible spawn collisions, detached young mantle panels and stale breadcrumb following corrected. Current-owner obstacle navigation, step/hop and recovery implemented and tested with staircase, wall and gateway checks. See docs/creatures/C2_NAVIGATION_CORRECTIONS.md. User acceptance and multiplayer/device regression remain open.
+
+## 30 October — elemental appearances
+Fire/Crystal/Nature appearance variants implemented and connected to authoritative Path. Desktop branch selection, guards and snapshot restoration passed; user visual review remains open. See docs/creatures/C1_ELEMENTAL_FORMS.md. Next: review this family set, remaining C2 animation, then documented G1 gameplay; do not treat appearance completion as release readiness.
+
+## 30 October — C2 interactions and first G1 landmark
+User explicitly deferred visual testing and authorized continuing implementation during this session. Implemented hatch emergence, feeding prop/reaction, delayed growth/evolution reveals, affection, Follow/Stay/Come/Pet controls and first contextual Interact. Existing Grove bloom now requires companion approach/channel before its same two-berry reward. Native hatch/F menu, Stay/Recall, growth/evolution cleanup, interrupted channel, duplicate/cooldown protection, three elemental channels and respawn recovery passed desktop checks. See docs/creatures/C2_ACTIONS_AND_CONTROLS.md and docs/gameplay/G1_GROVE_INTERACTION.md. User appearance/animation review, physical device/three-player tests, save/rejoin and full G1 caretaker/trial/garden/journal remain open. Next work must review this pass and continue the documented G1 slice, not claim it complete.
+
+Camera/foliage correction: reproduced the seed-bench leaf mesh clipping the camera, added local fade/restore, connected low home ground cover and stabilized the portal membrane. Relevant checks passed; user appearance review remains open. See docs/world/W4_CAMERA_FOLIAGE_FIX.md.
+
+Gateway clarification: the user's recurring defect was the rectangular server fallback, not the foliage. Legacy square frame generation is removed; fallback/collision and artwork now share a curved outline. Visibility-reset and fallback-only screenshot checks plus round-trip travel passed. See docs/world/W4_CURVED_GATEWAY_REGRESSION.md.

@@ -41,7 +41,7 @@ confirm.Activated:Connect(function() if selected then remote:FireServer(selected
 local status=label(316,28,"Your next adventure: Element Grove")
 remotes:WaitForChild("EvolutionFeedback").OnClientEvent:Connect(function(_,message) status.Text=message end)
 local function refresh()
-	panel.Visible=(player:GetAttribute("MonsterXP") or 0)>=Config.AtXP and (player:GetAttribute("MonsterPath") or "")==""
+	panel.Visible=(player:GetAttribute("MonsterXP") or 0)>=Config.AtXP and (player:GetAttribute("MonsterPath") or "")=="" and (player:GetAttribute("CompanionAction") or "")~="Grow"
 	scale.Scale=math.min(1,(gui.AbsoluteSize.X-24)/340,(gui.AbsoluteSize.Y-24)/350)
 end
 player.AttributeChanged:Connect(refresh)

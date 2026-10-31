@@ -6,5 +6,5 @@ return {
 	{ Id="Feed", Title="Feed Sprout", Hint="Select food in your basket and press Feed. Every food gives growth.", Reward=2 },
 	{ Id="Home", Title="Return home", Hint="Bring Sprout back to your island after feeding. Your progress stays if you reset your character.", Reward=2 },
 	{ Id="Evolve", Title="Choose your element", Hint="Gather or farm and feed to 100 growth. Preview Fire, Crystal or Nature, then confirm.", Reward=5 },
-	{ Id="Grove", Title="Explore Element Grove", Hint="Follow the Grove trail from the hub. An evolved monster can claim its bloom.", Reward=5 },
+	{ Id="Grove", Title="Explore Element Grove", Hint="Follow the Grove trail from the hub. Ask your evolved companion to awaken the bloom. Stay nearby while it channels.", Reward=5 },
 }

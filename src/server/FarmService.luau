@@ -125,6 +125,7 @@ local function init(player)
 	local spawn = Instance.new("SpawnLocation")
 	spawn.Name, spawn.Size, spawn.Position = "HomeSpawn", Vector3.new(6,1,6), center + Vector3.new(0,2.5,18)
 	spawn.Anchored, spawn.Transparency, spawn.Neutral, spawn.Parent = true, 1, true, island
+ spawn.CanCollide,spawn.CanTouch,spawn.CanQuery=false,false,false
 	local homeLabel=Instance.new("BillboardGui")
 	homeLabel.Name,homeLabel.Size,homeLabel.StudsOffset,homeLabel.MaxDistance="HomeLabel",UDim2.fromOffset(220,50),Vector3.new(0,7,0),100
 	homeLabel.Adornee,homeLabel.Parent=spawn,spawn
